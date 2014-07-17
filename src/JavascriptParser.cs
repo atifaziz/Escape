@@ -8,8 +8,6 @@ using Escape.Ast;
 
 namespace Escape
 {
-    using Ast;
-    using Jint;
 
     public class JavaScriptParser
     {

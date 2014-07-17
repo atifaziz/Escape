@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -36,52 +36,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Ast\ArrayExpression.cs" />
-    <Compile Include="Ast\AssignmentExpression.cs" />
-    <Compile Include="Ast\BinaryExpression.cs" />
-    <Compile Include="Ast\BlockStatement.cs" />
-    <Compile Include="Ast\BreakStatement.cs" />
-    <Compile Include="Ast\CallExpression.cs" />
-    <Compile Include="Ast\CatchClause.cs" />
-    <Compile Include="Ast\ConditionalExpression.cs" />
-    <Compile Include="Ast\ContinueStatement.cs" />
-    <Compile Include="Ast\DebuggerStatement.cs" />
-    <Compile Include="Ast\DoWhileStatement.cs" />
-    <Compile Include="Ast\EmptyStatement.cs" />
-    <Compile Include="Ast\Expression.cs" />
-    <Compile Include="Ast\ExpressionStatement.cs" />
-    <Compile Include="Ast\ForInStatement.cs" />
-    <Compile Include="Ast\ForStatement.cs" />
-    <Compile Include="Ast\FunctionDeclaration.cs" />
-    <Compile Include="Ast\FunctionExpression.cs" />
-    <Compile Include="Ast\Identifier.cs" />
-    <Compile Include="Ast\IfStatement.cs" />
-    <Compile Include="Ast\IPropertyKeyExpression.cs" />
-    <Compile Include="Ast\LabeledStatement.cs" />
-    <Compile Include="Ast\Literal.cs" />
-    <Compile Include="Ast\LogicalExpression.cs" />
-    <Compile Include="Ast\MemberExpression.cs" />
-    <Compile Include="Ast\NewExpression.cs" />
-    <Compile Include="Ast\ObjectExpression.cs" />
-    <Compile Include="Ast\Program.cs" />
-    <Compile Include="Ast\Property.cs" />
-    <Compile Include="Ast\RegExpLiteral.cs" />
-    <Compile Include="Ast\ReturnStatement.cs" />
-    <Compile Include="Ast\SequenceExpression.cs" />
-    <Compile Include="Ast\Statement.cs" />
-    <Compile Include="Ast\SwitchCase.cs" />
-    <Compile Include="Ast\SwitchStatement.cs" />
-    <Compile Include="Ast\SyntaxNode.cs" />
-    <Compile Include="Ast\SyntaxNodes.cs" />
-    <Compile Include="Ast\ThisExpression.cs" />
-    <Compile Include="Ast\ThrowStatement.cs" />
-    <Compile Include="Ast\TryStatement.cs" />
-    <Compile Include="Ast\UnaryExpression.cs" />
-    <Compile Include="Ast\UpdateExpression.cs" />
-    <Compile Include="Ast\VariableDeclaration.cs" />
-    <Compile Include="Ast\VariableDeclarator.cs" />
-    <Compile Include="Ast\WhileStatement.cs" />
-    <Compile Include="Ast\WithStatement.cs" />
+    <Compile Include="Ast.cs" />
     <Compile Include="Comment.cs" />
     <Compile Include="IFunctionDeclaration.cs" />
     <Compile Include="IFunctionScope.cs" />
