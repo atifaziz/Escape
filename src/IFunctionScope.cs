@@ -35,7 +35,6 @@
 #endregion
 
 using System.Collections.Generic;
-using Escape.Ast;
 
 namespace Escape
 {
