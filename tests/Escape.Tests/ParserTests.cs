@@ -58,18 +58,16 @@ namespace Escape.Tests
 
             using (var stream = assembly.GetManifestResourceStream(scriptPath))
             {
-                if (stream != null)
+                Assert.True(stream != null, string.Format("Script resource '{0}' not found", scriptPath));
+                using (var sr = new StreamReader(stream))
                 {
-                    using (var sr = new StreamReader(stream))
-                    {
-                        var source = sr.ReadToEnd();
-                        sw.Reset();
-                        sw.Start();
-                        var parser = new JavaScriptParser();
-                        var program = parser.Parse(source);
-                        Console.WriteLine("Parsed {0} {1} ({3} KB) in {2} ms", file, version, sw.ElapsedMilliseconds, (int)source.Length/1024);
-                        Assert.NotNull(program);
-                    }
+                    var source = sr.ReadToEnd();
+                    sw.Reset();
+                    sw.Start();
+                    var parser = new JavaScriptParser();
+                    var program = parser.Parse(source);
+                    Console.WriteLine("Parsed {0} {1} ({3} KB) in {2} ms", file, version, sw.ElapsedMilliseconds, (int)source.Length/1024);
+                    Assert.NotNull(program);
                 }
             }
         }
