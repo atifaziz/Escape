@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		COPYING.txt = COPYING.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Escape.Tests", "tests\Escape.Tests\Escape.Tests.csproj", "{10194F5B-3EB5-4922-A4C0-10AF1BC92CBD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{9C88EBFF-59F3-460A-B381-C9C953682711}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C88EBFF-59F3-460A-B381-C9C953682711}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C88EBFF-59F3-460A-B381-C9C953682711}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10194F5B-3EB5-4922-A4C0-10AF1BC92CBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10194F5B-3EB5-4922-A4C0-10AF1BC92CBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10194F5B-3EB5-4922-A4C0-10AF1BC92CBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10194F5B-3EB5-4922-A4C0-10AF1BC92CBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
