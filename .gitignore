@@ -11,3 +11,4 @@ dist/
 pkg/base/
 *.nupkg
 *.DotSettings
+packages/
