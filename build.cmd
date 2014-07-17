@@ -1,6 +1,7 @@
 @echo off
 setlocal
 cd "%~dp0"
+call prestore || exit /b 1
 set MSBUILD=%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe
 if not exist "%MSBUILD%" (
     echo The .NET Framework 4.0 does not appear to be installed on this 
