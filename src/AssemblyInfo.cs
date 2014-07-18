@@ -39,7 +39,6 @@ using System.Reflection;
 
 [assembly: AssemblyTitle("Escape")]
 [assembly: AssemblyDescription("JavaScript/ECMAScript 5.1 (ECMA-262) Parser")]
-[assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Escape")]
 [assembly: AssemblyCopyright(
@@ -55,7 +54,13 @@ using System.Reflection;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-[assembly: CLSCompliant(true)]
-
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+#if DEBUG
+[assembly: AssemblyConfiguration("DEBUG")]
+#else
+[assembly: AssemblyConfiguration("RELEASE")]
+#endif
+
+[assembly: CLSCompliant(true)]
