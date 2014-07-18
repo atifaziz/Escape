@@ -34,6 +34,7 @@
 //
 #endregion
 
+using System;
 using System.Reflection;
 
 [assembly: AssemblyTitle("Escape")]
@@ -53,6 +54,8 @@ using System.Reflection;
           + ", \u00a9 2011, Ariya Hidayat")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+
+[assembly: CLSCompliant(true)]
 
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
