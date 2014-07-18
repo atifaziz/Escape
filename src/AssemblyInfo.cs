@@ -38,7 +38,7 @@ using System;
 using System.Reflection;
 
 [assembly: AssemblyTitle("Escape")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("JavaScript/ECMAScript 5.1 (ECMA-262) Parser")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Escape")]
