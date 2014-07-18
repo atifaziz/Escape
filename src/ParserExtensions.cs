@@ -34,10 +34,10 @@
 //
 #endregion
 
-using System.Collections.Generic;
-
 namespace Escape
 {
+    using System.Collections.Generic;
+
     public static class ParserExtensions
     {
         public static string Slice(this string source, int start, int end)

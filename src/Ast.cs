@@ -34,12 +34,12 @@
 //
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-
 namespace Escape.Ast
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+
     public class ArrayExpression : Expression
     {
         public IEnumerable<Expression> Elements;

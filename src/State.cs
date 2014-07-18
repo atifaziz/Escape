@@ -34,10 +34,10 @@
 //
 #endregion
 
-using System.Collections.Generic;
-
 namespace Escape
 {
+    using System.Collections.Generic;
+
     public struct State
     {
         public int LastCommentStart;

@@ -34,16 +34,19 @@
 //
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using Escape.Ast;
-
 namespace Escape
 {
+    #region Imports
+
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using Ast;
+
+    #endregion
 
     public class JavaScriptParser
     {

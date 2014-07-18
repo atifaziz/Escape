@@ -34,10 +34,10 @@
 //
 #endregion
 
-using System;
-
 namespace Escape
 {
+    using System;
+
     public class ParserException : Exception
     {
         public int Column;

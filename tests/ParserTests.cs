@@ -26,17 +26,21 @@
 //
 #endregion
 
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using Escape.Ast;
-using Xunit;
-using Xunit.Extensions;
-
 namespace Escape.Tests
 {
+    #region Imports
+
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using Ast;
+    using Xunit;
+    using Xunit.Extensions;
+
+    #endregion
+
     public class ParserTests
     {
         private readonly JavaScriptParser _parser = new JavaScriptParser();

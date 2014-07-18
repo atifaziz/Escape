@@ -34,10 +34,9 @@
 //
 #endregion
 
-using System.Collections.Generic;
-
 namespace Escape
 {
+    using System.Collections.Generic;
     using Ast;
 
     /// <summary>
