@@ -35,7 +35,6 @@
 #endregion
 
 using System.Reflection;
-using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -57,14 +56,6 @@ using System.Runtime.InteropServices;
           + ", \u00a9 2011, Ariya Hidayat")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-
-// Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
-// COM, set the ComVisible attribute to true on that type.
-[assembly: ComVisible(false)]
-
-// The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("52DD8182-391F-4A0B-BEB2-C4E71569074D")]
 
 // Version information for an assembly consists of the following four values:
 //
