@@ -36,10 +36,41 @@
 
 namespace Escape
 {
-    public class Location
+    using System;
+
+    public class Location : IEquatable<Location>
     {
-        public Position Start;
-        public Position End;
-        public string Source;
+        public Position Start { get; private set; }
+        public Position End   { get; private set; }
+        public string Source  { get; private set; }
+
+        public Location(Position start, Position end) : this(start, end, null) {}
+
+        public Location(Position start, Position end, string source)
+        {
+            Start = start;
+            End = end;
+            Source = source;
+        }
+
+        public bool Equals(Location other)
+        {
+            return other != null
+                && Start.Equals(other.Start) 
+                && End.Equals(other.End) 
+                && string.Equals(Source, other.Source);
+        }
+
+        public override bool Equals(object obj) { return Equals(obj as Location); }
+
+        public override int GetHashCode()
+        {
+            return unchecked(((Start.GetHashCode() * 397) ^ End.GetHashCode()) * 397) ^ (Source != null ? Source.GetHashCode() : 0);
+        }
+
+        public override string ToString()
+        {
+            return Start + "..." + End;
+        }
     }
 }
