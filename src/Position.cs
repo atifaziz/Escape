@@ -36,9 +36,22 @@
 
 namespace Escape
 {
-    public struct Position
+    using System;
+
+    public struct Position : IEquatable<Position>
     {
-        public int Line;
-        public int Column;
+        public int Line   { get; private set; }
+        public int Column { get; private set; }
+
+        public Position(int line, int column) : this()
+        {
+            Line = line;
+            Column = column;
+        }
+
+        public bool Equals(Position other)      { return Line == other.Line && Column == other.Column; }
+        public override bool Equals(object obj) { return obj is Position && Equals((Position) obj);    }
+        public override int GetHashCode()       { return unchecked((Line * 397) ^ Column);             }
+        public override string ToString()       { return Line + ":" + Column;                          }
     }
 }

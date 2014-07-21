@@ -252,11 +252,7 @@ namespace Escape
             var start = _index - 2;
             _location = new Location
                 {
-                    Start = new Position
-                        {
-                            Line = _lineNumber,
-                            Column = _index - _lineStart - 2
-                        }
+                    Start = new Position(_lineNumber, _index - _lineStart - 2)
                 };
 
             while (_index < _length)
@@ -268,11 +264,7 @@ namespace Escape
                     if (_extra.Comments != null)
                     {
                         var comment = _source.Slice(start + 2, _index - 1);
-                        _location.End = new Position
-                            {
-                                Line = _lineNumber,
-                                Column = _index - _lineStart - 1
-                            };
+                        _location.End = new Position(_lineNumber, _index - _lineStart - 1);
                         AddComment("Line", comment, start, _index - 1, _location);
                     }
                     if (ch == 13 && _source.CharCodeAt(_index) == 10)
@@ -288,11 +280,7 @@ namespace Escape
             if (_extra.Comments != null)
             {
                 var comment = _source.Slice(start + 2, _index);
-                _location.End = new Position
-                    {
-                        Line = _lineNumber,
-                        Column = _index - _lineStart
-                    };
+                _location.End = new Position(_lineNumber, _index - _lineStart);
                 AddComment("Line", comment, start, _index, _location);
             }
         }
@@ -305,14 +293,7 @@ namespace Escape
             if (_extra.Comments != null)
             {
                 start = _index - 2;
-                _location = new Location
-                    {
-                        Start = new Position
-                            {
-                                Line = _lineNumber,
-                                Column = _index - _lineStart - 2
-                            }
-                    };
+                _location = new Location { Start = new Position(_lineNumber, _index - _lineStart - 2) };
             }
 
             while (_index < _length)
@@ -342,11 +323,7 @@ namespace Escape
                         if (_extra.Comments != null)
                         {
                             var comment = _source.Slice(start + 2, _index - 2);
-                            _location.End = new Position
-                                {
-                                    Line = _lineNumber,
-                                    Column = _index - _lineStart
-                                };
+                            _location.End = new Position(_lineNumber, _index - _lineStart);
                             AddComment("Block", comment, start, _index, _location);
                         }
                         return;
@@ -1167,21 +1144,10 @@ namespace Escape
             SkipComment();
 
             var pos = _index;
-            var loc = new Location
-                {
-                    Start = new Position
-                        {
-                            Line = _lineNumber,
-                            Column = _index - _lineStart
-                        }
-                };
+            var loc = new Location { Start = new Position(_lineNumber, _index - _lineStart) };
 
             var regex = ScanRegExp();
-            loc.End = new Position
-                {
-                    Line = _lineNumber,
-                    Column = _index - _lineStart
-                };
+            loc.End = new Position(_lineNumber, _index - _lineStart);
 
             // Pop the previous token, which is likely '/' or '/='
             if (_extra.Tokens != null)
@@ -1271,21 +1237,10 @@ namespace Escape
         Token CollectToken()
         {
             SkipComment();
-            _location = new Location
-                {
-                    Start = new Position
-                        {
-                            Line = _lineNumber,
-                            Column = _index - _lineStart
-                        }
-                };
+            _location = new Location { Start = new Position(_lineNumber, _index - _lineStart) };
 
             var token = Advance();
-            _location.End = new Position
-                {
-                    Line = _lineNumber,
-                    Column = _index - _lineStart
-                };
+            _location.End = new Position(_lineNumber, _index - _lineStart);
 
             if (token.Type != Tokens.EOF)
             {
@@ -1354,16 +1309,8 @@ namespace Escape
             {
                 node.Location = new Location
                     {
-                        Start = new Position
-                            {
-                                Line = _state.MarkerStack.Pop(),
-                                Column = _state.MarkerStack.Pop()
-                            },
-                        End = new Position
-                            {
-                                Line = _lineNumber,
-                                Column = _index - _lineStart
-                            }
+                        Start = new Position(_state.MarkerStack.Pop(), _state.MarkerStack.Pop()),
+                        End = new Position(_lineNumber, _index - _lineStart)
                     };
                 PostProcess(node);
             }
@@ -4050,18 +3997,10 @@ namespace Escape
                 if (extra.Loc.HasValue)
                 {
                     node.Location = new Location
-                        {
-                            Start = new Position
-                                {
-                                    Line = _marker[1],
-                                    Column = _marker[2]
-                                },
-                            End = new Position
-                                {
-                                    Line = _marker[4],
-                                    Column = _marker[5]
-                                }
-                        };
+                    {
+                        Start = new Position(_marker[1], _marker[2]),
+                        End = new Position(_marker[4], _marker[5])
+                    };
                 }
 
                 node = postProcess(node);
