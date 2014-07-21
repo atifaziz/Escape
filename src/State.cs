@@ -38,7 +38,7 @@ namespace Escape
 {
     using System.Collections.Generic;
 
-    public struct State
+    struct State
     {
         public int LastCommentStart;
         public bool AllowIn;

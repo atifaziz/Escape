@@ -1312,7 +1312,7 @@ namespace Escape
             return node;
         }
 
-        public T MarkEndIf<T>(T node) where T : SyntaxNode
+        T MarkEndIf<T>(T node) where T : SyntaxNode
         {
             if (node.Range != null || node.Location != null)
             {
@@ -1333,7 +1333,7 @@ namespace Escape
             return node;
         }
 
-        public SyntaxNode PostProcess(SyntaxNode node)
+        SyntaxNode PostProcess(SyntaxNode node)
         {
             if (_extra.Source != null)
                 node.Location = new Location(node.Location.Start, node.Location.End, _extra.Source);
@@ -3922,6 +3922,8 @@ namespace Escape
 
             return program;
         }
+
+        // TODO review public accessibility
 
         public FunctionExpression ParseFunctionExpression(string functionExpression)
         {
