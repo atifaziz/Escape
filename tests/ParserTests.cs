@@ -51,7 +51,7 @@ namespace Escape.Tests
 
     public class ParserTests
     {
-        private readonly JavaScriptParser _parser = new JavaScriptParser();
+        readonly JavaScriptParser _parser = new JavaScriptParser();
 
         [Theory]
         [InlineData("jQuery.js", "1.9.1")]

@@ -396,7 +396,7 @@ namespace Escape.Ast
         public IEnumerable<Property> Properties;
     }
 
-    public class Program : Statement, IVariableScope, IFunctionScope
+    public class Program : Statement, IFunctionScope
     {
         public Program()
         {
