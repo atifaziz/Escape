@@ -1,7 +1,7 @@
 #region BSD 2-Clause License
 //
-// Copyright (c) 2014, Atif Aziz
-// Copyright (c) 2013, Sebastien Ros
+// Copyright (C) 2014, Atif Aziz
+// Copyright (C) 2013, Sebastien Ros
 // Copyright (C) 2013, Thaddee Tyl <thaddee.tyl@gmail.com>
 // Copyright (C) 2012, Mathias Bynens <mathias@qiwi.be>
 // Copyright (C) 2012, Joost-Wim Boekesteijn <joost-wim@boekesteijn.nl>

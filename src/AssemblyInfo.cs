@@ -1,7 +1,7 @@
 #region BSD 2-Clause License
 //
-// Copyright (c) 2014, Atif Aziz
-// Copyright (c) 2013, Sebastien Ros
+// Copyright (C) 2014, Atif Aziz
+// Copyright (C) 2013, Sebastien Ros
 // Copyright (C) 2013, Thaddee Tyl <thaddee.tyl@gmail.com>
 // Copyright (C) 2012, Mathias Bynens <mathias@qiwi.be>
 // Copyright (C) 2012, Joost-Wim Boekesteijn <joost-wim@boekesteijn.nl>
@@ -42,15 +42,15 @@ using System.Reflection;
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Escape")]
 [assembly: AssemblyCopyright(
-    "Copyright \u00a9 2014, Atif Aziz"
-          + ", \u00a9 2013, Sebastien Ros"
-          + ", \u00a9 2013, Thaddee Tyl"
-          + ", \u00a9 2012, Mathias Bynens"
-          + ", \u00a9 2012, Joost-Wim Boekesteijn"
-          + ", \u00a9 2012, Kris Kowal"
-          + ", \u00a9 2012, Yusuke Suzuki"
-          + ", \u00a9 2012, Arpad Borsos"
-          + ", \u00a9 2011, Ariya Hidayat")]
+    "Copyright \u00a9 2014 Atif Aziz"
+          + ", \u00a9 2013 S\u00e9bastien Ros"
+          + ", \u00a9 2013 Thaddee Tyl"
+          + ", \u00a9 2012 Mathias Bynens"
+          + ", \u00a9 2012 Joost-Wim Boekesteijn"
+          + ", \u00a9 2012 Kris Kowal"
+          + ", \u00a9 2012 Yusuke Suzuki"
+          + ", \u00a9 2012 Arpad Borsos"
+          + ", \u00a9 2011 Ariya Hidayat")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -1,6 +1,14 @@
 #region BSD 2-Clause License
 //
-// Copyright (c) 2013, Sebastien Ros, (c) 2014, Atif Aziz
+// Copyright (C) 2014, Atif Aziz
+// Copyright (C) 2013, Sebastien Ros
+// Copyright (C) 2013, Thaddee Tyl <thaddee.tyl@gmail.com>
+// Copyright (C) 2012, Mathias Bynens <mathias@qiwi.be>
+// Copyright (C) 2012, Joost-Wim Boekesteijn <joost-wim@boekesteijn.nl>
+// Copyright (C) 2012, Kris Kowal <kris.kowal@cixar.com>
+// Copyright (C) 2012, Yusuke Suzuki <utatane.tea@gmail.com>
+// Copyright (C) 2012, Arpad Borsos <arpad.borsos@googlemail.com>
+// Copyright (C) 2011, Ariya Hidayat <ariya.hidayat@gmail.com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
