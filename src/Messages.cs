@@ -38,7 +38,7 @@ namespace Escape
 {
     // Error messages should be identical to V8.
     
-    /* TODO static */ class Messages
+    static class Messages
     {
         public static string UnexpectedToken = "Unexpected token {0}";
         public static string UnexpectedNumber = "Unexpected number";
