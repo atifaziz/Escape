@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>Escape</id>
+        <version>1.0.0</version>
+        <title>Escape</title>
+        <authors>Sébastien Ros</authors>
+        <owners>Atif Aziz</owners>
+        <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+        <projectUrl>https://bitbucket.org/raboof/owc</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>JavaScript/ECMAScript 5.1 (ECMA-262) Parser</description>
+        <releaseNotes>Initial release designed to be source compatible with Jint (JavaScript interpreter).</releaseNotes>
+        <copyright>Copyright © 2014 Atif Aziz, © 2013 Sébastien Ros, © 2013 Thaddee Tyl, © 2012 Mathias Bynens, © 2012 Joost-Wim Boekesteijn, © 2012 Kris Kowal, © 2012 Yusuke Suzuki, © 2012 Arpad Borsos, © 2011 Ariya Hidayat. All rights reserved.</copyright>
+        <tags>javascript ecmascript js parser</tags>
+    </metadata>
+    <files>
+        <file src="bin\net35\Release\*" target="lib\net35-client" />
+        <file src="bin\Release\*" target="lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1" />
+        <file src="src\*.cs" target="src" />
+        <file src="COPYING.txt" target="COPYING.txt" />
+    </files>
+</package>
