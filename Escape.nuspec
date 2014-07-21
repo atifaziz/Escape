@@ -2,12 +2,12 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>Escape</id>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
         <title>Escape</title>
         <authors>Sébastien Ros</authors>
         <owners>Atif Aziz</owners>
         <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
-        <projectUrl>https://bitbucket.org/raboof/owc</projectUrl>
+        <projectUrl>https://bitbucket.org/raboof/escape</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>JavaScript/ECMAScript 5.1 (ECMA-262) Parser</description>
         <releaseNotes>Initial release designed to be source compatible with Jint (JavaScript interpreter).</releaseNotes>
