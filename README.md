@@ -4,6 +4,7 @@ Escape is a JavaScript parser for .NET applications based on the [Esprima](http:
 
 ## Usage
 
+Escape is [distributed as a NuGet package](https://www.nuget.org/packages/Escape).
     
     const string js = @"
         // Life, Universe, and Everything
