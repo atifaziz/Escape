@@ -42,7 +42,7 @@ namespace Escape.Ast
 
     public class ArrayExpression : Expression
     {
-        public IEnumerable<Expression> Elements;
+        public IEnumerable<Expression> Elements { get; set; }
     }
 
     public enum AssignmentOperator
@@ -63,9 +63,9 @@ namespace Escape.Ast
 
     public class AssignmentExpression : Expression
     {
-        public AssignmentOperator Operator;
-        public Expression Left;
-        public Expression Right;
+        public AssignmentOperator Operator { get; set; }
+        public Expression Left { get; set; }
+        public Expression Right { get; set; }
 
         public static AssignmentOperator ParseAssignmentOperator(string op)
         {
@@ -129,9 +129,9 @@ namespace Escape.Ast
 
     public class BinaryExpression : Expression
     {
-        public BinaryOperator Operator;
-        public Expression Left;
-        public Expression Right;
+        public BinaryOperator Operator { get; set; }
+        public Expression Left { get; set; }
+        public Expression Right { get; set; }
 
         public static BinaryOperator ParseBinaryOperator(string op)
         {
@@ -188,44 +188,44 @@ namespace Escape.Ast
 
     public class BlockStatement : Statement
     {
-        public IEnumerable<Statement> Body;
+        public IEnumerable<Statement> Body { get; set; }
     }
 
     public class BreakStatement : Statement
     {
-        public Identifier Label;
+        public Identifier Label { get; set; }
     }
 
     public class CallExpression : Expression
     {
-        public Expression Callee;
-        public IEnumerable<Expression> Arguments;
+        public Expression Callee { get; set; }
+        public IEnumerable<Expression> Arguments { get; set; }
     }
 
     public class CatchClause : Statement
     {
-        public Identifier Param;
-        public BlockStatement Body;
+        public Identifier Param { get; set; }
+        public BlockStatement Body { get; set; }
     }
 
     public class ConditionalExpression : Expression
     {
-        public Expression Test;
-        public Expression Consequent;
-        public Expression Alternate;
+        public Expression Test { get; set; }
+        public Expression Consequent { get; set; }
+        public Expression Alternate { get; set; }
     }
 
     public class ContinueStatement : Statement
     {
-        public Identifier Label;
+        public Identifier Label { get; set; }
     }
 
     public class DebuggerStatement: Statement {}
 
     public class DoWhileStatement  : Statement
     {
-        public Statement Body;
-        public Expression Test;
+        public Statement Body { get; set; }
+        public Expression Test { get; set; }
     }
 
     public class EmptyStatement : Statement {}
@@ -238,24 +238,24 @@ namespace Escape.Ast
 
     public class ExpressionStatement : Statement
     {
-        public Expression Expression;
+        public Expression Expression { get; set; }
     }
 
     public class ForInStatement : Statement
     {
-        public SyntaxNode Left;
-        public Expression Right;
-        public Statement Body;
-        public bool Each;
+        public SyntaxNode Left { get; set; }
+        public Expression Right { get; set; }
+        public Statement Body { get; set; }
+        public bool Each { get; set; }
     }
 
     public class ForStatement : Statement
     {
         // can be a Statement (var i) or an Expression (i=0)
-        public SyntaxNode Init;
-        public Expression Test;
-        public Expression Update;
-        public Statement Body;
+        public SyntaxNode Init { get; set; }
+        public Expression Test { get; set; }
+        public Expression Update { get; set; }
+        public Statement Body { get; set; }
     }
 
     public class FunctionDeclaration : Statement, IFunctionDeclaration
@@ -274,10 +274,10 @@ namespace Escape.Ast
 
         #region ECMA6
         
-        public IEnumerable<Expression> Defaults;
-        public SyntaxNode Rest;
-        public bool Generator;
-        public bool Expression;
+        public IEnumerable<Expression> Defaults { get; set; }
+        public SyntaxNode Rest { get; set; }
+        public bool Generator { get; set; }
+        public bool Expression { get; set; }
         
         #endregion
 
@@ -300,16 +300,16 @@ namespace Escape.Ast
         public IList<FunctionDeclaration> FunctionDeclarations { get; set; }
 
         #region ECMA6
-        public IEnumerable<Expression> Defaults;
-        public SyntaxNode Rest;
-        public bool Generator;
-        public bool Expression;
+        public IEnumerable<Expression> Defaults { get; set; }
+        public SyntaxNode Rest { get; set; }
+        public bool Generator { get; set; }
+        public bool Expression { get; set; }
         #endregion
     }
 
     public class Identifier : Expression, IPropertyKeyExpression
     {
-        public string Name;
+        public string Name { get; set; }
         
         public string GetKey()
         {
@@ -319,9 +319,9 @@ namespace Escape.Ast
 
     public class IfStatement : Statement
     {
-        public Expression Test;
-        public Statement Consequent;
-        public Statement Alternate;
+        public Expression Test { get; set; }
+        public Statement Consequent { get; set; }
+        public Statement Alternate { get; set; }
     }
 
     /// <summary>
@@ -334,14 +334,14 @@ namespace Escape.Ast
 
     public class LabelledStatement : Statement
     {
-        public Identifier Label;
-        public Statement Body;
+        public Identifier Label { get; set; }
+        public Statement Body { get; set; }
     }
 
     public class Literal : Expression, IPropertyKeyExpression
     {
-        public object Value;
-        public string Raw;
+        public object Value { get; set; }
+        public string Raw { get; set; }
 
         public string GetKey()
         {
@@ -357,9 +357,9 @@ namespace Escape.Ast
 
     public class LogicalExpression : Expression
     {
-        public LogicalOperator Operator;
-        public Expression Left;
-        public Expression Right;
+        public LogicalOperator Operator { get; set; }
+        public Expression Left { get; set; }
+        public Expression Right { get; set; }
         
         public static LogicalOperator ParseLogicalOperator(string op)
         {
@@ -378,22 +378,22 @@ namespace Escape.Ast
 
     public class MemberExpression : Expression
     {
-        public Expression Object;
-        public Expression Property;
+        public Expression Object { get; set; }
+        public Expression Property { get; set; }
 
         // true if an indexer is used and the property to be evaluated
-        public bool Computed;
+        public bool Computed { get; set; }
     }
 
     public class NewExpression : Expression
     {
-        public Expression Callee;
-        public IEnumerable<Expression> Arguments;
+        public Expression Callee { get; set; }
+        public IEnumerable<Expression> Arguments { get; set; }
     }
 
     public class ObjectExpression : Expression
     {
-        public IEnumerable<Property> Properties;
+        public IEnumerable<Property> Properties { get; set; }
     }
 
     public class Program : Statement, IFunctionScope
@@ -402,12 +402,12 @@ namespace Escape.Ast
         {
             VariableDeclarations = new List<VariableDeclaration>();
         }
-        public ICollection<Statement> Body;
+        public ICollection<Statement> Body { get; set; }
 
-        public List<Comment> Comments;
-        public List<Token> Tokens;
-        public List<ParserException> Errors;
-        public bool Strict;
+        public List<Comment> Comments { get; set; }
+        public List<Token> Tokens { get; set; }
+        public List<ParserException> Errors { get; set; }
+        public bool Strict { get; set; }
 
         public IList<VariableDeclaration> VariableDeclarations { get; set; }
         public IList<FunctionDeclaration> FunctionDeclarations { get; set; }
@@ -423,16 +423,16 @@ namespace Escape.Ast
 
     public class Property : Expression
     {
-        public PropertyKind Kind;
-        public IPropertyKeyExpression Key;
-        public Expression Value;
+        public PropertyKind Kind { get; set; }
+        public IPropertyKeyExpression Key { get; set; }
+        public Expression Value { get; set; }
     }
 
     public class RegExpLiteral : Expression, IPropertyKeyExpression
     {
-        public object Value;
-        public string Raw;
-        public string Flags;
+        public object Value { get; set; }
+        public string Raw { get; set; }
+        public string Flags { get; set; }
         
         public string GetKey()
         {
@@ -442,36 +442,36 @@ namespace Escape.Ast
 
     public class ReturnStatement : Statement
     {
-        public Expression Argument;
+        public Expression Argument { get; set; }
     }
 
     public class SequenceExpression : Expression
     {
-        public IList<Expression> Expressions;
+        public IList<Expression> Expressions { get; set; }
     }
 
     public class Statement : SyntaxNode
     {
-        public string LabelSet;
+        public string LabelSet { get; set; }
     }
 
     public class SwitchCase : SyntaxNode
     {
-        public Expression Test;
-        public IEnumerable<Statement> Consequent;
+        public Expression Test { get; set; }
+        public IEnumerable<Statement> Consequent { get; set; }
     }
 
     public class SwitchStatement : Statement
     {
-        public Expression Discriminant;
-        public IEnumerable<SwitchCase> Cases;
+        public Expression Discriminant { get; set; }
+        public IEnumerable<SwitchCase> Cases { get; set; }
     }
 
     public class SyntaxNode
     {
-        public SyntaxNodes Type;
+        public SyntaxNodes Type { get; set; }
         public int[] Range;
-        public Location Location;
+        public Location Location { get; set; }
 
         [DebuggerStepThrough]
         public T As<T>() where T : SyntaxNode
@@ -529,15 +529,15 @@ namespace Escape.Ast
 
     public class ThrowStatement : Statement
     {
-        public Expression Argument;
+        public Expression Argument { get; set; }
     }
 
     public class TryStatement : Statement
     {
-        public Statement Block;
-        public IEnumerable<Statement> GuardedHandlers;
-        public IEnumerable<CatchClause> Handlers;
-        public Statement Finalizer;
+        public Statement Block { get; set; }
+        public IEnumerable<Statement> GuardedHandlers { get; set; }
+        public IEnumerable<CatchClause> Handlers { get; set; }
+        public Statement Finalizer { get; set; }
     }
 
     public enum UnaryOperator
@@ -555,9 +555,9 @@ namespace Escape.Ast
 
     public class UnaryExpression : Expression
     {
-        public UnaryOperator Operator;
-        public Expression Argument;
-        public bool Prefix;
+        public UnaryOperator Operator { get; set; }
+        public Expression Argument { get; set; }
+        public bool Prefix { get; set; }
 
         public static UnaryOperator ParseUnaryOperator(string op)
         {
@@ -591,25 +591,25 @@ namespace Escape.Ast
 
     public class VariableDeclaration : Statement
     {
-        public IEnumerable<VariableDeclarator> Declarations;
-        public string Kind;
+        public IEnumerable<VariableDeclarator> Declarations { get; set; }
+        public string Kind { get; set; }
     }
 
     public class VariableDeclarator : Expression
     {
-        public Identifier Id;
-        public Expression Init;
+        public Identifier Id { get; set; }
+        public Expression Init { get; set; }
     }
 
     public class WhileStatement : Statement
     {
-        public Expression Test;
-        public Statement Body;
+        public Expression Test { get; set; }
+        public Statement Body { get; set; }
     }
 
     public class WithStatement : Statement
     {
-        public Expression Object;
-        public Statement Body;
+        public Expression Object { get; set; }
+        public Statement Body { get; set; }
     }
 }
