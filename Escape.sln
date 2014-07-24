@@ -2,7 +2,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Escape.net35", "src\Escape.net35.csproj", "{9C88EBFF-59F3-460A-B381-C9C953682711}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Escape", "src\Escape\Escape.csproj", "{281FB3FD-B5D7-4A34-9325-4113C4C01D71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Escape.net35", "src\Escape\Escape.net35.csproj", "{9C88EBFF-59F3-460A-B381-C9C953682711}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DBDB99A5-9275-4278-BE13-450018EF4D3B}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Escape.Tests", "tests\Escape.Tests.csproj", "{10194F5B-3EB5-4922-A4C0-10AF1BC92CBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Escape", "src\Escape.csproj", "{281FB3FD-B5D7-4A34-9325-4113C4C01D71}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Esparse", "src\Esparse\Esparse.csproj", "{51280D86-0E65-4438-9DA6-8FAE1D757F7F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +27,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{281FB3FD-B5D7-4A34-9325-4113C4C01D71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{281FB3FD-B5D7-4A34-9325-4113C4C01D71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{281FB3FD-B5D7-4A34-9325-4113C4C01D71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{281FB3FD-B5D7-4A34-9325-4113C4C01D71}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9C88EBFF-59F3-460A-B381-C9C953682711}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9C88EBFF-59F3-460A-B381-C9C953682711}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C88EBFF-59F3-460A-B381-C9C953682711}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,10 +39,10 @@ Global
 		{10194F5B-3EB5-4922-A4C0-10AF1BC92CBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10194F5B-3EB5-4922-A4C0-10AF1BC92CBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10194F5B-3EB5-4922-A4C0-10AF1BC92CBD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{281FB3FD-B5D7-4A34-9325-4113C4C01D71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{281FB3FD-B5D7-4A34-9325-4113C4C01D71}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{281FB3FD-B5D7-4A34-9325-4113C4C01D71}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{281FB3FD-B5D7-4A34-9325-4113C4C01D71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51280D86-0E65-4438-9DA6-8FAE1D757F7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51280D86-0E65-4438-9DA6-8FAE1D757F7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51280D86-0E65-4438-9DA6-8FAE1D757F7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51280D86-0E65-4438-9DA6-8FAE1D757F7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
