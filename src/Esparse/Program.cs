@@ -141,12 +141,10 @@ namespace Esparse
 
                 Debug.Assert(program != null);
 
-                var encodeStopwatch = Stopwatch.StartNew();
                 using (var stdout = OpenStdOut(outputEncoding))
                 {
                     JsonEncoder.Encode(program, includeLocation, stdout);
                     stdout.Flush();
-                    encodeStopwatch.Stop();
                 }
 
                 if (stats)
