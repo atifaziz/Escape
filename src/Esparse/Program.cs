@@ -42,6 +42,8 @@ namespace Esparse
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
+    using System.Security.Cryptography.X509Certificates;
     using System.Text;
     using Escape;
 
@@ -70,7 +72,8 @@ namespace Esparse
             var includeLocation = false;
             var outputEncoding = (Encoding) null;
             var inputEncoding = (Encoding) null;
-            var showStats = false;
+            var stats = false;
+            var gc = false;
 
             using (var arg = args.GetEnumerator())
             {
@@ -81,7 +84,8 @@ namespace Esparse
                     else if (arg.Current == "--tokens") { options.Tokens = true; }
                     else if (arg.Current == "--tolerant") { options.Tolerant = true; }
                     else if (arg.Current == "--loc") { includeLocation = true; }
-                    else if (arg.Current == "--stat" || arg.Current == "--stats") { showStats = true; }
+                    else if (arg.Current == "--stats") { stats = true; }
+                    else if (arg.Current == "--gc") { gc = true; }
                     else if (arg.Current == "--output-encoding")
                     {
                         if (!arg.MoveNext()) throw new Exception("Missing output encoding value specification.");
@@ -111,9 +115,31 @@ namespace Esparse
                              : File.ReadAllText(sourceFilePath)
                            : Console.In.ReadToEnd();
 
-                var parseStopwatch = Stopwatch.StartNew();
-                var program = new JavaScriptParser().Parse(source, options);
-                parseStopwatch.Stop();
+                Escape.Ast.Program program = null;
+                
+                var durations = new TimeSpan[stats ? 4 : 1];
+                var allocations = gc && stats ? new long[durations.Length] : null;
+                var nullHeapSize = (long?) null;
+
+                for (var i = 0; i < durations.Length; i++)
+                {
+                    var heapStartSize = allocations != null 
+                                      ? GC.GetTotalMemory(true) 
+                                      : nullHeapSize;
+
+                    var sw = Stopwatch.StartNew();
+                    program = new JavaScriptParser().Parse(source, options);
+                    durations[i] = sw.Elapsed;
+
+                    if (heapStartSize != nullHeapSize)
+                    {
+                        allocations[i] = GC.GetTotalMemory(true) - heapStartSize.Value;
+                        if (i < durations.Length - 1)
+                            program = null; // so it can be collected
+                    }
+                }
+
+                Debug.Assert(program != null);
 
                 var encodeStopwatch = Stopwatch.StartNew();
                 using (var stdout = OpenStdOut(outputEncoding))
@@ -123,10 +149,25 @@ namespace Esparse
                     encodeStopwatch.Stop();
                 }
 
-                if (showStats)
+                if (stats)
                 {
-                    Console.Error.WriteLine("Parsing duration = {0}", parseStopwatch.Elapsed);
-                    Console.Error.WriteLine("Encoding duration = {0}", encodeStopwatch.Elapsed);
+                    var ms = from d in durations.Skip(1 /* cold */) 
+                             select d.TotalMilliseconds;
+                    var duration = TimeSpan.FromMilliseconds(ms.Average());
+                    var format = duration.Days == 0 && duration.Hours == 0
+                               ? "mm':'ss'.'ffff"
+                               : null;
+                    Console.Error.WriteLine("Time: {0}; [{1}]", 
+                        duration.ToString(format), 
+                        string.Join(", ", from d in durations select d.ToString(format)));
+                }
+
+                if (allocations != null)
+                {
+                    var bsfp = new ByteSizeFormatProvider();
+                    Console.Error.WriteLine("Heap: {0}; [{1}]",
+                        bsfp.Format("SZ2", allocations.Select(a => (double)a).Average(), null),
+                        string.Join(", ", allocations));
                 }
             }
         }

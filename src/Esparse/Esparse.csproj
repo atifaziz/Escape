@@ -37,6 +37,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ByteSizeFormatProvider.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="JsonEncoder.cs" />
     <Compile Include="JsonTextWriter.cs" />
