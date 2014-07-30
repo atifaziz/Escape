@@ -41,8 +41,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\src\Esparse\ByteSizeFormatProvider.cs">
+      <Link>ByteSizeFormatProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\src\Esparse\Extensions.cs">
+      <Link>Extensions.cs</Link>
+    </Compile>
+    <Compile Include="..\src\Esparse\JsonEncoder.cs">
+      <Link>JsonEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\src\Esparse\JsonTextWriter.cs">
+      <Link>JsonTextWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\src\Esparse\SyntaxNodeVisitor.cs">
+      <Link>SyntaxNodeVisitor.cs</Link>
+    </Compile>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="ParserTests.cs" />
+    <Compile Include="Process.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -63,6 +79,14 @@
       <Project>{281fb3fd-b5d7-4a34-9325-4113c4c01d71}</Project>
       <Name>Escape</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="esparse.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="esprima.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

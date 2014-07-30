@@ -43,7 +43,10 @@ namespace Escape.Tests
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Text;
     using Ast;
+    using Esparse;
+    using Mannex.Diagnostics;
     using Xunit;
     using Xunit.Extensions;
 
@@ -54,33 +57,121 @@ namespace Escape.Tests
         readonly JavaScriptParser _parser = new JavaScriptParser();
 
         [Theory]
-        [InlineData("jQuery.js", "1.9.1")]
-        [InlineData("underscore.js", "1.5.2")]
-        [InlineData("backbone.js", "1.1.0")]
-        [InlineData("mootools.js", "1.4.5")]
-        [InlineData("angular.js", "1.2.5")]
-        [InlineData("JSXTransformer.js", "0.10.0")]
-        public void ShouldParseScriptFile(string file, string version)
+        [InlineData("jQuery.js"        , "1.9.1" , true)]
+        [InlineData("underscore.js"    , "1.5.2" , true )]
+        [InlineData("backbone.js"      , "1.1.0" , true )]
+        [InlineData("mootools.js"      , "1.4.5" , true )]
+        [InlineData("angular.js"       , "1.2.5" , true )]
+        [InlineData("JSXTransformer.js", "0.10.0", false)]
+        public void ShouldParseScriptFile(string file, string version, bool compareTrees)
         {
             const string prefix = "Escape.Tests.Scripts.";
 
             var assembly = Assembly.GetExecutingAssembly();
             var scriptPath = prefix + file;
             var sw = new Stopwatch();
+            var tempFilePath = NodePath != null 
+                             ? Path.GetTempFileName() : null;
 
-            using (var stream = assembly.GetManifestResourceStream(scriptPath))
+            try
             {
-                Assert.True(stream != null, string.Format("Script resource '{0}' not found", scriptPath));
-                using (var sr = new StreamReader(stream))
+                using (var stream = assembly.GetManifestResourceStream(scriptPath))
                 {
-                    var source = sr.ReadToEnd();
-                    sw.Reset();
-                    sw.Start();
-                    var parser = new JavaScriptParser();
-                    var program = parser.Parse(source);
-                    Console.WriteLine("Parsed {0} {1} ({3} KB) in {2} ms", file, version, sw.ElapsedMilliseconds, (int)source.Length/1024);
-                    Assert.NotNull(program);
+                    Assert.True(stream != null, string.Format("Script resource '{0}' not found", scriptPath));
+                    using (var sr = new StreamReader(stream))
+                    {
+                        var source = sr.ReadToEnd();
+                        sw.Reset();
+                        sw.Start();
+                        var parser = new JavaScriptParser();
+                        var program = parser.Parse(source);
+                        var bsfp = new ByteSizeFormatProvider();
+                        Console.WriteLine("Parsed {0} {1} ({3}) in {2} ms", file, version, sw.ElapsedMilliseconds, bsfp.Format("SZ1", source.Length, null));
+                        Assert.NotNull(program);
+
+                        if (!compareTrees)
+                        {
+                            Console.WriteLine("WARNING! AST compairson skipped for {0} {1}.", file, version);
+                            return;
+                        }
+
+                        if (tempFilePath == null)
+                        {
+                            Console.WriteLine(
+                                "If Node.js is installed in the system path " + 
+                                "then a more comprehensive test can be carried " + 
+                                "out comparing Esprima's and Escape's AST.");
+                            return;
+                        }
+
+                        File.WriteAllText(tempFilePath, source);
+                        sw.Restart();
+                        var esparseOutput = Esparse(tempFilePath);
+
+                        Console.WriteLine(
+                            "Esparse.js for {0} {1} took {2} ms, producing {3} of pretty-printed AST JSON", 
+                            file, version, sw.ElapsedMilliseconds, 
+                            bsfp.Format("SZ1", esparseOutput.Length, null));
+
+                        var sb = new StringBuilder(esparseOutput.Length * 110 / 100);
+                        var esw = new StringWriter(sb) { NewLine = "\r\n" };
+                        JsonEncoder.Encode(program, false, esw);
+                        esw.WriteLine();
+                        Assert.Equal(esparseOutput.Length, sb.Length);
+                        Assert.True(esparseOutput == sb.ToString(), "AST JSON mismatch");
+                    }
                 }
+            }
+            finally
+            {
+                if (tempFilePath != null)
+                    File.Delete(tempFilePath);
+            }
+        }
+
+        static string _nodePath;
+
+        public static string NodePath
+        {
+            get { return _nodePath ?? (_nodePath = FindNode()); }
+        }
+
+        static string FindNode()
+        {
+            var path = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
+            return path.Split(Path.PathSeparator)
+                       .Select(p => Path.Combine(p, "nod.exe"))
+                       .FirstOrDefault(File.Exists);
+        }
+
+        static string Esparse(string path, string options = null)
+        {
+            using (var node = Process.Start(new ProcessStartInfo
+            {
+                UseShellExecute = false,
+                FileName = NodePath,
+                Arguments = string.Format("esparse.js {0} \"{1}\"", options, path),
+                CreateNoWindow = true,
+                RedirectStandardOutput = true, 
+                RedirectStandardError = true,
+                StandardOutputEncoding = Encoding.UTF8,
+            }))
+            {
+                var stdout = new StringWriter();
+                var stderr = new StringWriter();
+                var drain = node.BeginReadLine(stdout.WriteLine, stderr.WriteLine);
+
+                node.WaitForExit(null); // ReSharper disable once PossibleNullReferenceException
+                if (node.ExitCode != 0)
+                {
+                    Console.Error.Write(stderr);
+                    throw new Exception(string.Format("Node program terminated with a non-zero exit code of {0}.", node.ExitCode));
+                }
+                
+                if (!drain(TimeSpan.FromSeconds(5)))
+                    throw new TimeoutException();
+                
+                return stdout.ToString();
             }
         }
         
