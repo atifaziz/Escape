@@ -140,7 +140,7 @@ namespace Escape.Tests
         {
             var path = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
             return path.Split(Path.PathSeparator)
-                       .Select(p => Path.Combine(p, "nod.exe"))
+                       .Select(p => Path.Combine(p, "node.exe"))
                        .FirstOrDefault(File.Exists);
         }
 
