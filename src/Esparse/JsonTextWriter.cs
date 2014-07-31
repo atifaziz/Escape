@@ -126,7 +126,7 @@ namespace Esparse
         }
 
         public JsonTextWriter Number(int value) { return Write(value.ToString(CultureInfo.InvariantCulture)); }
-        public JsonTextWriter Number(double value) { return Write(value.ToString(CultureInfo.InvariantCulture)); }
+        public JsonTextWriter Number(double value) { return Write(value.ToString(CultureInfo.InvariantCulture).Replace('E', 'e')); }
         public JsonTextWriter String(string str) { return str == null ? Null() : WriteEnquoted(str); }
         public JsonTextWriter Null() { return Write("null"); }
         public JsonTextWriter Boolean(bool value) { return Write(value ? "true" : "false"); }
