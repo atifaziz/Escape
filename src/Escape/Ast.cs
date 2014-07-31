@@ -258,19 +258,12 @@ namespace Escape.Ast
         public Statement Body { get; set; }
     }
 
-    public class FunctionDeclaration : Statement, IFunctionDeclaration
+    public class FunctionDeclaration : Statement
     {
-        public FunctionDeclaration()
-        {
-            VariableDeclarations = new List<VariableDeclaration>();
-        }
-
         public Identifier Id { get; set; }
         public IEnumerable<Identifier> Parameters { get; set; }
         public Statement Body { get; set; }
         public bool Strict { get; set; }
-
-        public IList<VariableDeclaration> VariableDeclarations { get; set; }
 
         #region ECMA6
         
@@ -280,24 +273,14 @@ namespace Escape.Ast
         public bool Expression { get; set; }
         
         #endregion
-
-        public IList<FunctionDeclaration> FunctionDeclarations { get; set; }
     }
 
-    public class FunctionExpression : Expression, IFunctionDeclaration
+    public class FunctionExpression : Expression
     {
-        public FunctionExpression()
-        {
-            VariableDeclarations = new List<VariableDeclaration>();
-        }
-
         public Identifier Id { get; set; }
         public IEnumerable<Identifier> Parameters { get; set; }
         public Statement Body { get; set; }
         public bool Strict { get; set; }
-
-        public IList<VariableDeclaration> VariableDeclarations { get; set; }
-        public IList<FunctionDeclaration> FunctionDeclarations { get; set; }
 
         #region ECMA6
         public IEnumerable<Expression> Defaults { get; set; }
@@ -396,21 +379,14 @@ namespace Escape.Ast
         public IEnumerable<Property> Properties { get; set; }
     }
 
-    public class Program : Statement, IFunctionScope
+    public class Program : Statement
     {
-        public Program()
-        {
-            VariableDeclarations = new List<VariableDeclaration>();
-        }
         public ICollection<Statement> Body { get; set; }
 
         public List<Comment> Comments { get; set; }
         public List<Token> Tokens { get; set; }
         public List<ParserException> Errors { get; set; }
         public bool Strict { get; set; }
-
-        public IList<VariableDeclaration> VariableDeclarations { get; set; }
-        public IList<FunctionDeclaration> FunctionDeclarations { get; set; }
     }
 
     [Flags]

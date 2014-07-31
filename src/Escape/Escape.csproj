@@ -41,9 +41,6 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Ast.cs" />
     <Compile Include="Comment.cs" />
-    <Compile Include="IFunctionDeclaration.cs" />
-    <Compile Include="IFunctionScope.cs" />
-    <Compile Include="IVariableScope.cs" />
     <Compile Include="JavascriptParser.cs" />
     <Compile Include="Loc.cs" />
     <Compile Include="Messages.cs" />

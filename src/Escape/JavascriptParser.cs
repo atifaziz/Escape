@@ -96,14 +96,7 @@ namespace Escape
         State _state;
         bool _strict;
 
-        readonly Stack<IVariableScope> _variableScopes = new Stack<IVariableScope>();
-        readonly Stack<IFunctionScope> _functionScopes = new Stack<IFunctionScope>();
-
-
-        public JavaScriptParser()
-        {
-            
-        }
+        public JavaScriptParser() : this(false) {}
 
         public JavaScriptParser(bool strict)
         {
@@ -1340,7 +1333,7 @@ namespace Escape
             return node;
         }
 
-        public ArrayExpression CreateArrayExpression(IEnumerable<Expression> elements)
+        public static ArrayExpression CreateArrayExpression(IEnumerable<Expression> elements)
         {
             return new ArrayExpression
                 {
@@ -1349,7 +1342,7 @@ namespace Escape
                 };
         }
 
-        public AssignmentExpression CreateAssignmentExpression(string op, Expression left, Expression right)
+        public static AssignmentExpression CreateAssignmentExpression(string op, Expression left, Expression right)
         {
             return new AssignmentExpression
                 {
@@ -1360,7 +1353,7 @@ namespace Escape
                 };
         }
 
-        public Expression CreateBinaryExpression(string op, Expression left, Expression right)
+        public static Expression CreateBinaryExpression(string op, Expression left, Expression right)
         {
             
             return (op == "||" || op == "&&")
@@ -1380,7 +1373,7 @@ namespace Escape
                            };
         }
 
-        public BlockStatement CreateBlockStatement(IEnumerable<Statement> body)
+        public static BlockStatement CreateBlockStatement(IEnumerable<Statement> body)
         {
             return new BlockStatement
                 {
@@ -1389,7 +1382,7 @@ namespace Escape
                 };
         }
 
-        public BreakStatement CreateBreakStatement(Identifier label)
+        public static BreakStatement CreateBreakStatement(Identifier label)
         {
             return new BreakStatement
                 {
@@ -1398,7 +1391,7 @@ namespace Escape
                 };
         }
 
-        public CallExpression CreateCallExpression(Expression callee, IEnumerable<Expression> args)
+        public static CallExpression CreateCallExpression(Expression callee, IEnumerable<Expression> args)
         {
             return new CallExpression
                 {
@@ -1408,7 +1401,7 @@ namespace Escape
                 };
         }
 
-        public CatchClause CreateCatchClause(Identifier param, BlockStatement body)
+        public static CatchClause CreateCatchClause(Identifier param, BlockStatement body)
         {
             return new CatchClause
                 {
@@ -1418,7 +1411,7 @@ namespace Escape
                 };
         }
 
-        public ConditionalExpression CreateConditionalExpression(Expression test, Expression consequent,
+        public static ConditionalExpression CreateConditionalExpression(Expression test, Expression consequent,
                                                                  Expression alternate)
         {
             return new ConditionalExpression
@@ -1430,7 +1423,7 @@ namespace Escape
                 };
         }
 
-        public ContinueStatement CreateContinueStatement(Identifier label)
+        public static ContinueStatement CreateContinueStatement(Identifier label)
         {
             return new ContinueStatement
                 {
@@ -1439,7 +1432,7 @@ namespace Escape
                 };
         }
 
-        public DebuggerStatement CreateDebuggerStatement()
+        public static DebuggerStatement CreateDebuggerStatement()
         {
             return new DebuggerStatement
                 {
@@ -1447,7 +1440,7 @@ namespace Escape
                 };
         }
 
-        public DoWhileStatement CreateDoWhileStatement(Statement body, Expression test)
+        public static DoWhileStatement CreateDoWhileStatement(Statement body, Expression test)
         {
             return new DoWhileStatement
                 {
@@ -1457,7 +1450,7 @@ namespace Escape
                 };
         }
 
-        public EmptyStatement CreateEmptyStatement()
+        public static EmptyStatement CreateEmptyStatement()
         {
             return new EmptyStatement
                 {
@@ -1465,7 +1458,7 @@ namespace Escape
                 };
         }
 
-        public ExpressionStatement CreateExpressionStatement(Expression expression)
+        public static ExpressionStatement CreateExpressionStatement(Expression expression)
         {
             return new ExpressionStatement
                 {
@@ -1474,7 +1467,7 @@ namespace Escape
                 };
         }
 
-        public ForStatement CreateForStatement(SyntaxNode init, Expression test, Expression update, Statement body)
+        public static ForStatement CreateForStatement(SyntaxNode init, Expression test, Expression update, Statement body)
         {
             return new ForStatement
                 {
@@ -1486,7 +1479,7 @@ namespace Escape
                 };
         }
 
-        public ForInStatement CreateForInStatement(SyntaxNode left, Expression right, Statement body)
+        public static ForInStatement CreateForInStatement(SyntaxNode left, Expression right, Statement body)
         {
             return new ForInStatement
                 {
@@ -1498,10 +1491,10 @@ namespace Escape
                 };
         }
 
-        public FunctionDeclaration CreateFunctionDeclaration(Identifier id, IEnumerable<Identifier> parameters,
+        public static FunctionDeclaration CreateFunctionDeclaration(Identifier id, IEnumerable<Identifier> parameters,
                                                              IEnumerable<Expression> defaults, Statement body, bool strict)
         {
-            var functionDeclaration = new FunctionDeclaration
+            return new FunctionDeclaration
                 {
                     Type = SyntaxNodes.FunctionDeclaration,
                     Id = id,
@@ -1512,16 +1505,10 @@ namespace Escape
                     Rest = null,
                     Generator = false,
                     Expression = false,
-                    VariableDeclarations = LeaveVariableScope(),
-                    FunctionDeclarations = LeaveFunctionScope()
                 };
-
-            _functionScopes.Peek().FunctionDeclarations.Add(functionDeclaration);
-
-            return functionDeclaration;
         }
 
-        public FunctionExpression CreateFunctionExpression(Identifier id, IEnumerable<Identifier> parameters,
+        public static FunctionExpression CreateFunctionExpression(Identifier id, IEnumerable<Identifier> parameters,
                                                            IEnumerable<Expression> defaults, Statement body, bool strict)
         {
             return new FunctionExpression
@@ -1535,12 +1522,10 @@ namespace Escape
                     Rest = null,
                     Generator = false,
                     Expression = false,
-                    VariableDeclarations = LeaveVariableScope(),
-                    FunctionDeclarations = LeaveFunctionScope()
                 };
         }
 
-        public Identifier CreateIdentifier(string name)
+        public static Identifier CreateIdentifier(string name)
         {
             return new Identifier
                 {
@@ -1549,7 +1534,7 @@ namespace Escape
                 };
         }
 
-        public IfStatement CreateIfStatement(Expression test, Statement consequent, Statement alternate)
+        public static IfStatement CreateIfStatement(Expression test, Statement consequent, Statement alternate)
         {
             return new IfStatement
                 {
@@ -1560,7 +1545,7 @@ namespace Escape
                 };
         }
 
-        public LabelledStatement CreateLabeledStatement(Identifier label, Statement body)
+        public static LabelledStatement CreateLabeledStatement(Identifier label, Statement body)
         {
             return new LabelledStatement
                 {
@@ -1570,27 +1555,25 @@ namespace Escape
                 };
         }
 
-        public Literal CreateLiteral(Token token)
+        Literal CreateLiteral(Token token)
         {
-            if (token.Type == Tokens.RegularExpression)
-            {
-                return new Literal
-                {
-                    Type = SyntaxNodes.RegularExpressionLiteral,
-                    Value = token.Value,
-                    Raw = _source.Slice(token.Range[0], token.Range[1])
-                };
-            }
+            return CreateLiteral(token.Type == Tokens.RegularExpression, token.Value, 
+                                 _source.Slice(token.Range[0], token.Range[1]));
+        }
 
+        public static Literal CreateLiteral(/* TODO Review */ bool isRegExp, object value, string raw)
+        {
             return new Literal
                 {
-                    Type = SyntaxNodes.Literal,
-                    Value = token.Value,
-                    Raw = _source.Slice(token.Range[0], token.Range[1])
+                    Type  = isRegExp
+                          ? SyntaxNodes.RegularExpressionLiteral
+                          : SyntaxNodes.Literal,
+                    Value = value,
+                    Raw   = raw
                 };
         }
 
-        public MemberExpression CreateMemberExpression(char accessor, Expression obj, Expression property)
+        public static MemberExpression CreateMemberExpression(char accessor, Expression obj, Expression property)
         {
             return new MemberExpression
                 {
@@ -1601,7 +1584,7 @@ namespace Escape
                 };
         }
 
-        public NewExpression CreateNewExpression(Expression callee, IEnumerable<Expression> args)
+        public static NewExpression CreateNewExpression(Expression callee, IEnumerable<Expression> args)
         {
             return new NewExpression
                 {
@@ -1611,7 +1594,7 @@ namespace Escape
                 };
         }
 
-        public ObjectExpression CreateObjectExpression(IEnumerable<Property> properties)
+        public static ObjectExpression CreateObjectExpression(IEnumerable<Property> properties)
         {
             return new ObjectExpression
                 {
@@ -1620,7 +1603,7 @@ namespace Escape
                 };
         }
 
-        public UpdateExpression CreatePostfixExpression(string op, Expression argument)
+        public static UpdateExpression CreatePostfixExpression(string op, Expression argument)
         {
             return new UpdateExpression
                 {
@@ -1631,19 +1614,17 @@ namespace Escape
                 };
         }
 
-        public Program CreateProgram(ICollection<Statement> body, bool strict)
+        public static Program CreateProgram(ICollection<Statement> body, bool strict)
         {
             return new Program
                 {
                     Type = SyntaxNodes.Program,
                     Body = body,
                     Strict = strict,
-                    VariableDeclarations = LeaveVariableScope(),
-                    FunctionDeclarations = LeaveFunctionScope()
                 };
         }
 
-        public Property CreateProperty(PropertyKind kind, IPropertyKeyExpression key, Expression value)
+        public static Property CreateProperty(PropertyKind kind, IPropertyKeyExpression key, Expression value)
         {
             return new Property
                 {
@@ -1654,7 +1635,7 @@ namespace Escape
                 };
         }
 
-        public ReturnStatement CreateReturnStatement(Expression argument)
+        public static ReturnStatement CreateReturnStatement(Expression argument)
         {
             return new ReturnStatement
                 {
@@ -1663,7 +1644,7 @@ namespace Escape
                 };
         }
 
-        public SequenceExpression CreateSequenceExpression(IList<Expression> expressions)
+        public static SequenceExpression CreateSequenceExpression(IList<Expression> expressions)
         {
             return new SequenceExpression
                 {
@@ -1672,7 +1653,7 @@ namespace Escape
                 };
         }
 
-        public SwitchCase CreateSwitchCase(Expression test, IEnumerable<Statement> consequent)
+        public static SwitchCase CreateSwitchCase(Expression test, IEnumerable<Statement> consequent)
         {
             return new SwitchCase
                 {
@@ -1682,7 +1663,7 @@ namespace Escape
                 };
         }
 
-        public SwitchStatement CreateSwitchStatement(Expression discriminant, IEnumerable<SwitchCase> cases)
+        public static SwitchStatement CreateSwitchStatement(Expression discriminant, IEnumerable<SwitchCase> cases)
         {
             return new SwitchStatement
                 {
@@ -1692,7 +1673,7 @@ namespace Escape
                 };
         }
 
-        public ThisExpression CreateThisExpression()
+        public static ThisExpression CreateThisExpression()
         {
             return new ThisExpression
                 {
@@ -1700,7 +1681,7 @@ namespace Escape
                 };
         }
 
-        public ThrowStatement CreateThrowStatement(Expression argument)
+        public static ThrowStatement CreateThrowStatement(Expression argument)
         {
             return new ThrowStatement
                 {
@@ -1709,7 +1690,7 @@ namespace Escape
                 };
         }
 
-        public TryStatement CreateTryStatement(Statement block, IEnumerable<Statement> guardedHandlers,
+        public static TryStatement CreateTryStatement(Statement block, IEnumerable<Statement> guardedHandlers,
                                                IEnumerable<CatchClause> handlers, Statement finalizer)
         {
             return new TryStatement
@@ -1722,7 +1703,7 @@ namespace Escape
                 };
         }
 
-        public UnaryExpression CreateUnaryExpression(string op, Expression argument)
+        public static UnaryExpression CreateUnaryExpression(string op, Expression argument)
         {
             if (op == "++" || op == "--")
             {
@@ -1745,21 +1726,17 @@ namespace Escape
         }
 
 
-        public VariableDeclaration CreateVariableDeclaration(IEnumerable<VariableDeclarator> declarations, string kind)
+        public static VariableDeclaration CreateVariableDeclaration(IEnumerable<VariableDeclarator> declarations, string kind)
         {
-            var variableDeclaration = new VariableDeclaration
+            return new VariableDeclaration
                 {
                     Type = SyntaxNodes.VariableDeclaration,
                     Declarations = declarations,
                     Kind = kind
                 };
-
-            _variableScopes.Peek().VariableDeclarations.Add(variableDeclaration);
-
-            return variableDeclaration;
         }
 
-        public VariableDeclarator CreateVariableDeclarator(Identifier id, Expression init)
+        public static VariableDeclarator CreateVariableDeclarator(Identifier id, Expression init)
         {
             return new VariableDeclarator
                 {
@@ -1769,7 +1746,7 @@ namespace Escape
                 };
         }
 
-        public WhileStatement CreateWhileStatement(Expression test, Statement body)
+        public static WhileStatement CreateWhileStatement(Expression test, Statement body)
         {
             return new WhileStatement
                 {
@@ -1779,7 +1756,7 @@ namespace Escape
                 };
         }
 
-        public WithStatement CreateWithStatement(Expression obj, Statement body)
+        public static WithStatement CreateWithStatement(Expression obj, Statement body)
         {
             return new WithStatement
                 {
@@ -2032,9 +2009,6 @@ namespace Escape
 
         FunctionExpression ParsePropertyFunction(Identifier[] parameters, Token first = null)
         {
-            EnterVariableScope();
-            EnterFunctionScope();
-
             var previousStrict = _strict;
             MarkStart();
             var body = ParseFunctionSourceElements();
@@ -3600,9 +3574,6 @@ namespace Escape
 
         Statement ParseFunctionDeclaration()
         {
-            EnterVariableScope();
-            EnterFunctionScope();
-
             var firstRestricted = Token.Empty;
             string message = null;
 
@@ -3657,31 +3628,8 @@ namespace Escape
             return MarkEnd(CreateFunctionDeclaration(id, parameters, new Expression[0], body, functionStrict));
         }
 
-        void EnterVariableScope()
-        {
-            _variableScopes.Push(new VariableScope());
-        }
-
-        IList<VariableDeclaration> LeaveVariableScope()
-        {
-            return _variableScopes.Pop().VariableDeclarations;
-        }
-
-        void EnterFunctionScope()
-        {
-            _functionScopes.Push(new FunctionScope());
-        }
-
-        IList<FunctionDeclaration> LeaveFunctionScope()
-        {
-            return _functionScopes.Pop().FunctionDeclarations;
-        }
-
         FunctionExpression ParseFunctionExpression()
         {
-            EnterVariableScope();
-            EnterFunctionScope();
-
             var firstRestricted = Token.Empty;
             string message = null;
             Identifier id = null;
@@ -3819,9 +3767,6 @@ namespace Escape
 
         Program ParseProgram()
         {
-            EnterVariableScope();
-            EnterFunctionScope();
-            
             MarkStart();
             Peek();
             var body = ParseSourceElements();
