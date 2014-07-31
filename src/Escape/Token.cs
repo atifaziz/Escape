@@ -36,7 +36,7 @@
 
 namespace Escape
 {
-    public enum Tokens
+    public enum TokenType
     {
         BooleanLiteral = 1,
         EOF = 2,
@@ -53,7 +53,7 @@ namespace Escape
     {
         public static Token Empty = new Token();
 
-        public Tokens Type;
+        public TokenType TokenType;
         public string Literal;
         public object Value;
         public int[] Range;

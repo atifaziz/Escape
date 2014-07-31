@@ -487,7 +487,7 @@ namespace Escape
         Token ScanIdentifier()
         {
             var start = _index;
-            Tokens type;
+            TokenType type;
 
             // Backslash (char #92) starts an escaped character.
             var id = (_source.CharCodeAt(_index) == 92) ? GetEscapedIdentifier() : GetIdentifier();
@@ -496,28 +496,28 @@ namespace Escape
             // Thus, it must be an identifier.
             if (id.Length == 1)
             {
-                type = Tokens.Identifier;
+                type = TokenType.Identifier;
             }
             else if (IsKeyword(id))
             {
-                type = Tokens.Keyword;
+                type = TokenType.Keyword;
             }
             else if ("null".Equals(id))
             {
-                type = Tokens.NullLiteral;
+                type = TokenType.NullLiteral;
             }
             else if ("true".Equals(id) || "false".Equals(id))
             {
-                type = Tokens.BooleanLiteral;
+                type = TokenType.BooleanLiteral;
             }
             else
             {
-                type = Tokens.Identifier;
+                type = TokenType.Identifier;
             }
 
             return new Token
                 {
-                    Type = type,
+                    TokenType = type,
                     Value = id,
                     LineNumber = _lineNumber,
                     LineStart = _lineStart,
@@ -553,7 +553,7 @@ namespace Escape
 
                     return new Token
                         {
-                            Type = Tokens.Punctuator,
+                            TokenType = TokenType.Punctuator,
                             Value = code.ToString(),
                             LineNumber = _lineNumber,
                             LineStart = _lineStart,
@@ -581,7 +581,7 @@ namespace Escape
                                 _index += 2;
                                 return new Token
                                     {
-                                        Type = Tokens.Punctuator,
+                                        TokenType = TokenType.Punctuator,
                                         Value =
                                             code.ToString() +
                                             code2.ToString(),
@@ -601,7 +601,7 @@ namespace Escape
                                 }
                                 return new Token
                                     {
-                                        Type = Tokens.Punctuator,
+                                        TokenType = TokenType.Punctuator,
                                         Value = _source.Slice(start, _index),
                                         LineNumber = _lineNumber,
                                         LineStart = _lineStart,
@@ -627,7 +627,7 @@ namespace Escape
                     _index += 4;
                     return new Token
                         {
-                            Type = Tokens.Punctuator,
+                            TokenType = TokenType.Punctuator,
                             Value = ">>>=",
                             LineNumber = _lineNumber,
                             LineStart = _lineStart,
@@ -643,7 +643,7 @@ namespace Escape
                 _index += 3;
                 return new Token
                     {
-                        Type = Tokens.Punctuator,
+                        TokenType = TokenType.Punctuator,
                         Value = ">>>",
                         LineNumber = _lineNumber,
                         LineStart = _lineStart,
@@ -656,7 +656,7 @@ namespace Escape
                 _index += 3;
                 return new Token
                     {
-                        Type = Tokens.Punctuator,
+                        TokenType = TokenType.Punctuator,
                         Value = "<<=",
                         LineNumber = _lineNumber,
                         LineStart = _lineStart,
@@ -669,7 +669,7 @@ namespace Escape
                 _index += 3;
                 return new Token
                     {
-                        Type = Tokens.Punctuator,
+                        TokenType = TokenType.Punctuator,
                         Value = ">>=",
                         LineNumber = _lineNumber,
                         LineStart = _lineStart,
@@ -684,7 +684,7 @@ namespace Escape
                 _index += 2;
                 return new Token
                     {
-                        Type = Tokens.Punctuator,
+                        TokenType = TokenType.Punctuator,
                         Value = ch1.ToString() + ch2.ToString(),
                         LineNumber = _lineNumber,
                         LineStart = _lineStart,
@@ -697,7 +697,7 @@ namespace Escape
                 ++_index;
                 return new Token
                     {
-                        Type = Tokens.Punctuator,
+                        TokenType = TokenType.Punctuator,
                         Value = ch1.ToString(),
                         LineNumber = _lineNumber,
                         LineStart = _lineStart,
@@ -737,7 +737,7 @@ namespace Escape
 
             return new Token
                 {
-                    Type = Tokens.NumericLiteral,
+                    TokenType = TokenType.NumericLiteral,
                     Value = Convert.ToInt64(number, 16),
                     LineNumber = _lineNumber,
                     LineStart = _lineStart,
@@ -764,7 +764,7 @@ namespace Escape
 
             return new Token
                 {
-                    Type = Tokens.NumericLiteral,
+                    TokenType = TokenType.NumericLiteral,
                     Value = Convert.ToInt32(number, 8),
                     Octal = true,
                     LineNumber = _lineNumber,
@@ -874,7 +874,7 @@ namespace Escape
 
             return new Token
                 {
-                    Type = Tokens.NumericLiteral,
+                    TokenType = TokenType.NumericLiteral,
                     Value = n,
                     LineNumber = _lineNumber,
                     LineStart = _lineStart,
@@ -1004,7 +1004,7 @@ namespace Escape
 
             return new Token
                 {
-                    Type = Tokens.StringLiteral,
+                    TokenType = TokenType.StringLiteral,
                     Value = str.ToString(),
                     Octal = octal,
                     LineNumber = _lineNumber,
@@ -1122,7 +1122,7 @@ namespace Escape
 
             return new Token
                 {
-                    Type = Tokens.RegularExpression,
+                    TokenType = TokenType.RegularExpression,
                     Literal = str.ToString(),
                     Value = pattern + flags,
                     Range = new[] {start, _index}
@@ -1143,7 +1143,7 @@ namespace Escape
             if (_extra.Tokens != null)
             {
                 var token = _extra.Tokens[_extra.Tokens.Count - 1];
-                if (token.Range[0] == pos && token.Type == Tokens.Punctuator)
+                if (token.Range[0] == pos && token.TokenType == TokenType.Punctuator)
                 {
                     if ("/".Equals(token.Value) || "/=".Equals(token.Value))
                     {
@@ -1153,7 +1153,7 @@ namespace Escape
 
                 _extra.Tokens.Add(new Token
                 {
-                    Type = Tokens.RegularExpression,
+                    TokenType = TokenType.RegularExpression,
                     Value = regex.Literal,
                     Range = new[] { pos, _index },
                     Location = loc
@@ -1165,10 +1165,10 @@ namespace Escape
 
         bool IsIdentifierName(Token token)
         {
-            return token.Type == Tokens.Identifier ||
-                   token.Type == Tokens.Keyword ||
-                   token.Type == Tokens.BooleanLiteral ||
-                   token.Type == Tokens.NullLiteral;
+            return token.TokenType == TokenType.Identifier ||
+                   token.TokenType == TokenType.Keyword ||
+                   token.TokenType == TokenType.BooleanLiteral ||
+                   token.TokenType == TokenType.NullLiteral;
         }
 
         Token Advance()
@@ -1179,7 +1179,7 @@ namespace Escape
             {
                 return new Token
                     {
-                        Type = Tokens.EOF,
+                        TokenType = TokenType.EOF,
                         LineNumber = _lineNumber,
                         LineStart = _lineStart,
                         Range = new[] {_index, _index}
@@ -1232,13 +1232,13 @@ namespace Escape
             var token = Advance();
             _location = new Location(startPos, new Position(_lineNumber, _index - _lineStart));
 
-            if (token.Type != Tokens.EOF)
+            if (token.TokenType != TokenType.EOF)
             {
                 var range = new[] {token.Range[0], token.Range[1]};
                 var value = _source.Slice(token.Range[0], token.Range[1]);
                 _extra.Tokens.Add(new Token
                     {
-                        Type = token.Type,
+                        TokenType = token.TokenType,
                         Value = value,
                         Range = range,
                         Location = _location
@@ -1335,7 +1335,7 @@ namespace Escape
 
         Literal CreateLiteral(Token token)
         {
-            return SyntaxNodeFactory.Literal(token.Type == Tokens.RegularExpression, token.Value, 
+            return SyntaxNodeFactory.Literal(token.TokenType == TokenType.RegularExpression, token.Value, 
                                  _source.Slice(token.Range[0], token.Range[1]));
         }
 
@@ -1414,27 +1414,27 @@ namespace Escape
 
         void ThrowUnexpected(Token token)
         {
-            if (token.Type == Tokens.EOF)
+            if (token.TokenType == TokenType.EOF)
             {
                 ThrowError(token, Messages.UnexpectedEOS);
             }
 
-            if (token.Type == Tokens.NumericLiteral)
+            if (token.TokenType == TokenType.NumericLiteral)
             {
                 ThrowError(token, Messages.UnexpectedNumber);
             }
 
-            if (token.Type == Tokens.StringLiteral)
+            if (token.TokenType == TokenType.StringLiteral)
             {
                 ThrowError(token, Messages.UnexpectedString);
             }
 
-            if (token.Type == Tokens.Identifier)
+            if (token.TokenType == TokenType.Identifier)
             {
                 ThrowError(token, Messages.UnexpectedIdentifier);
             }
 
-            if (token.Type == Tokens.Keyword)
+            if (token.TokenType == TokenType.Keyword)
             {
                 if (IsFutureReservedWord(token.Value as string))
                 {
@@ -1458,7 +1458,7 @@ namespace Escape
         void Expect(string value)
         {
             var token = Lex();
-            if (token.Type != Tokens.Punctuator || !value.Equals(token.Value))
+            if (token.TokenType != TokenType.Punctuator || !value.Equals(token.Value))
             {
                 ThrowUnexpected(token);
             }
@@ -1470,7 +1470,7 @@ namespace Escape
         void ExpectKeyword(string keyword)
         {
             var token = Lex();
-            if (token.Type != Tokens.Keyword || !keyword.Equals(token.Value))
+            if (token.TokenType != TokenType.Keyword || !keyword.Equals(token.Value))
             {
                 ThrowUnexpected(token);
             }
@@ -1480,21 +1480,21 @@ namespace Escape
 
         bool Match(string value)
         {
-            return _lookahead.Type == Tokens.Punctuator && value.Equals(_lookahead.Value);
+            return _lookahead.TokenType == TokenType.Punctuator && value.Equals(_lookahead.Value);
         }
 
         // Return true if the next token matches the specified keyword
 
         bool MatchKeyword(object keyword)
         {
-            return _lookahead.Type == Tokens.Keyword && keyword.Equals(_lookahead.Value);
+            return _lookahead.TokenType == TokenType.Keyword && keyword.Equals(_lookahead.Value);
         }
 
         // Return true if the next token is an assignment operator
 
         bool MatchAssign()
         {
-            if (_lookahead.Type != Tokens.Punctuator)
+            if (_lookahead.TokenType != TokenType.Punctuator)
             {
                 return false;
             }
@@ -1535,7 +1535,7 @@ namespace Escape
                 return;
             }
 
-            if (_lookahead.Type != Tokens.EOF && !Match("}"))
+            if (_lookahead.TokenType != TokenType.EOF && !Match("}"))
             {
                 ThrowUnexpected(_lookahead);
             }
@@ -1545,7 +1545,7 @@ namespace Escape
 
         bool isLeftHandSide(Expression expr)
         {
-            return expr.Type == SyntaxNodes.Identifier || expr.Type == SyntaxNodes.MemberExpression;
+            return expr.NodeType == SyntaxNodeType.Identifier || expr.NodeType == SyntaxNodeType.MemberExpression;
         }
 
         // 11.1.4 Array Initialiser
@@ -1603,7 +1603,7 @@ namespace Escape
             // Note: This function is called only from parseObjectProperty(), where
             // EOF and Punctuator tokens are already filtered out.
 
-            if (token.Type == Tokens.StringLiteral || token.Type == Tokens.NumericLiteral)
+            if (token.TokenType == TokenType.StringLiteral || token.TokenType == TokenType.NumericLiteral)
             {
                 if (_strict && token.Octal)
                 {
@@ -1622,7 +1622,7 @@ namespace Escape
             var token = _lookahead;
             MarkStart();
 
-            if (token.Type == Tokens.Identifier)
+            if (token.TokenType == TokenType.Identifier)
             {
                 var id = ParseObjectPropertyKey();
 
@@ -1641,7 +1641,7 @@ namespace Escape
                     var key = ParseObjectPropertyKey();
                     Expect("(");
                     token = _lookahead;
-                    if (token.Type != Tokens.Identifier)
+                    if (token.TokenType != TokenType.Identifier)
                     {
                         Expect(")");
                         ThrowErrorTolerant(token, Messages.UnexpectedToken, (string) token.Value);
@@ -1660,7 +1660,7 @@ namespace Escape
                 value = ParseAssignmentExpression();
                 return MarkEnd(SyntaxNodeFactory.Property(PropertyKind.Data, id, value));
             }
-            if (token.Type == Tokens.EOF || token.Type == Tokens.Punctuator)
+            if (token.TokenType == TokenType.EOF || token.TokenType == TokenType.Punctuator)
             {
                 ThrowUnexpected(token);
                 return null; // can't be reached
@@ -1759,14 +1759,14 @@ namespace Escape
                 return ParseGroupExpression();
             }
 
-            var type = _lookahead.Type;
+            var type = _lookahead.TokenType;
             MarkStart();
 
-            if (type == Tokens.Identifier)
+            if (type == TokenType.Identifier)
             {
                 expr = SyntaxNodeFactory.Identifier((string) Lex().Value);
             }
-            else if (type == Tokens.StringLiteral || type == Tokens.NumericLiteral)
+            else if (type == TokenType.StringLiteral || type == TokenType.NumericLiteral)
             {
                 if (_strict && _lookahead.Octal)
                 {
@@ -1774,7 +1774,7 @@ namespace Escape
                 }
                 expr = CreateLiteral(Lex());
             }
-            else if (type == Tokens.Keyword)
+            else if (type == TokenType.Keyword)
             {
                 if (MatchKeyword("this"))
                 {
@@ -1786,13 +1786,13 @@ namespace Escape
                     expr = ParseFunctionExpression();
                 }
             }
-            else if (type == Tokens.BooleanLiteral)
+            else if (type == TokenType.BooleanLiteral)
             {
                 var token = Lex();
                 token.Value = ("true".Equals(token.Value));
                 expr = CreateLiteral(token);
             }
-            else if (type == Tokens.NullLiteral)
+            else if (type == TokenType.NullLiteral)
             {
                 var token = Lex();
                 token.Value = null;
@@ -1960,12 +1960,12 @@ namespace Escape
             MarkStart();
             var expr = ParseLeftHandSideExpressionAllowCall();
 
-            if (_lookahead.Type == Tokens.Punctuator)
+            if (_lookahead.TokenType == TokenType.Punctuator)
             {
                 if ((Match("++") || Match("--")) && !PeekLineTerminator())
                 {
                     // 11.3.1, 11.3.2
-                    if (_strict && expr.Type == SyntaxNodes.Identifier && IsRestrictedWord(((Identifier) expr).Name))
+                    if (_strict && expr.NodeType == SyntaxNodeType.Identifier && IsRestrictedWord(((Identifier) expr).Name))
                     {
                         ThrowErrorTolerant(Token.Empty, Messages.StrictLHSPostfix);
                     }
@@ -1991,7 +1991,7 @@ namespace Escape
 
             MarkStart();
 
-            if (_lookahead.Type != Tokens.Punctuator && _lookahead.Type != Tokens.Keyword)
+            if (_lookahead.TokenType != TokenType.Punctuator && _lookahead.TokenType != TokenType.Keyword)
             {
                 expr = ParsePostfixExpression();
             }
@@ -2000,7 +2000,7 @@ namespace Escape
                 var token = Lex();
                 expr = ParseUnaryExpression();
                 // 11.4.4, 11.4.5
-                if (_strict && expr.Type == SyntaxNodes.Identifier && IsRestrictedWord(((Identifier) expr).Name))
+                if (_strict && expr.NodeType == SyntaxNodeType.Identifier && IsRestrictedWord(((Identifier) expr).Name))
                 {
                     ThrowErrorTolerant(Token.Empty, Messages.StrictLHSPrefix);
                 }
@@ -2023,7 +2023,7 @@ namespace Escape
                 var token = Lex();
                 expr = ParseUnaryExpression();
                 var unaryExpr = SyntaxNodeFactory.Unary((string) token.Value, expr);
-                if (_strict && unaryExpr.Operator == UnaryOperator.Delete && unaryExpr.Argument.Type == SyntaxNodes.Identifier)
+                if (_strict && unaryExpr.Operator == UnaryOperator.Delete && unaryExpr.Argument.NodeType == SyntaxNodeType.Identifier)
                 {
                     ThrowErrorTolerant(Token.Empty, Messages.StrictDelete);
                 }
@@ -2041,7 +2041,7 @@ namespace Escape
         {
             var prec = 0;
 
-            if (token.Type != Tokens.Punctuator && token.Type != Tokens.Keyword)
+            if (token.TokenType != TokenType.Punctuator && token.TokenType != TokenType.Keyword)
             {
                 return 0;
             }
@@ -2234,7 +2234,7 @@ namespace Escape
                 //}
 
                 // 11.13.1
-                if (_strict && left.Type == SyntaxNodes.Identifier && IsRestrictedWord(((Identifier) left).Name))
+                if (_strict && left.NodeType == SyntaxNodeType.Identifier && IsRestrictedWord(((Identifier) left).Name))
                 {
                     ThrowErrorTolerant(token, Messages.StrictLHSAssignment);
                 }
@@ -2314,7 +2314,7 @@ namespace Escape
             MarkStart();
             var token = Lex();
 
-            if (token.Type != Tokens.Identifier)
+            if (token.TokenType != TokenType.Identifier)
             {
                 ThrowUnexpected(token);
             }
@@ -2614,7 +2614,7 @@ namespace Escape
                 return SyntaxNodeFactory.Continue(null);
             }
 
-            if (_lookahead.Type == Tokens.Identifier)
+            if (_lookahead.TokenType == TokenType.Identifier)
             {
                 label = ParseVariableIdentifier();
 
@@ -2666,7 +2666,7 @@ namespace Escape
                 return SyntaxNodeFactory.Break(null);
             }
 
-            if (_lookahead.Type == Tokens.Identifier)
+            if (_lookahead.TokenType == TokenType.Identifier)
             {
                 label = ParseVariableIdentifier();
 
@@ -2718,7 +2718,7 @@ namespace Escape
 
             if (!Match(";"))
             {
-                if (!Match("}") && _lookahead.Type != Tokens.EOF)
+                if (!Match("}") && _lookahead.TokenType != TokenType.EOF)
                 {
                     argument = ParseExpression();
                 }
@@ -2919,16 +2919,16 @@ namespace Escape
 
         Statement ParseStatement()
         {
-            var type = _lookahead.Type;
+            var type = _lookahead.TokenType;
 
-            if (type == Tokens.EOF)
+            if (type == TokenType.EOF)
             {
                 ThrowUnexpected(_lookahead);
             }
 
             MarkStart();
 
-            if (type == Tokens.Punctuator)
+            if (type == TokenType.Punctuator)
             {
                 switch ((string) _lookahead.Value)
                 {
@@ -2941,7 +2941,7 @@ namespace Escape
                 }
             }
 
-            if (type == Tokens.Keyword)
+            if (type == TokenType.Keyword)
             {
                 switch ((string) _lookahead.Value)
                 {
@@ -2979,7 +2979,7 @@ namespace Escape
             var expr = ParseExpression();
 
             // 12.12 Labelled Statements
-            if ((expr.Type == SyntaxNodes.Identifier) && Match(":"))
+            if ((expr.NodeType == SyntaxNodeType.Identifier) && Match(":"))
             {
                 Lex();
 
@@ -3013,7 +3013,7 @@ namespace Escape
 
             while (_index < _length)
             {
-                if (_lookahead.Type != Tokens.StringLiteral)
+                if (_lookahead.TokenType != TokenType.StringLiteral)
                 {
                     break;
                 }
@@ -3021,7 +3021,7 @@ namespace Escape
 
                 var sourceElement = ParseSourceElement();
                 sourceElements.Add(sourceElement);
-                if (((ExpressionStatement) sourceElement).Expression.Type != SyntaxNodes.Literal)
+                if (((ExpressionStatement) sourceElement).Expression.NodeType != SyntaxNodeType.Literal)
                 {
                     // this is not directive
                     break;
@@ -3266,7 +3266,7 @@ namespace Escape
 
         Statement ParseSourceElement()
         {
-            if (_lookahead.Type == Tokens.Keyword)
+            if (_lookahead.TokenType == TokenType.Keyword)
             {
                 switch ((string) _lookahead.Value)
                 {
@@ -3280,7 +3280,7 @@ namespace Escape
                 }
             }
 
-            if (_lookahead.Type != Tokens.EOF)
+            if (_lookahead.TokenType != TokenType.EOF)
             {
                 return ParseStatement();
             }
@@ -3297,14 +3297,14 @@ namespace Escape
             while (_index < _length)
             {
                 var token = _lookahead;
-                if (token.Type != Tokens.StringLiteral)
+                if (token.TokenType != TokenType.StringLiteral)
                 {
                     break;
                 }
 
                 sourceElement = ParseSourceElement();
                 sourceElements.Add(sourceElement);
-                if (((ExpressionStatement) sourceElement).Expression.Type != SyntaxNodes.Literal)
+                if (((ExpressionStatement) sourceElement).Expression.NodeType != SyntaxNodeType.Literal)
                 {
                     // this is not directive
                     break;

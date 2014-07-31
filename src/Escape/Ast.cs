@@ -445,7 +445,7 @@ namespace Escape.Ast
 
     public class SyntaxNode
     {
-        public SyntaxNodes Type { get; set; }
+        public SyntaxNodeType NodeType { get; set; }
         public int[] Range;
         public Location Location { get; set; }
 
@@ -456,7 +456,7 @@ namespace Escape.Ast
         }
     }
 
-    public enum SyntaxNodes
+    public enum SyntaxNodeType
     {
         AssignmentExpression,
         ArrayExpression,

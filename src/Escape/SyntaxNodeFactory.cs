@@ -45,7 +45,7 @@ namespace Escape
         {
             return new ArrayExpression
                    {
-                       Type = SyntaxNodes.ArrayExpression,
+                       NodeType = SyntaxNodeType.ArrayExpression,
                        Elements = elements
                    };
         }
@@ -54,7 +54,7 @@ namespace Escape
         {
             return new AssignmentExpression
                    {
-                       Type = SyntaxNodes.AssignmentExpression,
+                       NodeType = SyntaxNodeType.AssignmentExpression,
                        Operator = AssignmentExpression.ParseAssignmentOperator(op),
                        Left = left,
                        Right = right
@@ -67,14 +67,14 @@ namespace Escape
             return (op == "||" || op == "&&")
                 ? (Expression)new LogicalExpression
                               {
-                                  Type = SyntaxNodes.LogicalExpression,
+                                  NodeType = SyntaxNodeType.LogicalExpression,
                                   Operator = LogicalExpression.ParseLogicalOperator(op),
                                   Left = left,
                                   Right = right
                               }
                 : new BinaryExpression
                   {
-                      Type = SyntaxNodes.BinaryExpression,
+                      NodeType = SyntaxNodeType.BinaryExpression,
                       Operator = BinaryExpression.ParseBinaryOperator(op),
                       Left = left,
                       Right = right
@@ -85,7 +85,7 @@ namespace Escape
         {
             return new BlockStatement
                    {
-                       Type = SyntaxNodes.BlockStatement,
+                       NodeType = SyntaxNodeType.BlockStatement,
                        Body = body
                    };
         }
@@ -94,7 +94,7 @@ namespace Escape
         {
             return new BreakStatement
                    {
-                       Type = SyntaxNodes.BreakStatement,
+                       NodeType = SyntaxNodeType.BreakStatement,
                        Label = label
                    };
         }
@@ -103,7 +103,7 @@ namespace Escape
         {
             return new CallExpression
                    {
-                       Type = SyntaxNodes.CallExpression,
+                       NodeType = SyntaxNodeType.CallExpression,
                        Callee = callee,
                        Arguments = args
                    };
@@ -113,7 +113,7 @@ namespace Escape
         {
             return new CatchClause
                    {
-                       Type = SyntaxNodes.CatchClause,
+                       NodeType = SyntaxNodeType.CatchClause,
                        Param = param,
                        Body = body
                    };
@@ -124,7 +124,7 @@ namespace Escape
         {
             return new ConditionalExpression
                    {
-                       Type = SyntaxNodes.ConditionalExpression,
+                       NodeType = SyntaxNodeType.ConditionalExpression,
                        Test = test,
                        Consequent = consequent,
                        Alternate = alternate
@@ -135,7 +135,7 @@ namespace Escape
         {
             return new ContinueStatement
                    {
-                       Type = SyntaxNodes.ContinueStatement,
+                       NodeType = SyntaxNodeType.ContinueStatement,
                        Label = label
                    };
         }
@@ -144,7 +144,7 @@ namespace Escape
         {
             return new DebuggerStatement
                    {
-                       Type = SyntaxNodes.DebuggerStatement
+                       NodeType = SyntaxNodeType.DebuggerStatement
                    };
         }
 
@@ -152,7 +152,7 @@ namespace Escape
         {
             return new DoWhileStatement
                    {
-                       Type = SyntaxNodes.DoWhileStatement,
+                       NodeType = SyntaxNodeType.DoWhileStatement,
                        Body = body,
                        Test = test
                    };
@@ -162,7 +162,7 @@ namespace Escape
         {
             return new EmptyStatement
                    {
-                       Type = SyntaxNodes.EmptyStatement
+                       NodeType = SyntaxNodeType.EmptyStatement
                    };
         }
 
@@ -170,7 +170,7 @@ namespace Escape
         {
             return new ExpressionStatement
                    {
-                       Type = SyntaxNodes.ExpressionStatement,
+                       NodeType = SyntaxNodeType.ExpressionStatement,
                        Expression = expression
                    };
         }
@@ -179,7 +179,7 @@ namespace Escape
         {
             return new ForStatement
                    {
-                       Type = SyntaxNodes.ForStatement,
+                       NodeType = SyntaxNodeType.ForStatement,
                        Init = init,
                        Test = test,
                        Update = update,
@@ -191,7 +191,7 @@ namespace Escape
         {
             return new ForInStatement
                    {
-                       Type = SyntaxNodes.ForInStatement,
+                       NodeType = SyntaxNodeType.ForInStatement,
                        Left = left,
                        Right = right,
                        Body = body,
@@ -204,7 +204,7 @@ namespace Escape
         {
             return new FunctionDeclaration
                    {
-                       Type = SyntaxNodes.FunctionDeclaration,
+                       NodeType = SyntaxNodeType.FunctionDeclaration,
                        Id = id,
                        Parameters = parameters,
                        Defaults = defaults,
@@ -221,7 +221,7 @@ namespace Escape
         {
             return new FunctionExpression
                    {
-                       Type = SyntaxNodes.FunctionExpression,
+                       NodeType = SyntaxNodeType.FunctionExpression,
                        Id = id,
                        Parameters = parameters,
                        Defaults = defaults,
@@ -237,7 +237,7 @@ namespace Escape
         {
             return new Identifier
                    {
-                       Type = SyntaxNodes.Identifier,
+                       NodeType = SyntaxNodeType.Identifier,
                        Name = name
                    };
         }
@@ -246,7 +246,7 @@ namespace Escape
         {
             return new IfStatement
                    {
-                       Type = SyntaxNodes.IfStatement,
+                       NodeType = SyntaxNodeType.IfStatement,
                        Test = test,
                        Consequent = consequent,
                        Alternate = alternate
@@ -257,7 +257,7 @@ namespace Escape
         {
             return new LabelledStatement
                    {
-                       Type = SyntaxNodes.LabeledStatement,
+                       NodeType = SyntaxNodeType.LabeledStatement,
                        Label = label,
                        Body = body
                    };
@@ -267,9 +267,9 @@ namespace Escape
         {
             return new Literal
                    {
-                       Type  = isRegExp
-                           ? SyntaxNodes.RegularExpressionLiteral
-                           : SyntaxNodes.Literal,
+                       NodeType  = isRegExp
+                           ? SyntaxNodeType.RegularExpressionLiteral
+                           : SyntaxNodeType.Literal,
                        Value = value,
                        Raw   = raw
                    };
@@ -279,7 +279,7 @@ namespace Escape
         {
             return new MemberExpression
                    {
-                       Type = SyntaxNodes.MemberExpression,
+                       NodeType = SyntaxNodeType.MemberExpression,
                        Computed = accessor == '[',
                        Object = obj,
                        Property = property
@@ -290,7 +290,7 @@ namespace Escape
         {
             return new NewExpression
                    {
-                       Type = SyntaxNodes.NewExpression,
+                       NodeType = SyntaxNodeType.NewExpression,
                        Callee = callee,
                        Arguments = args
                    };
@@ -300,7 +300,7 @@ namespace Escape
         {
             return new ObjectExpression
                    {
-                       Type = SyntaxNodes.ObjectExpression,
+                       NodeType = SyntaxNodeType.ObjectExpression,
                        Properties = properties
                    };
         }
@@ -309,7 +309,7 @@ namespace Escape
         {
             return new UpdateExpression
                    {
-                       Type = SyntaxNodes.UpdateExpression,
+                       NodeType = SyntaxNodeType.UpdateExpression,
                        Operator = UnaryExpression.ParseUnaryOperator(op),
                        Argument = argument,
                        Prefix = false
@@ -320,7 +320,7 @@ namespace Escape
         {
             return new Program
                    {
-                       Type = SyntaxNodes.Program,
+                       NodeType = SyntaxNodeType.Program,
                        Body = body,
                        Strict = strict,
                    };
@@ -330,7 +330,7 @@ namespace Escape
         {
             return new Property
                    {
-                       Type = SyntaxNodes.Property,
+                       NodeType = SyntaxNodeType.Property,
                        Key = key,
                        Value = value,
                        Kind = kind
@@ -341,7 +341,7 @@ namespace Escape
         {
             return new ReturnStatement
                    {
-                       Type = SyntaxNodes.ReturnStatement,
+                       NodeType = SyntaxNodeType.ReturnStatement,
                        Argument = argument
                    };
         }
@@ -350,7 +350,7 @@ namespace Escape
         {
             return new SequenceExpression
                    {
-                       Type = SyntaxNodes.SequenceExpression,
+                       NodeType = SyntaxNodeType.SequenceExpression,
                        Expressions = expressions
                    };
         }
@@ -359,7 +359,7 @@ namespace Escape
         {
             return new SwitchCase
                    {
-                       Type = SyntaxNodes.SwitchCase,
+                       NodeType = SyntaxNodeType.SwitchCase,
                        Test = test,
                        Consequent = consequent
                    };
@@ -369,7 +369,7 @@ namespace Escape
         {
             return new SwitchStatement
                    {
-                       Type = SyntaxNodes.SwitchStatement,
+                       NodeType = SyntaxNodeType.SwitchStatement,
                        Discriminant = discriminant,
                        Cases = cases
                    };
@@ -379,7 +379,7 @@ namespace Escape
         {
             return new ThisExpression
                    {
-                       Type = SyntaxNodes.ThisExpression
+                       NodeType = SyntaxNodeType.ThisExpression
                    };
         }
 
@@ -387,7 +387,7 @@ namespace Escape
         {
             return new ThrowStatement
                    {
-                       Type = SyntaxNodes.ThrowStatement,
+                       NodeType = SyntaxNodeType.ThrowStatement,
                        Argument = argument
                    };
         }
@@ -397,7 +397,7 @@ namespace Escape
         {
             return new TryStatement
                    {
-                       Type = SyntaxNodes.TryStatement,
+                       NodeType = SyntaxNodeType.TryStatement,
                        Block = block,
                        GuardedHandlers = guardedHandlers,
                        Handlers = handlers,
@@ -411,7 +411,7 @@ namespace Escape
             {
                 return new UpdateExpression
                        {
-                           Type = SyntaxNodes.UpdateExpression,
+                           NodeType = SyntaxNodeType.UpdateExpression,
                            Operator = UnaryExpression.ParseUnaryOperator(op),
                            Argument = argument,
                            Prefix = true
@@ -420,7 +420,7 @@ namespace Escape
 
             return new UnaryExpression
                    {
-                       Type = SyntaxNodes.UnaryExpression,
+                       NodeType = SyntaxNodeType.UnaryExpression,
                        Operator = UnaryExpression.ParseUnaryOperator(op),
                        Argument = argument,
                        Prefix = true
@@ -431,7 +431,7 @@ namespace Escape
         {
             return new VariableDeclaration
                    {
-                       Type = SyntaxNodes.VariableDeclaration,
+                       NodeType = SyntaxNodeType.VariableDeclaration,
                        Declarations = declarations,
                        Kind = kind
                    };
@@ -441,7 +441,7 @@ namespace Escape
         {
             return new VariableDeclarator
                    {
-                       Type = SyntaxNodes.VariableDeclarator,
+                       NodeType = SyntaxNodeType.VariableDeclarator,
                        Id = id,
                        Init = init
                    };
@@ -451,7 +451,7 @@ namespace Escape
         {
             return new WhileStatement
                    {
-                       Type = SyntaxNodes.WhileStatement,
+                       NodeType = SyntaxNodeType.WhileStatement,
                        Test = test,
                        Body = body
                    };
@@ -461,7 +461,7 @@ namespace Escape
         {
             return new WithStatement
                    {
-                       Type = SyntaxNodes.WithStatement,
+                       NodeType = SyntaxNodeType.WithStatement,
                        Object = obj,
                        Body = body
                    };

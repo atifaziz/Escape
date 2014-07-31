@@ -67,7 +67,7 @@ namespace Esparse
 
         void Encode(SyntaxNode node, params KeyValuePair<string, object>[] members)
         {
-            var ms = new[] { Member("type", node.Type.ToString()) }.Concat(members);
+            var ms = new[] { Member("type", node.NodeType.ToString()) }.Concat(members);
             if (_includeLocation)
                 ms = ms.Concat(new[] { Member("loc", node.Location) });
             Object(ms.ToArray());
@@ -251,7 +251,7 @@ namespace Esparse
 
         protected override void Visit(Literal node)
         {
-            if (node.Type == SyntaxNodes.RegularExpressionLiteral)
+            if (node.NodeType == SyntaxNodeType.RegularExpressionLiteral)
             {
                 // http://www.ecma-international.org/ecma-262/5.1/#sec-15.10.6.4
 
@@ -269,7 +269,7 @@ namespace Esparse
 
                 node = new Literal
                 {
-                    Type = SyntaxNodes.Literal,
+                    NodeType = SyntaxNodeType.Literal,
                     Location = node.Location,
                     Range = node.Range,
                     Raw = node.Raw,

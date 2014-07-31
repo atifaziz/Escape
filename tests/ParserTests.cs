@@ -183,7 +183,7 @@ namespace Escape.Tests
 
             Assert.NotNull(body);
             Assert.Equal(1, body.Count());
-            Assert.Equal(SyntaxNodes.ThisExpression, body.First().As<ExpressionStatement>().Expression.Type);
+            Assert.Equal(SyntaxNodeType.ThisExpression, body.First().As<ExpressionStatement>().Expression.NodeType);
         }
 
         [Fact]
@@ -194,7 +194,7 @@ namespace Escape.Tests
 
             Assert.NotNull(body);
             Assert.Equal(1, body.Count());
-            Assert.Equal(SyntaxNodes.Literal, body.First().As<ExpressionStatement>().Expression.Type);
+            Assert.Equal(SyntaxNodeType.Literal, body.First().As<ExpressionStatement>().Expression.NodeType);
             Assert.Equal(null, body.First().As<ExpressionStatement>().Expression.As<Literal>().Value);
             Assert.Equal("null", body.First().As<ExpressionStatement>().Expression.As<Literal>().Raw);
         }
@@ -210,7 +210,7 @@ namespace Escape.Tests
 
             Assert.NotNull(body);
             Assert.Equal(1, body.Count());
-            Assert.Equal(SyntaxNodes.Literal, body.First().As<ExpressionStatement>().Expression.Type);
+            Assert.Equal(SyntaxNodeType.Literal, body.First().As<ExpressionStatement>().Expression.NodeType);
             Assert.Equal(42d, body.First().As<ExpressionStatement>().Expression.As<Literal>().Value);
             Assert.Equal("42", body.First().As<ExpressionStatement>().Expression.As<Literal>().Raw);
         }

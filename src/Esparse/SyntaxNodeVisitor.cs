@@ -43,49 +43,49 @@ namespace Esparse
     {
         public virtual void Visit(SyntaxNode node)
         {
-            switch (node.Type)
+            switch (node.NodeType)
             {
-                case SyntaxNodes.ArrayExpression: Visit((ArrayExpression) node); break;
-                case SyntaxNodes.AssignmentExpression: Visit((AssignmentExpression) node); break;
-                case SyntaxNodes.BinaryExpression: Visit((BinaryExpression) node); break;
-                case SyntaxNodes.BlockStatement: Visit((BlockStatement) node); break;
-                case SyntaxNodes.BreakStatement: Visit((BreakStatement) node); break;
-                case SyntaxNodes.CallExpression: Visit((CallExpression) node); break;
-                case SyntaxNodes.CatchClause: Visit((CatchClause) node); break;
-                case SyntaxNodes.ConditionalExpression: Visit((ConditionalExpression) node); break;
-                case SyntaxNodes.ContinueStatement: Visit((ContinueStatement) node); break;
-                case SyntaxNodes.DebuggerStatement: Visit((DebuggerStatement) node); break;
-                case SyntaxNodes.DoWhileStatement: Visit((DoWhileStatement) node); break;
-                case SyntaxNodes.EmptyStatement: Visit((EmptyStatement) node); break;
-                case SyntaxNodes.ExpressionStatement: Visit((ExpressionStatement) node); break;
-                case SyntaxNodes.ForInStatement: Visit((ForInStatement) node); break;
-                case SyntaxNodes.ForStatement: Visit((ForStatement) node); break;
-                case SyntaxNodes.FunctionDeclaration: Visit((FunctionDeclaration) node); break;
-                case SyntaxNodes.FunctionExpression: Visit((FunctionExpression) node); break;
-                case SyntaxNodes.Identifier: Visit((Identifier) node); break;
-                case SyntaxNodes.IfStatement: Visit((IfStatement) node); break;
-                case SyntaxNodes.LabeledStatement: Visit((LabelledStatement) node); break;
-                case SyntaxNodes.Literal: Visit((Literal) node); break;
-                case SyntaxNodes.LogicalExpression: Visit((LogicalExpression) node); break;
-                case SyntaxNodes.MemberExpression: Visit((MemberExpression) node); break;
-                case SyntaxNodes.NewExpression: Visit((NewExpression) node); break;
-                case SyntaxNodes.ObjectExpression: Visit((ObjectExpression) node); break;
-                case SyntaxNodes.Program: Visit((Escape.Ast.Program) node); break;
-                case SyntaxNodes.Property: Visit((Property) node); break;
-                case SyntaxNodes.RegularExpressionLiteral: Visit((Literal) node); break;
-                case SyntaxNodes.ReturnStatement: Visit((ReturnStatement) node); break;
-                case SyntaxNodes.SequenceExpression: Visit((SequenceExpression) node); break;
-                case SyntaxNodes.SwitchCase: Visit((SwitchCase) node); break;
-                case SyntaxNodes.SwitchStatement: Visit((SwitchStatement) node); break;
-                case SyntaxNodes.ThisExpression: Visit((ThisExpression) node); break;
-                case SyntaxNodes.ThrowStatement: Visit((ThrowStatement) node); break;
-                case SyntaxNodes.TryStatement: Visit((TryStatement) node); break;
-                case SyntaxNodes.UnaryExpression: Visit((UnaryExpression) node); break;
-                case SyntaxNodes.UpdateExpression: Visit((UpdateExpression) node); break;
-                case SyntaxNodes.VariableDeclaration: Visit((VariableDeclaration) node); break;
-                case SyntaxNodes.VariableDeclarator: Visit((VariableDeclarator) node); break;
-                case SyntaxNodes.WhileStatement: Visit((WhileStatement) node); break;
-                case SyntaxNodes.WithStatement: Visit((WithStatement) node); break;
+                case SyntaxNodeType.ArrayExpression: Visit((ArrayExpression) node); break;
+                case SyntaxNodeType.AssignmentExpression: Visit((AssignmentExpression) node); break;
+                case SyntaxNodeType.BinaryExpression: Visit((BinaryExpression) node); break;
+                case SyntaxNodeType.BlockStatement: Visit((BlockStatement) node); break;
+                case SyntaxNodeType.BreakStatement: Visit((BreakStatement) node); break;
+                case SyntaxNodeType.CallExpression: Visit((CallExpression) node); break;
+                case SyntaxNodeType.CatchClause: Visit((CatchClause) node); break;
+                case SyntaxNodeType.ConditionalExpression: Visit((ConditionalExpression) node); break;
+                case SyntaxNodeType.ContinueStatement: Visit((ContinueStatement) node); break;
+                case SyntaxNodeType.DebuggerStatement: Visit((DebuggerStatement) node); break;
+                case SyntaxNodeType.DoWhileStatement: Visit((DoWhileStatement) node); break;
+                case SyntaxNodeType.EmptyStatement: Visit((EmptyStatement) node); break;
+                case SyntaxNodeType.ExpressionStatement: Visit((ExpressionStatement) node); break;
+                case SyntaxNodeType.ForInStatement: Visit((ForInStatement) node); break;
+                case SyntaxNodeType.ForStatement: Visit((ForStatement) node); break;
+                case SyntaxNodeType.FunctionDeclaration: Visit((FunctionDeclaration) node); break;
+                case SyntaxNodeType.FunctionExpression: Visit((FunctionExpression) node); break;
+                case SyntaxNodeType.Identifier: Visit((Identifier) node); break;
+                case SyntaxNodeType.IfStatement: Visit((IfStatement) node); break;
+                case SyntaxNodeType.LabeledStatement: Visit((LabelledStatement) node); break;
+                case SyntaxNodeType.Literal: Visit((Literal) node); break;
+                case SyntaxNodeType.LogicalExpression: Visit((LogicalExpression) node); break;
+                case SyntaxNodeType.MemberExpression: Visit((MemberExpression) node); break;
+                case SyntaxNodeType.NewExpression: Visit((NewExpression) node); break;
+                case SyntaxNodeType.ObjectExpression: Visit((ObjectExpression) node); break;
+                case SyntaxNodeType.Program: Visit((Escape.Ast.Program) node); break;
+                case SyntaxNodeType.Property: Visit((Property) node); break;
+                case SyntaxNodeType.RegularExpressionLiteral: Visit((Literal) node); break;
+                case SyntaxNodeType.ReturnStatement: Visit((ReturnStatement) node); break;
+                case SyntaxNodeType.SequenceExpression: Visit((SequenceExpression) node); break;
+                case SyntaxNodeType.SwitchCase: Visit((SwitchCase) node); break;
+                case SyntaxNodeType.SwitchStatement: Visit((SwitchStatement) node); break;
+                case SyntaxNodeType.ThisExpression: Visit((ThisExpression) node); break;
+                case SyntaxNodeType.ThrowStatement: Visit((ThrowStatement) node); break;
+                case SyntaxNodeType.TryStatement: Visit((TryStatement) node); break;
+                case SyntaxNodeType.UnaryExpression: Visit((UnaryExpression) node); break;
+                case SyntaxNodeType.UpdateExpression: Visit((UpdateExpression) node); break;
+                case SyntaxNodeType.VariableDeclaration: Visit((VariableDeclaration) node); break;
+                case SyntaxNodeType.VariableDeclarator: Visit((VariableDeclarator) node); break;
+                case SyntaxNodeType.WhileStatement: Visit((WhileStatement) node); break;
+                case SyntaxNodeType.WithStatement: Visit((WithStatement) node); break;
                 default: throw new NotImplementedException();
             }
         }
