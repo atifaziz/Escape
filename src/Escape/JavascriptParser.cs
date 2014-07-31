@@ -1333,438 +1333,12 @@ namespace Escape
             return node;
         }
 
-        public static ArrayExpression CreateArrayExpression(IEnumerable<Expression> elements)
-        {
-            return new ArrayExpression
-                {
-                    Type = SyntaxNodes.ArrayExpression,
-                    Elements = elements
-                };
-        }
-
-        public static AssignmentExpression CreateAssignmentExpression(string op, Expression left, Expression right)
-        {
-            return new AssignmentExpression
-                {
-                    Type = SyntaxNodes.AssignmentExpression,
-                    Operator = AssignmentExpression.ParseAssignmentOperator(op),
-                    Left = left,
-                    Right = right
-                };
-        }
-
-        public static Expression CreateBinaryExpression(string op, Expression left, Expression right)
-        {
-            
-            return (op == "||" || op == "&&")
-                       ? (Expression)new LogicalExpression
-                           {
-                               Type = SyntaxNodes.LogicalExpression,
-                               Operator = LogicalExpression.ParseLogicalOperator(op),
-                               Left = left,
-                               Right = right
-                           }
-                       : new BinaryExpression
-                           {
-                               Type = SyntaxNodes.BinaryExpression,
-                               Operator = BinaryExpression.ParseBinaryOperator(op),
-                               Left = left,
-                               Right = right
-                           };
-        }
-
-        public static BlockStatement CreateBlockStatement(IEnumerable<Statement> body)
-        {
-            return new BlockStatement
-                {
-                    Type = SyntaxNodes.BlockStatement,
-                    Body = body
-                };
-        }
-
-        public static BreakStatement CreateBreakStatement(Identifier label)
-        {
-            return new BreakStatement
-                {
-                    Type = SyntaxNodes.BreakStatement,
-                    Label = label
-                };
-        }
-
-        public static CallExpression CreateCallExpression(Expression callee, IEnumerable<Expression> args)
-        {
-            return new CallExpression
-                {
-                    Type = SyntaxNodes.CallExpression,
-                    Callee = callee,
-                    Arguments = args
-                };
-        }
-
-        public static CatchClause CreateCatchClause(Identifier param, BlockStatement body)
-        {
-            return new CatchClause
-                {
-                    Type = SyntaxNodes.CatchClause,
-                    Param = param,
-                    Body = body
-                };
-        }
-
-        public static ConditionalExpression CreateConditionalExpression(Expression test, Expression consequent,
-                                                                 Expression alternate)
-        {
-            return new ConditionalExpression
-                {
-                    Type = SyntaxNodes.ConditionalExpression,
-                    Test = test,
-                    Consequent = consequent,
-                    Alternate = alternate
-                };
-        }
-
-        public static ContinueStatement CreateContinueStatement(Identifier label)
-        {
-            return new ContinueStatement
-                {
-                    Type = SyntaxNodes.ContinueStatement,
-                    Label = label
-                };
-        }
-
-        public static DebuggerStatement CreateDebuggerStatement()
-        {
-            return new DebuggerStatement
-                {
-                    Type = SyntaxNodes.DebuggerStatement
-                };
-        }
-
-        public static DoWhileStatement CreateDoWhileStatement(Statement body, Expression test)
-        {
-            return new DoWhileStatement
-                {
-                    Type = SyntaxNodes.DoWhileStatement,
-                    Body = body,
-                    Test = test
-                };
-        }
-
-        public static EmptyStatement CreateEmptyStatement()
-        {
-            return new EmptyStatement
-                {
-                    Type = SyntaxNodes.EmptyStatement
-                };
-        }
-
-        public static ExpressionStatement CreateExpressionStatement(Expression expression)
-        {
-            return new ExpressionStatement
-                {
-                    Type = SyntaxNodes.ExpressionStatement,
-                    Expression = expression
-                };
-        }
-
-        public static ForStatement CreateForStatement(SyntaxNode init, Expression test, Expression update, Statement body)
-        {
-            return new ForStatement
-                {
-                    Type = SyntaxNodes.ForStatement,
-                    Init = init,
-                    Test = test,
-                    Update = update,
-                    Body = body
-                };
-        }
-
-        public static ForInStatement CreateForInStatement(SyntaxNode left, Expression right, Statement body)
-        {
-            return new ForInStatement
-                {
-                    Type = SyntaxNodes.ForInStatement,
-                    Left = left,
-                    Right = right,
-                    Body = body,
-                    Each = false
-                };
-        }
-
-        public static FunctionDeclaration CreateFunctionDeclaration(Identifier id, IEnumerable<Identifier> parameters,
-                                                             IEnumerable<Expression> defaults, Statement body, bool strict)
-        {
-            return new FunctionDeclaration
-                {
-                    Type = SyntaxNodes.FunctionDeclaration,
-                    Id = id,
-                    Parameters = parameters,
-                    Defaults = defaults,
-                    Body = body,
-                    Strict = strict,
-                    Rest = null,
-                    Generator = false,
-                    Expression = false,
-                };
-        }
-
-        public static FunctionExpression CreateFunctionExpression(Identifier id, IEnumerable<Identifier> parameters,
-                                                           IEnumerable<Expression> defaults, Statement body, bool strict)
-        {
-            return new FunctionExpression
-                {
-                    Type = SyntaxNodes.FunctionExpression,
-                    Id = id,
-                    Parameters = parameters,
-                    Defaults = defaults,
-                    Body = body,
-                    Strict = strict,
-                    Rest = null,
-                    Generator = false,
-                    Expression = false,
-                };
-        }
-
-        public static Identifier CreateIdentifier(string name)
-        {
-            return new Identifier
-                {
-                    Type = SyntaxNodes.Identifier,
-                    Name = name
-                };
-        }
-
-        public static IfStatement CreateIfStatement(Expression test, Statement consequent, Statement alternate)
-        {
-            return new IfStatement
-                {
-                    Type = SyntaxNodes.IfStatement,
-                    Test = test,
-                    Consequent = consequent,
-                    Alternate = alternate
-                };
-        }
-
-        public static LabelledStatement CreateLabeledStatement(Identifier label, Statement body)
-        {
-            return new LabelledStatement
-                {
-                    Type = SyntaxNodes.LabeledStatement,
-                    Label = label,
-                    Body = body
-                };
-        }
-
         Literal CreateLiteral(Token token)
         {
-            return CreateLiteral(token.Type == Tokens.RegularExpression, token.Value, 
+            return SyntaxNodeFactory.Literal(token.Type == Tokens.RegularExpression, token.Value, 
                                  _source.Slice(token.Range[0], token.Range[1]));
         }
 
-        public static Literal CreateLiteral(/* TODO Review */ bool isRegExp, object value, string raw)
-        {
-            return new Literal
-                {
-                    Type  = isRegExp
-                          ? SyntaxNodes.RegularExpressionLiteral
-                          : SyntaxNodes.Literal,
-                    Value = value,
-                    Raw   = raw
-                };
-        }
-
-        public static MemberExpression CreateMemberExpression(char accessor, Expression obj, Expression property)
-        {
-            return new MemberExpression
-                {
-                    Type = SyntaxNodes.MemberExpression,
-                    Computed = accessor == '[',
-                    Object = obj,
-                    Property = property
-                };
-        }
-
-        public static NewExpression CreateNewExpression(Expression callee, IEnumerable<Expression> args)
-        {
-            return new NewExpression
-                {
-                    Type = SyntaxNodes.NewExpression,
-                    Callee = callee,
-                    Arguments = args
-                };
-        }
-
-        public static ObjectExpression CreateObjectExpression(IEnumerable<Property> properties)
-        {
-            return new ObjectExpression
-                {
-                    Type = SyntaxNodes.ObjectExpression,
-                    Properties = properties
-                };
-        }
-
-        public static UpdateExpression CreatePostfixExpression(string op, Expression argument)
-        {
-            return new UpdateExpression
-                {
-                    Type = SyntaxNodes.UpdateExpression,
-                    Operator = UnaryExpression.ParseUnaryOperator(op),
-                    Argument = argument,
-                    Prefix = false
-                };
-        }
-
-        public static Program CreateProgram(ICollection<Statement> body, bool strict)
-        {
-            return new Program
-                {
-                    Type = SyntaxNodes.Program,
-                    Body = body,
-                    Strict = strict,
-                };
-        }
-
-        public static Property CreateProperty(PropertyKind kind, IPropertyKeyExpression key, Expression value)
-        {
-            return new Property
-                {
-                    Type = SyntaxNodes.Property,
-                    Key = key,
-                    Value = value,
-                    Kind = kind
-                };
-        }
-
-        public static ReturnStatement CreateReturnStatement(Expression argument)
-        {
-            return new ReturnStatement
-                {
-                    Type = SyntaxNodes.ReturnStatement,
-                    Argument = argument
-                };
-        }
-
-        public static SequenceExpression CreateSequenceExpression(IList<Expression> expressions)
-        {
-            return new SequenceExpression
-                {
-                    Type = SyntaxNodes.SequenceExpression,
-                    Expressions = expressions
-                };
-        }
-
-        public static SwitchCase CreateSwitchCase(Expression test, IEnumerable<Statement> consequent)
-        {
-            return new SwitchCase
-                {
-                    Type = SyntaxNodes.SwitchCase,
-                    Test = test,
-                    Consequent = consequent
-                };
-        }
-
-        public static SwitchStatement CreateSwitchStatement(Expression discriminant, IEnumerable<SwitchCase> cases)
-        {
-            return new SwitchStatement
-                {
-                    Type = SyntaxNodes.SwitchStatement,
-                    Discriminant = discriminant,
-                    Cases = cases
-                };
-        }
-
-        public static ThisExpression CreateThisExpression()
-        {
-            return new ThisExpression
-                {
-                    Type = SyntaxNodes.ThisExpression
-                };
-        }
-
-        public static ThrowStatement CreateThrowStatement(Expression argument)
-        {
-            return new ThrowStatement
-                {
-                    Type = SyntaxNodes.ThrowStatement,
-                    Argument = argument
-                };
-        }
-
-        public static TryStatement CreateTryStatement(Statement block, IEnumerable<Statement> guardedHandlers,
-                                               IEnumerable<CatchClause> handlers, Statement finalizer)
-        {
-            return new TryStatement
-                {
-                    Type = SyntaxNodes.TryStatement,
-                    Block = block,
-                    GuardedHandlers = guardedHandlers,
-                    Handlers = handlers,
-                    Finalizer = finalizer
-                };
-        }
-
-        public static UnaryExpression CreateUnaryExpression(string op, Expression argument)
-        {
-            if (op == "++" || op == "--")
-            {
-                return new UpdateExpression
-                {
-                    Type = SyntaxNodes.UpdateExpression,
-                    Operator = UnaryExpression.ParseUnaryOperator(op),
-                    Argument = argument,
-                    Prefix = true
-                };
-            }
-
-            return new UnaryExpression
-            {
-                Type = SyntaxNodes.UnaryExpression,
-                Operator = UnaryExpression.ParseUnaryOperator(op),
-                Argument = argument,
-                Prefix = true
-            };
-        }
-
-
-        public static VariableDeclaration CreateVariableDeclaration(IEnumerable<VariableDeclarator> declarations, string kind)
-        {
-            return new VariableDeclaration
-                {
-                    Type = SyntaxNodes.VariableDeclaration,
-                    Declarations = declarations,
-                    Kind = kind
-                };
-        }
-
-        public static VariableDeclarator CreateVariableDeclarator(Identifier id, Expression init)
-        {
-            return new VariableDeclarator
-                {
-                    Type = SyntaxNodes.VariableDeclarator,
-                    Id = id,
-                    Init = init
-                };
-        }
-
-        public static WhileStatement CreateWhileStatement(Expression test, Statement body)
-        {
-            return new WhileStatement
-                {
-                    Type = SyntaxNodes.WhileStatement,
-                    Test = test,
-                    Body = body
-                };
-        }
-
-        public static WithStatement CreateWithStatement(Expression obj, Statement body)
-        {
-            return new WithStatement
-                {
-                    Type = SyntaxNodes.WithStatement,
-                    Object = obj,
-                    Body = body
-                };
-        }
 
         // Return true if there is a line terminator before the next token.
 
@@ -2002,7 +1576,7 @@ namespace Escape
 
             Expect("]");
 
-            return CreateArrayExpression(elements);
+            return SyntaxNodeFactory.Array(elements);
         }
 
         // 11.1.5 Object Initialiser
@@ -2018,7 +1592,7 @@ namespace Escape
             }
             var functionStrict = _strict;
             _strict = previousStrict;
-            return MarkEnd(CreateFunctionExpression(null, parameters, new Expression[0], body, functionStrict));
+            return MarkEnd(SyntaxNodeFactory.Function(null, parameters, new Expression[0], body, functionStrict));
         }
 
         IPropertyKeyExpression ParseObjectPropertyKey()
@@ -2038,7 +1612,7 @@ namespace Escape
                 return MarkEnd(CreateLiteral(token));
             }
 
-            return MarkEnd(CreateIdentifier((string) token.Value));
+            return MarkEnd(SyntaxNodeFactory.Identifier((string) token.Value));
         }
 
         Property ParseObjectProperty()
@@ -2060,7 +1634,7 @@ namespace Escape
                     Expect("(");
                     Expect(")");
                     value = ParsePropertyFunction(new Identifier[0]);
-                    return MarkEnd(CreateProperty(PropertyKind.Get, key, value));
+                    return MarkEnd(SyntaxNodeFactory.Property(PropertyKind.Get, key, value));
                 }
                 if ("set".Equals(token.Value) && !Match(":"))
                 {
@@ -2079,12 +1653,12 @@ namespace Escape
                         Expect(")");
                         value = ParsePropertyFunction(param, token);
                     }
-                    return MarkEnd(CreateProperty(PropertyKind.Set, key, value));
+                    return MarkEnd(SyntaxNodeFactory.Property(PropertyKind.Set, key, value));
                 }
                 Expect(":");
 
                 value = ParseAssignmentExpression();
-                return MarkEnd(CreateProperty(PropertyKind.Data, id, value));
+                return MarkEnd(SyntaxNodeFactory.Property(PropertyKind.Data, id, value));
             }
             if (token.Type == Tokens.EOF || token.Type == Tokens.Punctuator)
             {
@@ -2096,7 +1670,7 @@ namespace Escape
                 var key = ParseObjectPropertyKey();
                 Expect(":");
                 value = ParseAssignmentExpression();
-                return MarkEnd(CreateProperty(PropertyKind.Data, key, value));
+                return MarkEnd(SyntaxNodeFactory.Property(PropertyKind.Data, key, value));
             }
         }
 
@@ -2157,7 +1731,7 @@ namespace Escape
 
             Expect("}");
 
-            return CreateObjectExpression(properties);
+            return SyntaxNodeFactory.Object(properties);
         }
 
         // 11.1.6 The Grouping Operator
@@ -2190,7 +1764,7 @@ namespace Escape
 
             if (type == Tokens.Identifier)
             {
-                expr = CreateIdentifier((string) Lex().Value);
+                expr = SyntaxNodeFactory.Identifier((string) Lex().Value);
             }
             else if (type == Tokens.StringLiteral || type == Tokens.NumericLiteral)
             {
@@ -2205,7 +1779,7 @@ namespace Escape
                 if (MatchKeyword("this"))
                 {
                     Lex();
-                    expr = CreateThisExpression();
+                    expr = SyntaxNodeFactory.This();
                 }
                 else if (MatchKeyword("function"))
                 {
@@ -2282,7 +1856,7 @@ namespace Escape
                 ThrowUnexpected(token);
             }
 
-            return MarkEnd(CreateIdentifier((string) token.Value));
+            return MarkEnd(SyntaxNodeFactory.Identifier((string) token.Value));
         }
 
         Identifier ParseNonComputedMember()
@@ -2310,7 +1884,7 @@ namespace Escape
             var callee = ParseLeftHandSideExpression();
             var args = Match("(") ? ParseArguments() : new AssignmentExpression[0];
 
-            return MarkEnd(CreateNewExpression(callee, args));
+            return MarkEnd(SyntaxNodeFactory.New(callee, args));
         }
 
         Expression ParseLeftHandSideExpressionAllowCall()
@@ -2327,17 +1901,17 @@ namespace Escape
                 if (Match("("))
                 {
                     var args = ParseArguments();
-                    expr = CreateCallExpression(expr, args);
+                    expr = SyntaxNodeFactory.Call(expr, args);
                 }
                 else if (Match("["))
                 {
                     var property = ParseComputedMember();
-                    expr = CreateMemberExpression('[', expr, property);
+                    expr = SyntaxNodeFactory.Member('[', expr, property);
                 }
                 else
                 {
                     var property = ParseNonComputedMember();
-                    expr = CreateMemberExpression('.', expr, property);
+                    expr = SyntaxNodeFactory.Member('.', expr, property);
                 }
                 if (marker != null)
                 {
@@ -2362,12 +1936,12 @@ namespace Escape
                 if (Match("["))
                 {
                     var property = ParseComputedMember();
-                    expr = CreateMemberExpression('[', expr, property);
+                    expr = SyntaxNodeFactory.Member('[', expr, property);
                 }
                 else
                 {
                     var property = ParseNonComputedMember();
-                    expr = CreateMemberExpression('.', expr, property);
+                    expr = SyntaxNodeFactory.Member('.', expr, property);
                 }
                 if (marker != null)
                 {
@@ -2402,7 +1976,7 @@ namespace Escape
                     }
 
                     var token = Lex();
-                    expr = CreatePostfixExpression((string) token.Value, expr);
+                    expr = SyntaxNodeFactory.Postfix((string) token.Value, expr);
                 }
             }
 
@@ -2436,19 +2010,19 @@ namespace Escape
                     ThrowErrorTolerant(Token.Empty, Messages.InvalidLHSInAssignment);
                 }
 
-                expr = CreateUnaryExpression((string) token.Value, expr);
+                expr = SyntaxNodeFactory.Unary((string) token.Value, expr);
             }
             else if (Match("+") || Match("-") || Match("~") || Match("!"))
             {
                 var token = Lex();
                 expr = ParseUnaryExpression();
-                expr = CreateUnaryExpression((string) token.Value, expr);
+                expr = SyntaxNodeFactory.Unary((string) token.Value, expr);
             }
             else if (MatchKeyword("delete") || MatchKeyword("void") || MatchKeyword("typeof"))
             {
                 var token = Lex();
                 expr = ParseUnaryExpression();
-                var unaryExpr = CreateUnaryExpression((string) token.Value, expr);
+                var unaryExpr = SyntaxNodeFactory.Unary((string) token.Value, expr);
                 if (_strict && unaryExpr.Operator == UnaryOperator.Delete && unaryExpr.Argument.Type == SyntaxNodes.Identifier)
                 {
                     ThrowErrorTolerant(Token.Empty, Messages.StrictDelete);
@@ -2558,7 +2132,7 @@ namespace Escape
             token.Precedence = prec;
             Lex();
 
-            var markers = new Stack<LocationMarker>( new [] {marker, CreateLocationMarker()});
+            var markers = new Stack<JavaScriptParser.LocationMarker>( new [] {marker, CreateLocationMarker()});
             var right = ParseUnaryExpression();
 
             var stack = new List<object>( new object[] {left, token, right});
@@ -2571,7 +2145,7 @@ namespace Escape
                     right = (Expression) stack.Pop();
                     var op = (string) ((Token) stack.Pop()).Value;
                     left = (Expression) stack.Pop();
-                    expr = CreateBinaryExpression(op, left, right);
+                    expr = SyntaxNodeFactory.Binary(op, left, right);
                     markers.Pop();
                     marker = markers.Pop();
                     if (marker != null)
@@ -2598,7 +2172,7 @@ namespace Escape
             markers.Pop();
             while (i > 1)
             {
-                expr = CreateBinaryExpression((string) ((Token) stack[i - 1]).Value, (Expression) stack[i - 2], expr);
+                expr = SyntaxNodeFactory.Binary((string) ((Token) stack[i - 1]).Value, (Expression) stack[i - 2], expr);
                 i -= 2;
                 marker = markers.Pop();
                 if (marker != null)
@@ -2629,7 +2203,7 @@ namespace Escape
                 Expect(":");
                 var alternate = ParseAssignmentExpression();
 
-                expr = MarkEnd(CreateConditionalExpression(expr, consequent, alternate));
+                expr = MarkEnd(SyntaxNodeFactory.Conditional(expr, consequent, alternate));
             }
             else
             {
@@ -2667,7 +2241,7 @@ namespace Escape
 
                 token = Lex();
                 var right = ParseAssignmentExpression();
-                expr = CreateAssignmentExpression((string) token.Value, left, right);
+                expr = SyntaxNodeFactory.Assignment((string) token.Value, left, right);
             }
 
             return MarkEndIf(expr);
@@ -2682,7 +2256,7 @@ namespace Escape
 
             if (Match(","))
             {
-                expr = CreateSequenceExpression(new List<Expression> {expr});
+                expr = SyntaxNodeFactory.Sequence(new List<Expression> {expr});
 
                 while (_index < _length)
                 {
@@ -2730,7 +2304,7 @@ namespace Escape
 
             Expect("}");
 
-            return MarkEnd(CreateBlockStatement(block));
+            return MarkEnd(SyntaxNodeFactory.Block(block));
         }
 
         // 12.2 Variable Statement
@@ -2745,7 +2319,7 @@ namespace Escape
                 ThrowUnexpected(token);
             }
 
-            return MarkEnd(CreateIdentifier((string) token.Value));
+            return MarkEnd(SyntaxNodeFactory.Identifier((string) token.Value));
         }
 
         VariableDeclarator ParseVariableDeclaration(string kind)
@@ -2772,7 +2346,7 @@ namespace Escape
                 init = ParseAssignmentExpression();
             }
 
-            return MarkEnd(CreateVariableDeclarator(id, init));
+            return MarkEnd(SyntaxNodeFactory.VariableDeclarator(id, init));
         }
 
         IEnumerable<VariableDeclarator> ParseVariableDeclarationList(string kind)
@@ -2800,7 +2374,7 @@ namespace Escape
 
             ConsumeSemicolon();
 
-            return CreateVariableDeclaration(declarations, "var");
+            return SyntaxNodeFactory.VariableDeclaration(declarations, "var");
         }
 
         // kind may be `const` or `let`
@@ -2817,7 +2391,7 @@ namespace Escape
 
             ConsumeSemicolon();
 
-            return MarkEnd(CreateVariableDeclaration(declarations, kind));
+            return MarkEnd(SyntaxNodeFactory.VariableDeclaration(declarations, kind));
         }
 
         // 12.3 Empty Statement
@@ -2825,7 +2399,7 @@ namespace Escape
         EmptyStatement ParseEmptyStatement()
         {
             Expect(";");
-            return CreateEmptyStatement();
+            return SyntaxNodeFactory.Empty();
         }
 
         // 12.4 Expression Statement
@@ -2834,7 +2408,7 @@ namespace Escape
         {
             var expr = ParseExpression();
             ConsumeSemicolon();
-            return CreateExpressionStatement(expr);
+            return SyntaxNodeFactory.Expression(expr);
         }
 
         // 12.5 If statement
@@ -2863,7 +2437,7 @@ namespace Escape
                 alternate = null;
             }
 
-            return CreateIfStatement(test, consequent, alternate);
+            return SyntaxNodeFactory.If(test, consequent, alternate);
         }
 
         // 12.6 Iteration Statements
@@ -2892,7 +2466,7 @@ namespace Escape
                 Lex();
             }
 
-            return CreateDoWhileStatement(body, test);
+            return SyntaxNodeFactory.DoWhile(body, test);
         }
 
         WhileStatement ParseWhileStatement()
@@ -2912,7 +2486,7 @@ namespace Escape
 
             _state.InIteration = oldInIteration;
 
-            return CreateWhileStatement(test, body);
+            return SyntaxNodeFactory.While(test, body);
         }
 
         VariableDeclaration ParseForVariableDeclaration()
@@ -2921,7 +2495,7 @@ namespace Escape
             var token = Lex();
             var declarations = ParseVariableDeclarationList(null);
 
-            return MarkEnd(CreateVariableDeclaration(declarations, (string) token.Value));
+            return MarkEnd(SyntaxNodeFactory.VariableDeclaration(declarations, (string) token.Value));
         }
 
         Statement ParseForStatement()
@@ -3005,8 +2579,8 @@ namespace Escape
             _state.InIteration = oldInIteration;
 
             return (left == null)
-                       ? (Statement) CreateForStatement(init, test, update, body)
-                       : CreateForInStatement(left, right, body);
+                       ? (Statement) SyntaxNodeFactory.For(init, test, update, body)
+                       : SyntaxNodeFactory.ForIn(left, right, body);
         }
 
         // 12.7 The continue statement
@@ -3027,7 +2601,7 @@ namespace Escape
                     ThrowError(Token.Empty, Messages.IllegalContinue);
                 }
 
-                return CreateContinueStatement(null);
+                return SyntaxNodeFactory.Continue(null);
             }
 
             if (PeekLineTerminator())
@@ -3037,7 +2611,7 @@ namespace Escape
                     ThrowError(Token.Empty, Messages.IllegalContinue);
                 }
 
-                return CreateContinueStatement(null);
+                return SyntaxNodeFactory.Continue(null);
             }
 
             if (_lookahead.Type == Tokens.Identifier)
@@ -3058,7 +2632,7 @@ namespace Escape
                 ThrowError(Token.Empty, Messages.IllegalContinue);
             }
 
-            return CreateContinueStatement(label);
+            return SyntaxNodeFactory.Continue(label);
         }
 
         // 12.8 The break statement
@@ -3079,7 +2653,7 @@ namespace Escape
                     ThrowError(Token.Empty, Messages.IllegalBreak);
                 }
 
-                return CreateBreakStatement(null);
+                return SyntaxNodeFactory.Break(null);
             }
 
             if (PeekLineTerminator())
@@ -3089,7 +2663,7 @@ namespace Escape
                     ThrowError(Token.Empty, Messages.IllegalBreak);
                 }
 
-                return CreateBreakStatement(null);
+                return SyntaxNodeFactory.Break(null);
             }
 
             if (_lookahead.Type == Tokens.Identifier)
@@ -3110,7 +2684,7 @@ namespace Escape
                 ThrowError(Token.Empty, Messages.IllegalBreak);
             }
 
-            return CreateBreakStatement(label);
+            return SyntaxNodeFactory.Break(label);
         }
 
         // 12.9 The return statement
@@ -3133,13 +2707,13 @@ namespace Escape
                 {
                     argument = ParseExpression();
                     ConsumeSemicolon();
-                    return CreateReturnStatement(argument);
+                    return SyntaxNodeFactory.Return(argument);
                 }
             }
 
             if (PeekLineTerminator())
             {
-                return CreateReturnStatement(null);
+                return SyntaxNodeFactory.Return(null);
             }
 
             if (!Match(";"))
@@ -3152,7 +2726,7 @@ namespace Escape
 
             ConsumeSemicolon();
 
-            return CreateReturnStatement(argument);
+            return SyntaxNodeFactory.Return(argument);
         }
 
         // 12.10 The with statement
@@ -3174,7 +2748,7 @@ namespace Escape
 
             var body = ParseStatement();
 
-            return CreateWithStatement(obj, body);
+            return SyntaxNodeFactory.With(obj, body);
         }
 
         // 12.10 The swith statement
@@ -3207,7 +2781,7 @@ namespace Escape
                 consequent.Add(statement);
             }
 
-            return MarkEnd(CreateSwitchCase(test, consequent));
+            return MarkEnd(SyntaxNodeFactory.SwitchCase(test, consequent));
         }
 
         SwitchStatement ParseSwitchStatement()
@@ -3227,7 +2801,7 @@ namespace Escape
             if (Match("}"))
             {
                 Lex();
-                return CreateSwitchStatement(discriminant, cases);
+                return SyntaxNodeFactory.Switch(discriminant, cases);
             }
 
             var oldInSwitch = _state.InSwitch;
@@ -3256,7 +2830,7 @@ namespace Escape
 
             Expect("}");
 
-            return CreateSwitchStatement(discriminant, cases);
+            return SyntaxNodeFactory.Switch(discriminant, cases);
         }
 
         // 12.13 The throw statement
@@ -3274,7 +2848,7 @@ namespace Escape
 
             ConsumeSemicolon();
 
-            return CreateThrowStatement(argument);
+            return SyntaxNodeFactory.Throw(argument);
         }
 
         // 12.14 The try statement
@@ -3299,7 +2873,7 @@ namespace Escape
 
             Expect(")");
             var body = ParseBlock();
-            return MarkEnd(CreateCatchClause(param, body));
+            return MarkEnd(SyntaxNodeFactory.Catch(param, body));
         }
 
         TryStatement ParseTryStatement()
@@ -3327,7 +2901,7 @@ namespace Escape
                 ThrowError(Token.Empty, Messages.NoCatchOrFinally);
             }
 
-            return CreateTryStatement(block, new Statement[0], handlers, finalizer);
+            return SyntaxNodeFactory.Try(block, new Statement[0], handlers, finalizer);
         }
 
         // 12.15 The debugger statement
@@ -3338,7 +2912,7 @@ namespace Escape
 
             ConsumeSemicolon();
 
-            return CreateDebuggerStatement();
+            return SyntaxNodeFactory.Debugger();
         }
 
         // 12 Statements
@@ -3418,12 +2992,12 @@ namespace Escape
                 _state.LabelSet.Add(key);
                 var labeledBody = ParseStatement();
                 _state.LabelSet.Remove(key);
-                return MarkEnd(CreateLabeledStatement((Identifier) expr, labeledBody));
+                return MarkEnd(SyntaxNodeFactory.LabeledStatement((Identifier) expr, labeledBody));
             }
 
             ConsumeSemicolon();
 
-            return MarkEnd(CreateExpressionStatement(expr));
+            return MarkEnd(SyntaxNodeFactory.Expression(expr));
         }
 
         // 13 Function Definition
@@ -3501,10 +3075,10 @@ namespace Escape
             _state.InSwitch = oldInSwitch;
             _state.InFunctionBody = oldInFunctionBody;
 
-            return MarkEnd(CreateBlockStatement(sourceElements));
+            return MarkEnd(SyntaxNodeFactory.Block(sourceElements));
         }
 
-        ParsedParameters ParseParams(Token firstRestricted)
+        JavaScriptParser.ParsedParameters ParseParams(Token firstRestricted)
         {
             string message = null;
             var stricted = Token.Empty;
@@ -3563,7 +3137,7 @@ namespace Escape
 
             Expect(")");
 
-            return new ParsedParameters
+            return new JavaScriptParser.ParsedParameters
                 {
                     Parameters = parameters,
                     Stricted = stricted,
@@ -3625,7 +3199,7 @@ namespace Escape
             var functionStrict = _strict;
             _strict = previousStrict;
 
-            return MarkEnd(CreateFunctionDeclaration(id, parameters, new Expression[0], body, functionStrict));
+            return MarkEnd(SyntaxNodeFactory.FunctionDeclaration(id, parameters, new Expression[0], body, functionStrict));
         }
 
         FunctionExpression ParseFunctionExpression()
@@ -3685,7 +3259,7 @@ namespace Escape
             var functionStrict = _strict;
             _strict = previousStrict;
 
-            return MarkEnd(CreateFunctionExpression(id, parameters, new Expression[0], body, functionStrict));
+            return MarkEnd(SyntaxNodeFactory.Function(id, parameters, new Expression[0], body, functionStrict));
         }
 
         // 14 Program
@@ -3770,10 +3344,10 @@ namespace Escape
             MarkStart();
             Peek();
             var body = ParseSourceElements();
-            return MarkEnd(CreateProgram(body, _strict));
+            return MarkEnd(SyntaxNodeFactory.Program(body, _strict));
         }
 
-        LocationMarker CreateLocationMarker()
+        JavaScriptParser.LocationMarker CreateLocationMarker()
         {
             if (!_extra.Loc.HasValue && _extra.Range.Length == 0)
             {
@@ -3782,7 +3356,7 @@ namespace Escape
 
             SkipComment();
 
-            return new LocationMarker(_index, _lineNumber, _lineStart);
+            return new JavaScriptParser.LocationMarker(_index, _lineNumber, _lineStart);
         }
 
         public Program Parse(string code)
@@ -3811,7 +3385,7 @@ namespace Escape
                 MarkerStack = new Stack<int>()
             };
 
-            _extra = new Extra
+            _extra = new JavaScriptParser.Extra
             {
                 Range = new int[0],
                 Loc = 0,
@@ -3862,7 +3436,7 @@ namespace Escape
             }
             finally
             {
-                _extra = new Extra();
+                _extra = new JavaScriptParser.Extra();
             }
 
             return program;
@@ -3889,7 +3463,7 @@ namespace Escape
                 MarkerStack = new Stack<int>()
             };
 
-            _extra = new Extra
+            _extra = new JavaScriptParser.Extra
             {
                 Range = new int[0],
                 Loc = 0,
