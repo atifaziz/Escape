@@ -640,13 +640,7 @@ namespace Escape.Ast
         }
     }
 
-    [Flags]
-    public enum PropertyKind
-    {
-        Data = 1,
-        Get = 2,
-        Set = 4
-    };
+    public enum PropertyKind { Data, Get, Set };
 
     public class Property : Expression
     {
