@@ -104,6 +104,7 @@ namespace Esparse
             else if (value is LogicalOperator) { _writer.String(((LogicalOperator) value).JsText()); }
             else if (value is UnaryOperator) { _writer.String(((UnaryOperator) value).JsText()); }
             else if (value is AssignmentOperator) { _writer.String(((AssignmentOperator) value).JsText()); }
+            else if (value is RegExp) { _writer.String(value.ToString()); }
             else if (value is PropertyKind) 
             { 
                 switch ((PropertyKind) value) 
@@ -251,7 +252,8 @@ namespace Esparse
 
         protected override void Visit(Literal node)
         {
-            if (node.NodeType == SyntaxNodeType.RegularExpressionLiteral)
+            /*
+            if (node.Value is RegExp)
             {
                 // http://www.ecma-international.org/ecma-262/5.1/#sec-15.10.6.4
 
@@ -267,16 +269,12 @@ namespace Esparse
                     value = sb.ToString();
                 }
 
-                node = new Literal
-                {
-                    NodeType = SyntaxNodeType.Literal,
-                    Location = node.Location,
-                    Range = node.Range,
-                    Raw = node.Raw,
-                    Value = value
-                };
+                var literal = SyntaxNodeFactory.Literal(value, node.Raw);
+                literal.Location = node.Location;
+                literal.Range = node.Range;
+                node = literal;
             }
-
+            */
             Encode(node, Member("value", node.Value), Member("raw", node.Raw));
         }
 

@@ -43,18 +43,13 @@ namespace Escape
     {
         public static ArrayExpression Array(IEnumerable<Expression> elements)
         {
-            return new ArrayExpression
-                   {
-                       NodeType = SyntaxNodeType.ArrayExpression,
-                       Elements = elements
-                   };
+            return new ArrayExpression { Elements = elements };
         }
 
         public static AssignmentExpression Assignment(string op, Expression left, Expression right)
         {
             return new AssignmentExpression
                    {
-                       NodeType = SyntaxNodeType.AssignmentExpression,
                        Operator = AssignmentExpression.ParseAssignmentOperator(op),
                        Left = left,
                        Right = right
@@ -67,14 +62,12 @@ namespace Escape
             return (op == "||" || op == "&&")
                 ? (Expression)new LogicalExpression
                               {
-                                  NodeType = SyntaxNodeType.LogicalExpression,
                                   Operator = LogicalExpression.ParseLogicalOperator(op),
                                   Left = left,
                                   Right = right
                               }
                 : new BinaryExpression
                   {
-                      NodeType = SyntaxNodeType.BinaryExpression,
                       Operator = BinaryExpression.ParseBinaryOperator(op),
                       Left = left,
                       Right = right
@@ -83,27 +76,18 @@ namespace Escape
 
         public static BlockStatement Block(IEnumerable<Statement> body)
         {
-            return new BlockStatement
-                   {
-                       NodeType = SyntaxNodeType.BlockStatement,
-                       Body = body
-                   };
+            return new BlockStatement { Body = body };
         }
 
         public static BreakStatement Break(Identifier label)
         {
-            return new BreakStatement
-                   {
-                       NodeType = SyntaxNodeType.BreakStatement,
-                       Label = label
-                   };
+            return new BreakStatement { Label = label };
         }
 
         public static CallExpression Call(Expression callee, IEnumerable<Expression> args)
         {
             return new CallExpression
                    {
-                       NodeType = SyntaxNodeType.CallExpression,
                        Callee = callee,
                        Arguments = args
                    };
@@ -113,7 +97,6 @@ namespace Escape
         {
             return new CatchClause
                    {
-                       NodeType = SyntaxNodeType.CatchClause,
                        Param = param,
                        Body = body
                    };
@@ -124,7 +107,6 @@ namespace Escape
         {
             return new ConditionalExpression
                    {
-                       NodeType = SyntaxNodeType.ConditionalExpression,
                        Test = test,
                        Consequent = consequent,
                        Alternate = alternate
@@ -133,26 +115,18 @@ namespace Escape
 
         public static ContinueStatement Continue(Identifier label)
         {
-            return new ContinueStatement
-                   {
-                       NodeType = SyntaxNodeType.ContinueStatement,
-                       Label = label
-                   };
+            return new ContinueStatement { Label = label };
         }
 
         public static DebuggerStatement Debugger()
         {
-            return new DebuggerStatement
-                   {
-                       NodeType = SyntaxNodeType.DebuggerStatement
-                   };
+            return new DebuggerStatement() /* TODO Singleton? */;
         }
 
         public static DoWhileStatement DoWhile(Statement body, Expression test)
         {
             return new DoWhileStatement
                    {
-                       NodeType = SyntaxNodeType.DoWhileStatement,
                        Body = body,
                        Test = test
                    };
@@ -160,26 +134,18 @@ namespace Escape
 
         public static EmptyStatement Empty() // TODO singleton?
         {
-            return new EmptyStatement
-                   {
-                       NodeType = SyntaxNodeType.EmptyStatement
-                   };
+            return new EmptyStatement();
         }
 
         public static ExpressionStatement Expression(Expression expression)
         {
-            return new ExpressionStatement
-                   {
-                       NodeType = SyntaxNodeType.ExpressionStatement,
-                       Expression = expression
-                   };
+            return new ExpressionStatement { Expression = expression };
         }
 
         public static ForStatement For(SyntaxNode init, Expression test, Expression update, Statement body)
         {
             return new ForStatement
                    {
-                       NodeType = SyntaxNodeType.ForStatement,
                        Init = init,
                        Test = test,
                        Update = update,
@@ -191,7 +157,6 @@ namespace Escape
         {
             return new ForInStatement
                    {
-                       NodeType = SyntaxNodeType.ForInStatement,
                        Left = left,
                        Right = right,
                        Body = body,
@@ -204,7 +169,6 @@ namespace Escape
         {
             return new FunctionDeclaration
                    {
-                       NodeType = SyntaxNodeType.FunctionDeclaration,
                        Id = id,
                        Parameters = parameters,
                        Defaults = defaults,
@@ -221,7 +185,6 @@ namespace Escape
         {
             return new FunctionExpression
                    {
-                       NodeType = SyntaxNodeType.FunctionExpression,
                        Id = id,
                        Parameters = parameters,
                        Defaults = defaults,
@@ -235,18 +198,13 @@ namespace Escape
 
         public static Identifier Identifier(string name)
         {
-            return new Identifier
-                   {
-                       NodeType = SyntaxNodeType.Identifier,
-                       Name = name
-                   };
+            return new Identifier { Name = name };
         }
 
         public static IfStatement If(Expression test, Statement consequent, Statement alternate)
         {
             return new IfStatement
                    {
-                       NodeType = SyntaxNodeType.IfStatement,
                        Test = test,
                        Consequent = consequent,
                        Alternate = alternate
@@ -257,19 +215,15 @@ namespace Escape
         {
             return new LabelledStatement
                    {
-                       NodeType = SyntaxNodeType.LabeledStatement,
                        Label = label,
                        Body = body
                    };
         }
 
-        public static Literal Literal(/* TODO Review */ bool isRegExp, object value, string raw)
+        public static Literal Literal(object value, string raw)
         {
             return new Literal
                    {
-                       NodeType  = isRegExp
-                           ? SyntaxNodeType.RegularExpressionLiteral
-                           : SyntaxNodeType.Literal,
                        Value = value,
                        Raw   = raw
                    };
@@ -279,7 +233,6 @@ namespace Escape
         {
             return new MemberExpression
                    {
-                       NodeType = SyntaxNodeType.MemberExpression,
                        Computed = accessor == '[',
                        Object = obj,
                        Property = property
@@ -290,7 +243,6 @@ namespace Escape
         {
             return new NewExpression
                    {
-                       NodeType = SyntaxNodeType.NewExpression,
                        Callee = callee,
                        Arguments = args
                    };
@@ -298,18 +250,13 @@ namespace Escape
 
         public static ObjectExpression Object(IEnumerable<Property> properties)
         {
-            return new ObjectExpression
-                   {
-                       NodeType = SyntaxNodeType.ObjectExpression,
-                       Properties = properties
-                   };
+            return new ObjectExpression { Properties = properties };
         }
 
         public static UpdateExpression Postfix(string op, Expression argument)
         {
             return new UpdateExpression
                    {
-                       NodeType = SyntaxNodeType.UpdateExpression,
                        Operator = UnaryExpression.ParseUnaryOperator(op),
                        Argument = argument,
                        Prefix = false
@@ -320,7 +267,6 @@ namespace Escape
         {
             return new Program
                    {
-                       NodeType = SyntaxNodeType.Program,
                        Body = body,
                        Strict = strict,
                    };
@@ -330,7 +276,6 @@ namespace Escape
         {
             return new Property
                    {
-                       NodeType = SyntaxNodeType.Property,
                        Key = key,
                        Value = value,
                        Kind = kind
@@ -339,27 +284,18 @@ namespace Escape
 
         public static ReturnStatement Return(Expression argument)
         {
-            return new ReturnStatement
-                   {
-                       NodeType = SyntaxNodeType.ReturnStatement,
-                       Argument = argument
-                   };
+            return new ReturnStatement { Argument = argument };
         }
 
         public static SequenceExpression Sequence(IList<Expression> expressions)
         {
-            return new SequenceExpression
-                   {
-                       NodeType = SyntaxNodeType.SequenceExpression,
-                       Expressions = expressions
-                   };
+            return new SequenceExpression { Expressions = expressions };
         }
 
         public static SwitchCase SwitchCase(Expression test, IEnumerable<Statement> consequent)
         {
             return new SwitchCase
                    {
-                       NodeType = SyntaxNodeType.SwitchCase,
                        Test = test,
                        Consequent = consequent
                    };
@@ -369,7 +305,6 @@ namespace Escape
         {
             return new SwitchStatement
                    {
-                       NodeType = SyntaxNodeType.SwitchStatement,
                        Discriminant = discriminant,
                        Cases = cases
                    };
@@ -377,19 +312,12 @@ namespace Escape
 
         public static ThisExpression This()
         {
-            return new ThisExpression
-                   {
-                       NodeType = SyntaxNodeType.ThisExpression
-                   };
+            return new ThisExpression() /* TODO Singleton? */;
         }
 
         public static ThrowStatement Throw(Expression argument)
         {
-            return new ThrowStatement
-                   {
-                       NodeType = SyntaxNodeType.ThrowStatement,
-                       Argument = argument
-                   };
+            return new ThrowStatement { Argument = argument };
         }
 
         public static TryStatement Try(Statement block, IEnumerable<Statement> guardedHandlers,
@@ -397,7 +325,6 @@ namespace Escape
         {
             return new TryStatement
                    {
-                       NodeType = SyntaxNodeType.TryStatement,
                        Block = block,
                        GuardedHandlers = guardedHandlers,
                        Handlers = handlers,
@@ -411,7 +338,6 @@ namespace Escape
             {
                 return new UpdateExpression
                        {
-                           NodeType = SyntaxNodeType.UpdateExpression,
                            Operator = UnaryExpression.ParseUnaryOperator(op),
                            Argument = argument,
                            Prefix = true
@@ -420,7 +346,6 @@ namespace Escape
 
             return new UnaryExpression
                    {
-                       NodeType = SyntaxNodeType.UnaryExpression,
                        Operator = UnaryExpression.ParseUnaryOperator(op),
                        Argument = argument,
                        Prefix = true
@@ -431,7 +356,6 @@ namespace Escape
         {
             return new VariableDeclaration
                    {
-                       NodeType = SyntaxNodeType.VariableDeclaration,
                        Declarations = declarations,
                        Kind = kind
                    };
@@ -441,7 +365,6 @@ namespace Escape
         {
             return new VariableDeclarator
                    {
-                       NodeType = SyntaxNodeType.VariableDeclarator,
                        Id = id,
                        Init = init
                    };
@@ -451,7 +374,6 @@ namespace Escape
         {
             return new WhileStatement
                    {
-                       NodeType = SyntaxNodeType.WhileStatement,
                        Test = test,
                        Body = body
                    };
@@ -461,7 +383,6 @@ namespace Escape
         {
             return new WithStatement
                    {
-                       NodeType = SyntaxNodeType.WithStatement,
                        Object = obj,
                        Body = body
                    };

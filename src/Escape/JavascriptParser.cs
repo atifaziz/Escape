@@ -1124,7 +1124,7 @@ namespace Escape
                 {
                     TokenType = TokenType.RegularExpression,
                     Literal = str.ToString(),
-                    Value = pattern + flags,
+                    Value = new RegExp(pattern, flags),
                     Range = new[] {start, _index}
                 };
         }
@@ -1335,8 +1335,7 @@ namespace Escape
 
         Literal CreateLiteral(Token token)
         {
-            return SyntaxNodeFactory.Literal(token.TokenType == TokenType.RegularExpression, token.Value, 
-                                 _source.Slice(token.Range[0], token.Range[1]));
+            return SyntaxNodeFactory.Literal(token.Value, _source.Slice(token.Range[0], token.Range[1]));
         }
 
 
@@ -2207,7 +2206,7 @@ namespace Escape
             }
             else
             {
-                MarkEnd(new SyntaxNode());
+                MarkEnd(new ExpressionStatement());
             }
 
             return expr;
