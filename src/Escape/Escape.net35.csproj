@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="Ast.cs" />
     <Compile Include="Comment.cs" />
+    <Compile Include="FastEnumValidator.cs" />
     <Compile Include="JavascriptParser.cs" />
     <Compile Include="Loc.cs" />
     <Compile Include="Messages.cs" />

@@ -76,7 +76,7 @@ namespace Escape.Ast
         public AssignmentExpression(AssignmentOperator op, Expression left, Expression right) : 
             base(SyntaxNodeType.AssignmentExpression)
         {
-            /* TODO perf */ if (!Enum.IsDefined(typeof(AssignmentOperator), op)) throw new ArgumentOutOfRangeException("op");
+            if (!FastEnumValidator<AssignmentOperator>.IsDefined((int) op)) throw new ArgumentOutOfRangeException("op");
             if (left == null) throw new ArgumentNullException("left");
             if (right == null) throw new ArgumentNullException("right");
             Operator = op;
@@ -153,7 +153,7 @@ namespace Escape.Ast
         public BinaryExpression(BinaryOperator op, Expression left, Expression right) : 
             base(SyntaxNodeType.BinaryExpression)
         {
-            /* TODO perf */ if (!Enum.IsDefined(typeof(BinaryOperator), op)) throw new ArgumentOutOfRangeException("op");
+            if (!FastEnumValidator<BinaryOperator>.IsDefined((int) op)) throw new ArgumentOutOfRangeException("op");
             if (left == null) throw new ArgumentNullException("left");
             if (right == null) throw new ArgumentNullException("right");
             Operator = op;
@@ -553,7 +553,7 @@ namespace Escape.Ast
         public LogicalExpression(LogicalOperator op, Expression left, Expression right) :
             base(SyntaxNodeType.LogicalExpression)
         {
-            /* TODO perf */ if (!Enum.IsDefined(typeof(LogicalOperator), op)) throw new ArgumentOutOfRangeException("op");
+            if (!FastEnumValidator<LogicalOperator>.IsDefined((int) op)) throw new ArgumentOutOfRangeException("op");
             if (left == null) throw new ArgumentNullException("left");
             if (right == null) throw new ArgumentNullException("right");
             Operator = op;
@@ -651,7 +651,7 @@ namespace Escape.Ast
         public Property(PropertyKind kind, IPropertyKeyExpression key, Expression value) : 
             base(SyntaxNodeType.Property)
         {
-            /* TODO perf */ if (!Enum.IsDefined(typeof(PropertyKind), kind)) throw new ArgumentOutOfRangeException("kind");
+            if (!FastEnumValidator<PropertyKind>.IsDefined((int) kind)) throw new ArgumentOutOfRangeException("kind");
             if (key == null) throw new ArgumentNullException("key");
             if (value == null) throw new ArgumentNullException("value");
             Value = value;
@@ -851,8 +851,7 @@ namespace Escape.Ast
         protected UnaryExpression(SyntaxNodeType nodeType, UnaryOperator op, Expression argument, bool prefix) : 
             base(nodeType)
         {
-            /* TODO perf */
-            if (!Enum.IsDefined(typeof(UnaryOperator), op)) throw new ArgumentOutOfRangeException("op");
+            if (!FastEnumValidator<UnaryOperator>.IsDefined((int) op)) throw new ArgumentOutOfRangeException("op");
             if (argument == null) throw new ArgumentNullException("argument");
             Operator = op;
             Argument = argument;
