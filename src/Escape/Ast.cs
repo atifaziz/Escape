@@ -42,8 +42,13 @@ namespace Escape.Ast
 
     public class ArrayExpression : Expression
     {
-        public IEnumerable<Expression> Elements { get; set; }
-        public ArrayExpression() : base(SyntaxNodeType.ArrayExpression) { }
+        public IEnumerable<Expression> Elements { get; private set; }
+        
+        public ArrayExpression(IEnumerable<Expression> elements) : base(SyntaxNodeType.ArrayExpression)
+        {
+            if (elements == null) throw new ArgumentNullException("elements");
+            Elements = elements;
+        }
     }
 
     public enum AssignmentOperator
@@ -64,11 +69,20 @@ namespace Escape.Ast
 
     public class AssignmentExpression : Expression
     {
-        public AssignmentOperator Operator { get; set; }
-        public Expression Left { get; set; }
-        public Expression Right { get; set; }
+        public AssignmentOperator Operator { get; private set; }
+        public Expression Left { get; private set; }
+        public Expression Right { get; private set; }
 
-        public AssignmentExpression() : base(SyntaxNodeType.AssignmentExpression) { }
+        public AssignmentExpression(AssignmentOperator op, Expression left, Expression right) : 
+            base(SyntaxNodeType.AssignmentExpression)
+        {
+            /* TODO perf */ if (!Enum.IsDefined(typeof(AssignmentOperator), op)) throw new ArgumentOutOfRangeException("op");
+            if (left == null) throw new ArgumentNullException("left");
+            if (right == null) throw new ArgumentNullException("right");
+            Operator = op;
+            Left = left;
+            Right = right;
+        }
 
         public static AssignmentOperator ParseAssignmentOperator(string op)
         {
@@ -132,11 +146,20 @@ namespace Escape.Ast
 
     public class BinaryExpression : Expression
     {
-        public BinaryOperator Operator { get; set; }
-        public Expression Left { get; set; }
-        public Expression Right { get; set; }
+        public BinaryOperator Operator { get; private set; }
+        public Expression Left { get; private set; }
+        public Expression Right { get; private set; }
 
-        public BinaryExpression() : base(SyntaxNodeType.BinaryExpression) { }
+        public BinaryExpression(BinaryOperator op, Expression left, Expression right) : 
+            base(SyntaxNodeType.BinaryExpression)
+        {
+            /* TODO perf */ if (!Enum.IsDefined(typeof(BinaryOperator), op)) throw new ArgumentOutOfRangeException("op");
+            if (left == null) throw new ArgumentNullException("left");
+            if (right == null) throw new ArgumentNullException("right");
+            Operator = op;
+            Left = left;
+            Right = right;
+        }
 
         public static BinaryOperator ParseBinaryOperator(string op)
         {
@@ -193,147 +216,286 @@ namespace Escape.Ast
 
     public class BlockStatement : Statement
     {
-        public IEnumerable<Statement> Body { get; set; }
-        public BlockStatement() : base(SyntaxNodeType.BlockStatement) { }
+        public IEnumerable<Statement> Body { get; private set; }
+        
+        public BlockStatement(IEnumerable<Statement> body) : base(SyntaxNodeType.BlockStatement)
+        {
+            if (body == null) throw new ArgumentNullException("body");
+            Body = body;
+        }
     }
 
     public class BreakStatement : Statement
     {
-        public Identifier Label { get; set; }
-        public BreakStatement() : base(SyntaxNodeType.BreakStatement) { }
+        public Identifier Label { get; private set; }
+
+        public BreakStatement() : this(null) {}
+        public BreakStatement(Identifier label) : 
+            base(SyntaxNodeType.BreakStatement)
+        {
+            Label = label;
+        }
     }
 
     public class CallExpression : Expression
     {
-        public Expression Callee { get; set; }
-        public IEnumerable<Expression> Arguments { get; set; }
-        public CallExpression() : base(SyntaxNodeType.CallExpression) { }
+        public Expression Callee { get; private set; }
+        public IEnumerable<Expression> Arguments { get; private set; }
+        
+        public CallExpression(Expression callee, IEnumerable<Expression> arguments) : 
+            base(SyntaxNodeType.CallExpression)
+        {
+            if (callee == null) throw new ArgumentNullException("callee");
+            if (arguments == null) throw new ArgumentNullException("arguments");
+            Callee = callee;
+            Arguments = arguments;
+        }
     }
 
     public class CatchClause : Statement
     {
-        public Identifier Param { get; set; }
-        public BlockStatement Body { get; set; }
-        public CatchClause() : base(SyntaxNodeType.CatchClause) { }
+        public Identifier Param { get; private set; }
+        public BlockStatement Body { get; private set; }
+        
+        public CatchClause(Identifier param, BlockStatement body) : 
+            base(SyntaxNodeType.CatchClause)
+        {
+            if (param == null) throw new ArgumentNullException("param");
+            if (body == null) throw new ArgumentNullException("body");
+            Param = param;
+            Body = body;
+        }
     }
 
     public class ConditionalExpression : Expression
     {
-        public Expression Test { get; set; }
-        public Expression Consequent { get; set; }
-        public Expression Alternate { get; set; }
-        public ConditionalExpression() : base(SyntaxNodeType.ConditionalExpression) { }
+        public Expression Test { get; private set; }
+        public Expression Consequent { get; private set; }
+        public Expression Alternate { get; private set; }
+        
+        public ConditionalExpression(Expression test, Expression consequent, Expression alternate) : 
+            base(SyntaxNodeType.ConditionalExpression)
+        {
+            if (test == null) throw new ArgumentNullException("test");
+            if (consequent == null) throw new ArgumentNullException("consequent");
+            if (alternate == null) throw new ArgumentNullException("alternate");
+            Test = test;
+            Alternate = alternate;
+            Consequent = consequent;
+        }
     }
 
     public class ContinueStatement : Statement
     {
-        public Identifier Label { get; set; }
-        public ContinueStatement() : base(SyntaxNodeType.ContinueStatement) { }
+        public Identifier Label { get; private set; }
+
+        public ContinueStatement() : this(null) {}
+        public ContinueStatement(Identifier label) : 
+            base(SyntaxNodeType.ContinueStatement)
+        {
+            Label = label;
+        }
     }
 
     public class DebuggerStatement: Statement
     {
-        public DebuggerStatement() : base(SyntaxNodeType.DebuggerStatement) { }
+        public DebuggerStatement() : base(SyntaxNodeType.DebuggerStatement) {}
     }
 
     public class DoWhileStatement  : Statement
     {
-        public Statement Body { get; set; }
-        public Expression Test { get; set; }
-        public DoWhileStatement() : base(SyntaxNodeType.DoWhileStatement) { }
+        public Statement Body { get; private set; }
+        public Expression Test { get; private set; }
+
+        public DoWhileStatement(Statement body, Expression test) : 
+            base(SyntaxNodeType.DoWhileStatement)
+        {
+            if (body == null) throw new ArgumentNullException("body");
+            if (test == null) throw new ArgumentNullException("test");
+            Test = test;
+            Body = body;
+        }
     }
 
     public class EmptyStatement : Statement
     {
-        public EmptyStatement() : base(SyntaxNodeType.EmptyStatement) { }
+        public EmptyStatement() : base(SyntaxNodeType.EmptyStatement) {}
     }
 
     public abstract class Expression : SyntaxNode
     {
         // an expression represents an actual value
         // foo() is an expression, a switch/case is a statement
-        protected Expression(SyntaxNodeType nodeType) : base(nodeType) { }
+        protected Expression(SyntaxNodeType nodeType) : base(nodeType) {}
     }
 
     public class ExpressionStatement : Statement
     {
-        public Expression Expression { get; set; }
-        public ExpressionStatement() : base(SyntaxNodeType.ExpressionStatement) { }
+        public Expression Expression { get; private set; }
+        
+        public ExpressionStatement(Expression expression) : 
+            base(SyntaxNodeType.ExpressionStatement)
+        {
+            if (expression == null) throw new ArgumentNullException("expression");
+            Expression = expression;
+        }
     }
 
     public class ForInStatement : Statement
     {
-        public SyntaxNode Left { get; set; }
-        public Expression Right { get; set; }
-        public Statement Body { get; set; }
-        public bool Each { get; set; }
-        public ForInStatement() : base(SyntaxNodeType.ForInStatement) { }
+        public SyntaxNode Left { get; private set; }
+        public Expression Right { get; private set; }
+        public Statement Body { get; private set; }
+        public bool Each { get; private set; }
+
+        public ForInStatement(SyntaxNode left, Expression right, Statement body) : 
+            this(left, right, body, false) {}
+
+        public ForInStatement(SyntaxNode left, Expression right, Statement body, bool each) : 
+            base(SyntaxNodeType.ForInStatement)
+        {
+            if (left == null) throw new ArgumentNullException("left");
+            if (right == null) throw new ArgumentNullException("right");
+            if (body == null) throw new ArgumentNullException("body");
+            Left = left;
+            Right = right;
+            Body = body;
+            Each = each;
+        }
     }
 
     public class ForStatement : Statement
     {
         // can be a Statement (var i) or an Expression (i=0)
-        public SyntaxNode Init { get; set; }
-        public Expression Test { get; set; }
-        public Expression Update { get; set; }
-        public Statement Body { get; set; }
-        public ForStatement() : base(SyntaxNodeType.ForStatement) { }
+        public SyntaxNode Init { get; private set; }
+        public Expression Test { get; private set; }
+        public Expression Update { get; private set; }
+        public Statement Body { get; private set; }
+        
+        public ForStatement(SyntaxNode init, Expression test, Expression update, Statement body) : 
+            base(SyntaxNodeType.ForStatement)
+        {
+            if (body == null) throw new ArgumentNullException("body");
+            Body = body;
+            Update = update;
+            Test = test;
+            Init = init;
+        }
     }
 
     public class FunctionDeclaration : Statement
     {
-        public Identifier Id { get; set; }
-        public IEnumerable<Identifier> Parameters { get; set; }
-        public Statement Body { get; set; }
-        public bool Strict { get; set; }
+        public Identifier Id { get; private set; }
+        public IEnumerable<Identifier> Parameters { get; private set; }
+        public Statement Body { get; private set; }
+        public bool Strict { get; private set; }
 
-        public FunctionDeclaration() : base(SyntaxNodeType.FunctionDeclaration) { }
+        public FunctionDeclaration(Identifier id, 
+            IEnumerable<Identifier> parameters, Statement body) : 
+            this(id, parameters, body, false) {}
+
+        public FunctionDeclaration(Identifier id, 
+            IEnumerable<Identifier> parameters, 
+            Statement body, bool strict) : 
+            base(SyntaxNodeType.FunctionDeclaration)
+        {
+            if (id == null) throw new ArgumentNullException("id");
+            if (parameters == null) throw new ArgumentNullException("parameters");
+            if (body == null) throw new ArgumentNullException("body");
+            Id = id;
+            Parameters = parameters;
+            Body = body;
+            Strict = strict;
+        }
 
         #region ECMA6
+
+        // ReSharper disable UnusedAutoPropertyAccessor.Local        
+        public IEnumerable<Expression> Defaults { get { yield break; } }
+        public SyntaxNode Rest { get; private set; }
+        public bool Generator { get; private set; }
+        public bool Expression { get; private set; }
+        // ReSharper restore UnusedAutoPropertyAccessor.Local
         
-        public IEnumerable<Expression> Defaults { get; set; }
-        public SyntaxNode Rest { get; set; }
-        public bool Generator { get; set; }
-        public bool Expression { get; set; }
-        
-        #endregion
+        #endregion 
     }
 
     public class FunctionExpression : Expression
     {
-        public Identifier Id { get; set; }
-        public IEnumerable<Identifier> Parameters { get; set; }
-        public Statement Body { get; set; }
-        public bool Strict { get; set; }
+        public Identifier Id { get; private set; }
+        public IEnumerable<Identifier> Parameters { get; private set; }
+        public Statement Body { get; private set; }
+        public bool Strict { get; private set; }
 
-        public FunctionExpression() : base(SyntaxNodeType.FunctionExpression) { }
+        public FunctionExpression(IEnumerable<Identifier> parameters, Statement body) : 
+            this(null, parameters, body) {}
+
+        public FunctionExpression(Identifier id, 
+            IEnumerable<Identifier> parameters, Statement body) : 
+            this(id, parameters, body, false) {}
+
+        public FunctionExpression(IEnumerable<Identifier> parameters, 
+            Statement body, bool strict) : 
+            this(null, parameters, body, strict) {}
+
+        public FunctionExpression(Identifier id, 
+            IEnumerable<Identifier> parameters, 
+            Statement body, bool strict) : 
+            base(SyntaxNodeType.FunctionExpression)
+        {
+            if (parameters == null) throw new ArgumentNullException("parameters");
+            if (body == null) throw new ArgumentNullException("body");
+            Id = id;
+            Parameters = parameters;
+            Body = body;
+            Strict = strict;
+        }
 
         #region ECMA6
-        public IEnumerable<Expression> Defaults { get; set; }
-        public SyntaxNode Rest { get; set; }
-        public bool Generator { get; set; }
-        public bool Expression { get; set; }
+        
+        // ReSharper disable UnusedAutoPropertyAccessor.Local
+        public IEnumerable<Expression> Defaults { get { yield break; } }
+        public SyntaxNode Rest { get; private set; }
+        public bool Generator { get; private set; }
+        public bool Expression { get; private set; }
+        // ReSharper restore UnusedAutoPropertyAccessor.Local
+        
         #endregion
     }
 
     public class Identifier : Expression, IPropertyKeyExpression
     {
-        public string Name { get; set; }
+        public string Name { get; private set; }
         
-        public Identifier() : base(SyntaxNodeType.Identifier) { }
-
-        public string GetKey()
+        public Identifier(string name) : 
+            base(SyntaxNodeType.Identifier)
         {
-            return Name;
+            if (name == null) throw new ArgumentNullException("name");
+            if (name.Length == 0) throw new ArgumentException(null, "name");
+            Name = name;
         }
+
+        public string GetKey() { return Name; }
     }
 
     public class IfStatement : Statement
     {
-        public Expression Test { get; set; }
-        public Statement Consequent { get; set; }
-        public Statement Alternate { get; set; }
-        public IfStatement() : base(SyntaxNodeType.IfStatement) { }
+        public Expression Test { get; private set; }
+        public Statement Consequent { get; private set; }
+        public Statement Alternate { get; private set; }
+
+        public IfStatement(Expression test, Statement consequent) : 
+            this(test, consequent, null) {}
+
+        public IfStatement(Expression test, Statement consequent, Statement alternate) : 
+            base(SyntaxNodeType.IfStatement)
+        {
+            if (test == null) throw new ArgumentNullException("test");
+            if (consequent == null) throw new ArgumentNullException("consequent");
+            Test = test;
+            Alternate = alternate;
+            Consequent = consequent;
+        }
     }
 
     /// <summary>
@@ -346,17 +508,29 @@ namespace Escape.Ast
 
     public class LabelledStatement : Statement
     {
-        public Identifier Label { get; set; }
-        public Statement Body { get; set; }
-        public LabelledStatement() : base(SyntaxNodeType.LabeledStatement) { }
+        public Identifier Label { get; private set; }
+        public Statement Body { get; private set; }
+        public LabelledStatement(Identifier label, Statement body) : 
+            base(SyntaxNodeType.LabeledStatement)
+        {
+            if (label == null) throw new ArgumentNullException("label");
+            if (body == null) throw new ArgumentNullException("body");
+            Label = label;
+            Body = body;
+        }
     }
 
     public class Literal : Expression, IPropertyKeyExpression
     {
-        public object Value { get; set; }
-        public string Raw { get; set; }
+        public object Value { get; private set; }
+        public string Raw { get; private set; }
 
-        public Literal() : base(SyntaxNodeType.Literal) { }
+        public Literal(object value, string raw) : 
+            base(SyntaxNodeType.Literal)
+        {
+            Raw = raw;
+            Value = value;
+        }
 
         public string GetKey()
         {
@@ -372,11 +546,20 @@ namespace Escape.Ast
 
     public class LogicalExpression : Expression
     {
-        public LogicalOperator Operator { get; set; }
-        public Expression Left { get; set; }
-        public Expression Right { get; set; }
-        
-        public LogicalExpression() : base(SyntaxNodeType.LogicalExpression) { }
+        public LogicalOperator Operator { get; private set; }
+        public Expression Left { get; private set; }
+        public Expression Right { get; private set; }
+
+        public LogicalExpression(LogicalOperator op, Expression left, Expression right) :
+            base(SyntaxNodeType.LogicalExpression)
+        {
+            /* TODO perf */ if (!Enum.IsDefined(typeof(LogicalOperator), op)) throw new ArgumentOutOfRangeException("op");
+            if (left == null) throw new ArgumentNullException("left");
+            if (right == null) throw new ArgumentNullException("right");
+            Operator = op;
+            Left = left;
+            Right = right;
+        }
 
         public static LogicalOperator ParseLogicalOperator(string op)
         {
@@ -395,38 +578,66 @@ namespace Escape.Ast
 
     public class MemberExpression : Expression
     {
-        public Expression Object { get; set; }
-        public Expression Property { get; set; }
+        public Expression Object { get; private set; }
+        public Expression Property { get; private set; }
+        public bool Computed { get; private set; } // true if an indexer is used and the property to be evaluated
 
-        // true if an indexer is used and the property to be evaluated
-        public bool Computed { get; set; }
-
-        public MemberExpression() : base(SyntaxNodeType.MemberExpression) { }
+        public MemberExpression(Expression obj, Expression property, bool computed) : 
+            base(SyntaxNodeType.MemberExpression)
+        {
+            if (obj == null) throw new ArgumentNullException("obj");
+            if (property == null) throw new ArgumentNullException("property");
+            Object = obj;
+            Property = property;
+            Computed = computed;
+        }
     }
 
     public class NewExpression : Expression
     {
-        public Expression Callee { get; set; }
-        public IEnumerable<Expression> Arguments { get; set; }
-        public NewExpression() : base(SyntaxNodeType.NewExpression) { }
+        public Expression Callee { get; private set; }
+        public IEnumerable<Expression> Arguments { get; private set; }
+        
+        public NewExpression(Expression callee, IEnumerable<Expression> arguments) : 
+            base(SyntaxNodeType.NewExpression)
+        {
+            if (callee == null) throw new ArgumentNullException("callee");
+            if (arguments == null) throw new ArgumentNullException("arguments");
+            Arguments = arguments;
+            Callee = callee;
+        }
     }
 
     public class ObjectExpression : Expression
     {
-        public IEnumerable<Property> Properties { get; set; }
-        public ObjectExpression() : base(SyntaxNodeType.ObjectExpression) { }
+        public IEnumerable<Property> Properties { get; private set; }
+        
+        public ObjectExpression(IEnumerable<Property> properties) : 
+            base(SyntaxNodeType.ObjectExpression)
+        {
+            if (properties == null) throw new ArgumentNullException("properties");
+            Properties = properties;
+        }
     }
 
     public class Program : Statement
     {
-        public ICollection<Statement> Body { get; set; }
+        public ICollection<Statement> Body { get; private set; }
 
         public List<Comment> Comments { get; set; }
         public List<Token> Tokens { get; set; }
         public List<ParserException> Errors { get; set; }
-        public bool Strict { get; set; }
+        public bool Strict { get; private set; }
 
-        public Program() : base(SyntaxNodeType.Program) { }
+        public Program(ICollection<Statement> body) : this(body, false) {}
+
+        public Program(ICollection<Statement> body, bool strict) : 
+            base(SyntaxNodeType.Program)
+        {
+            if (body == null) throw new ArgumentNullException("body");
+            Body = body;
+            Strict = strict;
+        }
     }
 
     [Flags]
@@ -439,42 +650,81 @@ namespace Escape.Ast
 
     public class Property : Expression
     {
-        public PropertyKind Kind { get; set; }
-        public IPropertyKeyExpression Key { get; set; }
-        public Expression Value { get; set; }
-        public Property() : base(SyntaxNodeType.Property) { }
+        public PropertyKind Kind { get; private set; }
+        public IPropertyKeyExpression Key { get; private set; }
+        public Expression Value { get; private set; }
+        
+        public Property(PropertyKind kind, IPropertyKeyExpression key, Expression value) : 
+            base(SyntaxNodeType.Property)
+        {
+            /* TODO perf */ if (!Enum.IsDefined(typeof(PropertyKind), kind)) throw new ArgumentOutOfRangeException("kind");
+            if (key == null) throw new ArgumentNullException("key");
+            if (value == null) throw new ArgumentNullException("value");
+            Value = value;
+            Key = key;
+            Kind = kind;
+        }
     }
 
     public class ReturnStatement : Statement
     {
-        public Expression Argument { get; set; }
-        public ReturnStatement() : base(SyntaxNodeType.ReturnStatement) { }
+        public Expression Argument { get; private set; }
+
+        public ReturnStatement() : this(null) {}
+        public ReturnStatement(Expression argument) : 
+            base(SyntaxNodeType.ReturnStatement)
+        {
+            Argument = argument;
+        }
     }
 
     public class SequenceExpression : Expression
     {
-        public IList<Expression> Expressions { get; set; }
-        public SequenceExpression() : base(SyntaxNodeType.SequenceExpression) { }
+        public IList<Expression> Expressions { get; private set; }
+
+        public SequenceExpression(IList<Expression> expressions) : 
+            base(SyntaxNodeType.SequenceExpression)
+        {
+            if (expressions == null) throw new ArgumentNullException("expressions");
+            Expressions = expressions;
+        }
     }
 
     public abstract class Statement : SyntaxNode
     {
-        public string LabelSet { get; set; }
-        protected Statement(SyntaxNodeType nodeType) : base(nodeType) { }
+        protected Statement(SyntaxNodeType nodeType) : base(nodeType) {}
     }
 
     public class SwitchCase : SyntaxNode
     {
-        public Expression Test { get; set; }
-        public IEnumerable<Statement> Consequent { get; set; }
-        public SwitchCase() : base(SyntaxNodeType.SwitchCase) {}
+        public Expression Test { get; private set; }
+        public IEnumerable<Statement> Consequent { get; private set; }
+
+        public SwitchCase(IEnumerable<Statement> consequent) : 
+            this(null, consequent) {}
+
+        public SwitchCase(Expression test, IEnumerable<Statement> consequent) : 
+            base(SyntaxNodeType.SwitchCase)
+        {
+            if (consequent == null) throw new ArgumentNullException("consequent");
+            Test = test;
+            Consequent = consequent;
+        }
     }
 
     public class SwitchStatement : Statement
     {
-        public Expression Discriminant { get; set; }
-        public IEnumerable<SwitchCase> Cases { get; set; }
-        public SwitchStatement() : base(SyntaxNodeType.SwitchStatement) { }
+        public Expression Discriminant { get; private set; }
+        public IEnumerable<SwitchCase> Cases { get; private set; }
+
+        public SwitchStatement(Expression discriminant, IEnumerable<SwitchCase> cases) : 
+            base(SyntaxNodeType.SwitchStatement)
+        {
+            if (discriminant == null) throw new ArgumentNullException("discriminant");
+            if (cases == null) throw new ArgumentNullException("cases");
+            Cases = cases;
+            Discriminant = discriminant;
+        }
     }
 
     public abstract class SyntaxNode
@@ -539,22 +789,47 @@ namespace Escape.Ast
 
     public class ThisExpression : Expression
     {
-        public ThisExpression() : base(SyntaxNodeType.ThisExpression) { }
+        public ThisExpression() : base(SyntaxNodeType.ThisExpression) {}
     }
 
     public class ThrowStatement : Statement
     {
-        public Expression Argument { get; set; }
-        public ThrowStatement() : base(SyntaxNodeType.ThrowStatement) { }
+        public Expression Argument { get; private set; }
+
+        public ThrowStatement(Expression argument) : 
+            base(SyntaxNodeType.ThrowStatement)
+        {
+            if (argument == null) throw new ArgumentNullException("argument");
+            Argument = argument;
+        }
     }
 
     public class TryStatement : Statement
     {
-        public Statement Block { get; set; }
-        public IEnumerable<Statement> GuardedHandlers { get; set; }
-        public IEnumerable<CatchClause> Handlers { get; set; }
-        public Statement Finalizer { get; set; }
-        public TryStatement() : base(SyntaxNodeType.TryStatement) { }
+        public Statement Block { get; private set; }
+        public IEnumerable<Statement> GuardedHandlers { get; private set; }
+        public IEnumerable<CatchClause> Handlers { get; private set; }
+        public Statement Finalizer { get; private set; }
+
+        public TryStatement(Statement block, 
+            IEnumerable<Statement> guardedHandlers, 
+            IEnumerable<CatchClause> handlers) : 
+            this(block, guardedHandlers, handlers, null) {}
+
+        public TryStatement(Statement block, 
+            IEnumerable<Statement> guardedHandlers, 
+            IEnumerable<CatchClause> handlers, 
+            Statement finalizer) : 
+            base(SyntaxNodeType.TryStatement)
+        {
+            if (block == null) throw new ArgumentNullException("block");
+            if (guardedHandlers == null) throw new ArgumentNullException("guardedHandlers");
+            if (handlers == null) throw new ArgumentNullException("handlers");
+            Block = block;
+            GuardedHandlers = guardedHandlers;
+            Handlers = handlers;
+            Finalizer = finalizer;
+        }
     }
 
     public enum UnaryOperator
@@ -572,12 +847,23 @@ namespace Escape.Ast
 
     public class UnaryExpression : Expression
     {
-        public UnaryOperator Operator { get; set; }
-        public Expression Argument { get; set; }
-        public bool Prefix { get; set; }
+        public UnaryOperator Operator { get; private set; }
+        public Expression Argument { get; private set; }
+        public bool Prefix { get; private set; }
 
-        public UnaryExpression() : base(SyntaxNodeType.UnaryExpression) { }
-        protected UnaryExpression(SyntaxNodeType nodeType) : base(nodeType) { }
+        public UnaryExpression(UnaryOperator op, Expression argument, bool prefix) :
+            this(SyntaxNodeType.UnaryExpression, op, argument, prefix) {}
+
+        protected UnaryExpression(SyntaxNodeType nodeType, UnaryOperator op, Expression argument, bool prefix) : 
+            base(nodeType)
+        {
+            /* TODO perf */
+            if (!Enum.IsDefined(typeof(UnaryOperator), op)) throw new ArgumentOutOfRangeException("op");
+            if (argument == null) throw new ArgumentNullException("argument");
+            Operator = op;
+            Argument = argument;
+            Prefix = prefix;
+        }
 
         public static UnaryOperator ParseUnaryOperator(string op)
         {
@@ -609,34 +895,66 @@ namespace Escape.Ast
 
     public class UpdateExpression : UnaryExpression
     {
-        public UpdateExpression() : base(SyntaxNodeType.UpdateExpression) { }
+        public UpdateExpression(UnaryOperator op, Expression argument, bool prefix) :
+            base(SyntaxNodeType.UpdateExpression, op, argument, prefix) {}
     }
 
     public class VariableDeclaration : Statement
     {
-        public IEnumerable<VariableDeclarator> Declarations { get; set; }
-        public string Kind { get; set; }
-        public VariableDeclaration() : base(SyntaxNodeType.VariableDeclaration) { }
+        public IEnumerable<VariableDeclarator> Declarations { get; private set; }
+        public string Kind { get; private set; }
+        
+        public VariableDeclaration(IEnumerable<VariableDeclarator> declarations, string kind) : 
+            base(SyntaxNodeType.VariableDeclaration)
+        {
+            if (declarations == null) throw new ArgumentNullException("declarations");
+            Declarations = declarations;
+            Kind = kind;
+        }
     }
 
     public class VariableDeclarator : Expression
     {
-        public Identifier Id { get; set; }
-        public Expression Init { get; set; }
-        public VariableDeclarator() : base(SyntaxNodeType.VariableDeclarator) { }
+        public Identifier Id { get; private set; }
+        public Expression Init { get; private set; }
+
+        public VariableDeclarator(Identifier id) : this(id, null) {}
+        public VariableDeclarator(Identifier id, Expression init) : 
+            base(SyntaxNodeType.VariableDeclarator)
+        {
+            if (id == null) throw new ArgumentNullException("id");
+            Id = id;
+            Init = init;
+        }
     }
 
     public class WhileStatement : Statement
     {
-        public Expression Test { get; set; }
-        public Statement Body { get; set; }
-        public WhileStatement() : base(SyntaxNodeType.WhileStatement) { }
+        public Expression Test { get; private set; }
+        public Statement Body { get; private set; }
+        
+        public WhileStatement(Expression test, Statement body) : 
+            base(SyntaxNodeType.WhileStatement)
+        {
+            if (test == null) throw new ArgumentNullException("test");
+            if (body == null) throw new ArgumentNullException("body");
+            Test = test;
+            Body = body;
+        }
     }
 
     public class WithStatement : Statement
     {
-        public Expression Object { get; set; }
-        public Statement Body { get; set; }
-        public WithStatement() : base(SyntaxNodeType.WithStatement) { }
+        public Expression Object { get; private set; }
+        public Statement Body { get; private set; }
+
+        public WithStatement(Expression obj, Statement body) : 
+            base(SyntaxNodeType.WithStatement)
+        {
+            if (obj == null) throw new ArgumentNullException("obj");
+            if (body == null) throw new ArgumentNullException("body");
+            Object = obj;
+            Body = body;
+        }
     }
 }

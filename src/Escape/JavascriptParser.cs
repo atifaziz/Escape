@@ -2206,7 +2206,7 @@ namespace Escape
             }
             else
             {
-                MarkEnd(new ExpressionStatement());
+                MarkEnd(new DebuggerStatement());
             }
 
             return expr;

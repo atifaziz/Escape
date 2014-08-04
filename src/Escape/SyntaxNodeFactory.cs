@@ -43,79 +43,50 @@ namespace Escape
     {
         public static ArrayExpression Array(IEnumerable<Expression> elements)
         {
-            return new ArrayExpression { Elements = elements };
+            return new ArrayExpression(elements);
         }
-
+        
         public static AssignmentExpression Assignment(string op, Expression left, Expression right)
         {
-            return new AssignmentExpression
-                   {
-                       Operator = AssignmentExpression.ParseAssignmentOperator(op),
-                       Left = left,
-                       Right = right
-                   };
+            return new AssignmentExpression(AssignmentExpression.ParseAssignmentOperator(op), left, right);
         }
 
         public static Expression Binary(string op, Expression left, Expression right)
         {
-            
             return (op == "||" || op == "&&")
-                ? (Expression)new LogicalExpression
-                              {
-                                  Operator = LogicalExpression.ParseLogicalOperator(op),
-                                  Left = left,
-                                  Right = right
-                              }
-                : new BinaryExpression
-                  {
-                      Operator = BinaryExpression.ParseBinaryOperator(op),
-                      Left = left,
-                      Right = right
-                  };
+                 ? (Expression) new LogicalExpression (LogicalExpression.ParseLogicalOperator(op), left, right)
+                 : new BinaryExpression(BinaryExpression.ParseBinaryOperator(op), left, right);
         }
 
         public static BlockStatement Block(IEnumerable<Statement> body)
         {
-            return new BlockStatement { Body = body };
+            return new BlockStatement(body);
         }
 
         public static BreakStatement Break(Identifier label)
         {
-            return new BreakStatement { Label = label };
+            return new BreakStatement(label);
         }
 
         public static CallExpression Call(Expression callee, IEnumerable<Expression> args)
         {
-            return new CallExpression
-                   {
-                       Callee = callee,
-                       Arguments = args
-                   };
+            return new CallExpression(callee, args);
         }
 
         public static CatchClause Catch(Identifier param, BlockStatement body)
         {
-            return new CatchClause
-                   {
-                       Param = param,
-                       Body = body
-                   };
+            return new CatchClause(param, body);
         }
 
         public static ConditionalExpression Conditional(Expression test, Expression consequent,
             Expression alternate)
         {
-            return new ConditionalExpression
-                   {
-                       Test = test,
-                       Consequent = consequent,
-                       Alternate = alternate
-                   };
+            return new ConditionalExpression(test, consequent, alternate);
         }
 
         public static ContinueStatement Continue(Identifier label)
         {
-            return new ContinueStatement { Label = label };
+            return new ContinueStatement(label);
         }
 
         public static DebuggerStatement Debugger()
@@ -125,11 +96,7 @@ namespace Escape
 
         public static DoWhileStatement DoWhile(Statement body, Expression test)
         {
-            return new DoWhileStatement
-                   {
-                       Body = body,
-                       Test = test
-                   };
+            return new DoWhileStatement(body, test);
         }
 
         public static EmptyStatement Empty() // TODO singleton?
@@ -139,175 +106,99 @@ namespace Escape
 
         public static ExpressionStatement Expression(Expression expression)
         {
-            return new ExpressionStatement { Expression = expression };
+            return new ExpressionStatement(expression);
         }
 
         public static ForStatement For(SyntaxNode init, Expression test, Expression update, Statement body)
         {
-            return new ForStatement
-                   {
-                       Init = init,
-                       Test = test,
-                       Update = update,
-                       Body = body
-                   };
+            return new ForStatement(init, test, update, body);
         }
 
         public static ForInStatement ForIn(SyntaxNode left, Expression right, Statement body)
         {
-            return new ForInStatement
-                   {
-                       Left = left,
-                       Right = right,
-                       Body = body,
-                       Each = false
-                   };
+            return new ForInStatement(left, right, body, false);
         }
 
         public static FunctionDeclaration FunctionDeclaration(Identifier id, IEnumerable<Identifier> parameters,
             IEnumerable<Expression> defaults, Statement body, bool strict)
         {
-            return new FunctionDeclaration
-                   {
-                       Id = id,
-                       Parameters = parameters,
-                       Defaults = defaults,
-                       Body = body,
-                       Strict = strict,
-                       Rest = null,
-                       Generator = false,
-                       Expression = false,
-                   };
+            return new FunctionDeclaration(id, parameters, body, strict);
         }
 
         public static FunctionExpression Function(Identifier id, IEnumerable<Identifier> parameters,
             IEnumerable<Expression> defaults, Statement body, bool strict)
         {
-            return new FunctionExpression
-                   {
-                       Id = id,
-                       Parameters = parameters,
-                       Defaults = defaults,
-                       Body = body,
-                       Strict = strict,
-                       Rest = null,
-                       Generator = false,
-                       Expression = false,
-                   };
+            return new FunctionExpression(id, parameters, body, strict);
         }
 
         public static Identifier Identifier(string name)
         {
-            return new Identifier { Name = name };
+            return new Identifier(name);
         }
 
         public static IfStatement If(Expression test, Statement consequent, Statement alternate)
         {
-            return new IfStatement
-                   {
-                       Test = test,
-                       Consequent = consequent,
-                       Alternate = alternate
-                   };
+            return new IfStatement(test, consequent, alternate);
         }
 
         public static LabelledStatement LabeledStatement(Identifier label, Statement body)
         {
-            return new LabelledStatement
-                   {
-                       Label = label,
-                       Body = body
-                   };
+            return new LabelledStatement(label, body);
         }
 
         public static Literal Literal(object value, string raw)
         {
-            return new Literal
-                   {
-                       Value = value,
-                       Raw   = raw
-                   };
+            return new Literal(value, raw);
         }
 
         public static MemberExpression Member(char accessor, Expression obj, Expression property)
         {
-            return new MemberExpression
-                   {
-                       Computed = accessor == '[',
-                       Object = obj,
-                       Property = property
-                   };
+            return new MemberExpression(obj, property, accessor == '[');
         }
 
         public static NewExpression New(Expression callee, IEnumerable<Expression> args)
         {
-            return new NewExpression
-                   {
-                       Callee = callee,
-                       Arguments = args
-                   };
+            return new NewExpression(callee, args);
         }
 
         public static ObjectExpression Object(IEnumerable<Property> properties)
         {
-            return new ObjectExpression { Properties = properties };
+            return new ObjectExpression(properties);
         }
 
         public static UpdateExpression Postfix(string op, Expression argument)
         {
-            return new UpdateExpression
-                   {
-                       Operator = UnaryExpression.ParseUnaryOperator(op),
-                       Argument = argument,
-                       Prefix = false
-                   };
+            return new UpdateExpression(UnaryExpression.ParseUnaryOperator(op), argument, false);
         }
 
         public static Program Program(ICollection<Statement> body, bool strict)
         {
-            return new Program
-                   {
-                       Body = body,
-                       Strict = strict,
-                   };
+            return new Program(body, strict);
         }
 
         public static Property Property(PropertyKind kind, IPropertyKeyExpression key, Expression value)
         {
-            return new Property
-                   {
-                       Key = key,
-                       Value = value,
-                       Kind = kind
-                   };
+            return new Property(kind, key, value);
         }
 
         public static ReturnStatement Return(Expression argument)
         {
-            return new ReturnStatement { Argument = argument };
+            return new ReturnStatement(argument);
         }
 
         public static SequenceExpression Sequence(IList<Expression> expressions)
         {
-            return new SequenceExpression { Expressions = expressions };
+            return new SequenceExpression(expressions);
         }
 
         public static SwitchCase SwitchCase(Expression test, IEnumerable<Statement> consequent)
         {
-            return new SwitchCase
-                   {
-                       Test = test,
-                       Consequent = consequent
-                   };
+            return new SwitchCase(test, consequent);
         }
 
         public static SwitchStatement Switch(Expression discriminant, IEnumerable<SwitchCase> cases)
         {
-            return new SwitchStatement
-                   {
-                       Discriminant = discriminant,
-                       Cases = cases
-                   };
+            return new SwitchStatement(discriminant, cases);
         }
 
         public static ThisExpression This()
@@ -317,75 +208,41 @@ namespace Escape
 
         public static ThrowStatement Throw(Expression argument)
         {
-            return new ThrowStatement { Argument = argument };
+            return new ThrowStatement(argument);
         }
 
         public static TryStatement Try(Statement block, IEnumerable<Statement> guardedHandlers,
             IEnumerable<CatchClause> handlers, Statement finalizer)
         {
-            return new TryStatement
-                   {
-                       Block = block,
-                       GuardedHandlers = guardedHandlers,
-                       Handlers = handlers,
-                       Finalizer = finalizer
-                   };
+            return new TryStatement(block, guardedHandlers, handlers, finalizer);
         }
 
         public static UnaryExpression Unary(string op, Expression argument)
         {
-            if (op == "++" || op == "--")
-            {
-                return new UpdateExpression
-                       {
-                           Operator = UnaryExpression.ParseUnaryOperator(op),
-                           Argument = argument,
-                           Prefix = true
-                       };
-            }
-
-            return new UnaryExpression
-                   {
-                       Operator = UnaryExpression.ParseUnaryOperator(op),
-                       Argument = argument,
-                       Prefix = true
-                   };
+            var pop = UnaryExpression.ParseUnaryOperator(op);
+            return pop == UnaryOperator.Increment || pop == UnaryOperator.Decrement
+                 ? new UpdateExpression(pop, argument, true)
+                 : new UnaryExpression(pop, argument, true);
         }
 
         public static VariableDeclaration VariableDeclaration(IEnumerable<VariableDeclarator> declarations, string kind)
         {
-            return new VariableDeclaration
-                   {
-                       Declarations = declarations,
-                       Kind = kind
-                   };
+            return new VariableDeclaration(declarations, kind);
         }
 
         public static VariableDeclarator VariableDeclarator(Identifier id, Expression init)
         {
-            return new VariableDeclarator
-                   {
-                       Id = id,
-                       Init = init
-                   };
+            return new VariableDeclarator(id, init);
         }
 
         public static WhileStatement While(Expression test, Statement body)
         {
-            return new WhileStatement
-                   {
-                       Test = test,
-                       Body = body
-                   };
+            return new WhileStatement(test, body);
         }
 
         public static WithStatement With(Expression obj, Statement body)
         {
-            return new WithStatement
-                   {
-                       Object = obj,
-                       Body = body
-                   };
+            return new WithStatement(obj, body);
         }
     }
 }
