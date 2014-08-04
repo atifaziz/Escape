@@ -1293,7 +1293,7 @@ namespace Escape
         {
             if (_extra.Range != null)
             {
-                node.Range = new[] {_state.MarkerStack.Pop(), _index};
+                node.Range = new Range( _state.MarkerStack.Pop(), _index);
             }
             if (_extra.Loc.HasValue)
             {
@@ -1307,7 +1307,7 @@ namespace Escape
 
         T MarkEndIf<T>(T node) where T : SyntaxNode
         {
-            if (node.Range != null || node.Location != null)
+            if (!node.Range.IsEmpty || node.Location != null)
             {
                 if (_extra.Loc.HasValue)
                 {
@@ -3505,7 +3505,7 @@ namespace Escape
             {
                 if (extra.Range.Length > 0)
                 {
-                    node.Range = new[] {_marker[0], _marker[3]};
+                    node.Range = new Range(_marker[0], _marker[3]);
                 }
                 if (extra.Loc.HasValue)
                 {

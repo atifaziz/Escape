@@ -480,7 +480,7 @@ namespace Escape.Ast
     public abstract class SyntaxNode
     {
         public SyntaxNodeType NodeType { get; private set; }
-        public int[] Range;
+        public Range Range { get; set; }
         public Location Location { get; set; }
 
         protected SyntaxNode(SyntaxNodeType nodeType) { NodeType = nodeType; }
