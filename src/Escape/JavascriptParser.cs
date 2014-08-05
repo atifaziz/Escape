@@ -1163,7 +1163,7 @@ namespace Escape
             return regex;
         }
 
-        bool IsIdentifierName(Token token)
+        static bool IsIdentifierName(Token token)
         {
             return token.TokenType == TokenType.Identifier ||
                    token.TokenType == TokenType.Keyword ||
@@ -1542,7 +1542,7 @@ namespace Escape
 
         // Return true if provided expression is LeftHandSideExpression
 
-        bool isLeftHandSide(Expression expr)
+        static bool isLeftHandSide(Expression expr)
         {
             return expr.NodeType == SyntaxNodeType.Identifier || expr.NodeType == SyntaxNodeType.MemberExpression;
         }
@@ -2036,7 +2036,7 @@ namespace Escape
             return MarkEndIf(expr);
         }
 
-        int binaryPrecedence(Token token, bool allowIn)
+        static int binaryPrecedence(Token token, bool allowIn)
         {
             var prec = 0;
 
