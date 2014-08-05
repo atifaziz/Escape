@@ -2131,7 +2131,7 @@ namespace Escape
             token.Precedence = prec;
             Lex();
 
-            var markers = new Stack<JavaScriptParser.LocationMarker>( new [] {marker, CreateLocationMarker()});
+            var markers = new Stack<LocationMarker>( new [] {marker, CreateLocationMarker()});
             var right = ParseUnaryExpression();
 
             var stack = new List<object>( new object[] {left, token, right});
@@ -3077,7 +3077,7 @@ namespace Escape
             return MarkEnd(SyntaxNodeFactory.Block(sourceElements));
         }
 
-        JavaScriptParser.ParsedParameters ParseParams(Token firstRestricted)
+        ParsedParameters ParseParams(Token firstRestricted)
         {
             string message = null;
             var stricted = Token.Empty;
@@ -3136,7 +3136,7 @@ namespace Escape
 
             Expect(")");
 
-            return new JavaScriptParser.ParsedParameters
+            return new ParsedParameters
                 {
                     Parameters = parameters,
                     Stricted = stricted,
@@ -3346,7 +3346,7 @@ namespace Escape
             return MarkEnd(SyntaxNodeFactory.Program(body, _strict));
         }
 
-        JavaScriptParser.LocationMarker CreateLocationMarker()
+        LocationMarker CreateLocationMarker()
         {
             if (!_extra.Loc.HasValue && _extra.Range.Length == 0)
             {
@@ -3355,7 +3355,7 @@ namespace Escape
 
             SkipComment();
 
-            return new JavaScriptParser.LocationMarker(_index, _lineNumber, _lineStart);
+            return new LocationMarker(_index, _lineNumber, _lineStart);
         }
 
         public Program Parse(string code)
@@ -3384,7 +3384,7 @@ namespace Escape
                 MarkerStack = new Stack<int>()
             };
 
-            _extra = new JavaScriptParser.Extra
+            _extra = new Extra
             {
                 Range = new int[0],
                 Loc = 0,
@@ -3435,7 +3435,7 @@ namespace Escape
             }
             finally
             {
-                _extra = new JavaScriptParser.Extra();
+                _extra = new Extra();
             }
 
             return program;
@@ -3462,7 +3462,7 @@ namespace Escape
                 MarkerStack = new Stack<int>()
             };
 
-            _extra = new JavaScriptParser.Extra
+            _extra = new Extra
             {
                 Range = new int[0],
                 Loc = 0,
