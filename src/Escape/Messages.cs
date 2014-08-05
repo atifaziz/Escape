@@ -40,6 +40,8 @@ namespace Escape
     
     static class Messages
     {
+        // ReSharper disable InconsistentNaming
+        
         public static string UnexpectedToken = "Unexpected token {0}";
         public static string UnexpectedNumber = "Unexpected number";
         public static string UnexpectedString = "Unexpected string";
@@ -73,5 +75,7 @@ namespace Escape
         public static string StrictLHSPostfix = "Postfix increment/decrement may not have eval or arguments operand in strict mode";
         public static string StrictLHSPrefix = "Prefix increment/decrement may not have eval or arguments operand in strict mode";
         public static string StrictReservedWord = "Use of future reserved word in strict mode";
+
+        // ReSharper restore InconsistentNaming
     };
 }

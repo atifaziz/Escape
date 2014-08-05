@@ -1179,7 +1179,7 @@ namespace Escape
             {
                 return new Token
                     {
-                        TokenType = TokenType.EOF,
+                        TokenType = TokenType.Eof,
                         LineNumber = _lineNumber,
                         LineStart = _lineStart,
                         Range = new[] {_index, _index}
@@ -1232,7 +1232,7 @@ namespace Escape
             var token = Advance();
             _location = new Location(startPos, new Position(_lineNumber, _index - _lineStart));
 
-            if (token.TokenType != TokenType.EOF)
+            if (token.TokenType != TokenType.Eof)
             {
                 var range = new[] {token.Range[0], token.Range[1]};
                 var value = _source.Slice(token.Range[0], token.Range[1]);
@@ -1413,7 +1413,7 @@ namespace Escape
 
         void ThrowUnexpected(Token token)
         {
-            if (token.TokenType == TokenType.EOF)
+            if (token.TokenType == TokenType.Eof)
             {
                 ThrowError(token, Messages.UnexpectedEOS);
             }
@@ -1534,7 +1534,7 @@ namespace Escape
                 return;
             }
 
-            if (_lookahead.TokenType != TokenType.EOF && !Match("}"))
+            if (_lookahead.TokenType != TokenType.Eof && !Match("}"))
             {
                 ThrowUnexpected(_lookahead);
             }
@@ -1542,7 +1542,7 @@ namespace Escape
 
         // Return true if provided expression is LeftHandSideExpression
 
-        static bool isLeftHandSide(Expression expr)
+        static bool IsLeftHandSide(Expression expr)
         {
             return expr.NodeType == SyntaxNodeType.Identifier || expr.NodeType == SyntaxNodeType.MemberExpression;
         }
@@ -1659,7 +1659,7 @@ namespace Escape
                 value = ParseAssignmentExpression();
                 return MarkEnd(SyntaxNodeFactory.Property(PropertyKind.Data, id, value));
             }
-            if (token.TokenType == TokenType.EOF || token.TokenType == TokenType.Punctuator)
+            if (token.TokenType == TokenType.Eof || token.TokenType == TokenType.Punctuator)
             {
                 ThrowUnexpected(token);
                 return null; // can't be reached
@@ -1969,7 +1969,7 @@ namespace Escape
                         ThrowErrorTolerant(Token.Empty, Messages.StrictLHSPostfix);
                     }
 
-                    if (!isLeftHandSide(expr))
+                    if (!IsLeftHandSide(expr))
                     {
                         ThrowErrorTolerant(Token.Empty, Messages.InvalidLHSInAssignment);
                     }
@@ -2004,7 +2004,7 @@ namespace Escape
                     ThrowErrorTolerant(Token.Empty, Messages.StrictLHSPrefix);
                 }
 
-                if (!isLeftHandSide(expr))
+                if (!IsLeftHandSide(expr))
                 {
                     ThrowErrorTolerant(Token.Empty, Messages.InvalidLHSInAssignment);
                 }
@@ -2036,7 +2036,7 @@ namespace Escape
             return MarkEndIf(expr);
         }
 
-        static int binaryPrecedence(Token token, bool allowIn)
+        static int BinaryPrecedence(Token token, bool allowIn)
         {
             var prec = 0;
 
@@ -2123,7 +2123,7 @@ namespace Escape
             var left = ParseUnaryExpression();
 
             var token = _lookahead;
-            var prec = binaryPrecedence(token, _state.AllowIn);
+            var prec = BinaryPrecedence(token, _state.AllowIn);
             if (prec == 0)
             {
                 return left;
@@ -2136,7 +2136,7 @@ namespace Escape
 
             var stack = new List<object>( new object[] {left, token, right});
 
-            while ((prec = binaryPrecedence(_lookahead, _state.AllowIn)) > 0)
+            while ((prec = BinaryPrecedence(_lookahead, _state.AllowIn)) > 0)
             {
                 // Reduce: make a binary expression from the three topmost entries.
                 while ((stack.Count > 2) && (prec <= ((Token) stack[stack.Count - 2]).Precedence))
@@ -2536,7 +2536,7 @@ namespace Escape
                     if (MatchKeyword("in"))
                     {
                         // LeftHandSideExpression
-                        if (!isLeftHandSide((Expression) init))
+                        if (!IsLeftHandSide((Expression) init))
                         {
                             ThrowErrorTolerant(Token.Empty, Messages.InvalidLHSInForIn);
                         }
@@ -2717,7 +2717,7 @@ namespace Escape
 
             if (!Match(";"))
             {
-                if (!Match("}") && _lookahead.TokenType != TokenType.EOF)
+                if (!Match("}") && _lookahead.TokenType != TokenType.Eof)
                 {
                     argument = ParseExpression();
                 }
@@ -2920,7 +2920,7 @@ namespace Escape
         {
             var type = _lookahead.TokenType;
 
-            if (type == TokenType.EOF)
+            if (type == TokenType.Eof)
             {
                 ThrowUnexpected(_lookahead);
             }
@@ -3279,7 +3279,7 @@ namespace Escape
                 }
             }
 
-            if (_lookahead.TokenType != TokenType.EOF)
+            if (_lookahead.TokenType != TokenType.Eof)
             {
                 return ParseStatement();
             }

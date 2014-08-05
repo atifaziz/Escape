@@ -39,7 +39,7 @@ namespace Escape
     public enum TokenType
     {
         BooleanLiteral = 1,
-        EOF = 2,
+        Eof = 2,
         Identifier = 3,
         Keyword = 4,
         NullLiteral = 5,
