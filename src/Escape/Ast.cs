@@ -83,40 +83,6 @@ namespace Escape.Ast
             Left = left;
             Right = right;
         }
-
-        public static AssignmentOperator ParseAssignmentOperator(string op)
-        {
-            switch (op)
-            {
-                case "=":
-                    return AssignmentOperator.Assign;
-                case "+=":
-                    return AssignmentOperator.PlusAssign;
-                case "-=":
-                    return AssignmentOperator.MinusAssign;
-                case "*=":
-                    return AssignmentOperator.TimesAssign;
-                case "/=":
-                    return AssignmentOperator.DivideAssign;
-                case "%=":
-                    return AssignmentOperator.ModuloAssign;
-                case "&=":
-                    return AssignmentOperator.BitwiseAndAssign;
-                case "|=":
-                    return AssignmentOperator.BitwiseOrAssign;
-                case "^=":
-                    return AssignmentOperator.BitwiseXOrAssign;
-                case "<<=":
-                    return AssignmentOperator.LeftShiftAssign;
-                case ">>=":
-                    return AssignmentOperator.RightShiftAssign;
-                case ">>>=":
-                    return AssignmentOperator.UnsignedRightShiftAssign;
-
-                default:
-                    throw new ArgumentOutOfRangeException("Invalid assignment operator: " + op);
-            }
-        }
     }
 
     public enum BinaryOperator
@@ -159,58 +125,6 @@ namespace Escape.Ast
             Operator = op;
             Left = left;
             Right = right;
-        }
-
-        public static BinaryOperator ParseBinaryOperator(string op)
-        {
-            switch (op)
-            {
-                case "+":
-                    return BinaryOperator.Plus;
-                case "-":
-                    return BinaryOperator.Minus;
-                case "*":
-                    return BinaryOperator.Times;
-                case "/":
-                    return BinaryOperator.Divide;
-                case "%":
-                    return BinaryOperator.Modulo;
-                case "==":
-                    return BinaryOperator.Equal;
-                case "!=":
-                    return BinaryOperator.NotEqual;
-                case ">":
-                    return BinaryOperator.Greater;
-                case ">=":
-                    return BinaryOperator.GreaterOrEqual;
-                case "<":
-                    return BinaryOperator.Less;
-                case "<=":
-                    return BinaryOperator.LessOrEqual;
-                case "===":
-                    return BinaryOperator.StrictlyEqual;
-                case "!==":
-                    return BinaryOperator.StricltyNotEqual;
-                case "&":
-                    return BinaryOperator.BitwiseAnd;
-                case "|":
-                    return BinaryOperator.BitwiseOr;
-                case "^":
-                    return BinaryOperator.BitwiseXOr;
-                case "<<":
-                    return BinaryOperator.LeftShift;
-                case ">>":
-                    return BinaryOperator.RightShift;
-                case ">>>":
-                    return BinaryOperator.UnsignedRightShift;
-                case "instanceof":
-                    return BinaryOperator.InstanceOf;
-                case "in":
-                    return BinaryOperator.In;
-
-                default: 
-                    throw new ArgumentOutOfRangeException("Invalid binary operator: " + op);
-            }
         }
     }
 
@@ -560,20 +474,6 @@ namespace Escape.Ast
             Left = left;
             Right = right;
         }
-
-        public static LogicalOperator ParseLogicalOperator(string op)
-        {
-            switch (op)
-            {
-                case "&&":
-                    return LogicalOperator.LogicalAnd;
-                case "||":
-                    return LogicalOperator.LogicalOr;
-
-                default:
-                    throw new ArgumentOutOfRangeException("Invalid binary operator: " + op);
-            }
-        }
     }
 
     public class MemberExpression : Expression
@@ -856,33 +756,6 @@ namespace Escape.Ast
             Operator = op;
             Argument = argument;
             Prefix = prefix;
-        }
-
-        public static UnaryOperator ParseUnaryOperator(string op)
-        {
-            switch (op)
-            {
-                case "+":
-                    return UnaryOperator.Plus;
-                case "-":
-                    return UnaryOperator.Minus;
-                case "++":
-                    return UnaryOperator.Increment;
-                case "--":
-                    return UnaryOperator.Decrement;
-                case "~":
-                    return UnaryOperator.BitwiseNot;
-                case "!":
-                    return UnaryOperator.LogicalNot;
-                case "delete":
-                    return UnaryOperator.Delete;
-                case "void":
-                    return UnaryOperator.Void;
-                case "typeof":
-                    return UnaryOperator.TypeOf;
-                default:
-                    throw new ArgumentOutOfRangeException("Invalid unary operator: " + op);
-            }
         }
     }
 

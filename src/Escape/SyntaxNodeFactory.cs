@@ -46,18 +46,29 @@ namespace Escape
             return new ArrayExpression(elements);
         }
         
-        public static AssignmentExpression Assignment(string op, Expression left, Expression right)
+        public static AssignmentExpression Assignment(AssignmentOperator op, Expression left, Expression right)
         {
-            return new AssignmentExpression(AssignmentExpression.ParseAssignmentOperator(op), left, right);
+            return new AssignmentExpression(op, left, right);
         }
 
-        public static Expression Binary(string op, Expression left, Expression right)
+        internal static Expression BinaryOrLogical(string op, Expression left, Expression right)
         {
-            return (op == "||" || op == "&&")
-                 ? (Expression) new LogicalExpression (LogicalExpression.ParseLogicalOperator(op), left, right)
-                 : new BinaryExpression(BinaryExpression.ParseBinaryOperator(op), left, right);
+            LogicalOperator? lop;
+            return (lop = JavaScriptParser.TryParseLogicalOperator(op)) != null
+                 ? (Expression) Logical(lop.Value, left, right)
+                 : Binary(JavaScriptParser.ParseBinaryOperator(op), left, right);
         }
 
+        public static BinaryExpression Binary(BinaryOperator op, Expression left, Expression right)
+        {
+            return new BinaryExpression(op, left, right);
+        }
+
+        public static LogicalExpression Logical(LogicalOperator op, Expression left, Expression right)
+        {
+            return new LogicalExpression(op, left, right);
+        }
+        
         public static BlockStatement Block(IEnumerable<Statement> body)
         {
             return new BlockStatement(body);
@@ -166,9 +177,9 @@ namespace Escape
             return new ObjectExpression(properties);
         }
 
-        public static UpdateExpression Postfix(string op, Expression argument)
+        public static UpdateExpression Postfix(UnaryOperator op, Expression argument)
         {
-            return new UpdateExpression(UnaryExpression.ParseUnaryOperator(op), argument, false);
+            return new UpdateExpression(op, argument, false);
         }
 
         public static Program Program(ICollection<Statement> body, bool strict)
@@ -217,12 +228,11 @@ namespace Escape
             return new TryStatement(block, guardedHandlers, handlers, finalizer);
         }
 
-        public static UnaryExpression Unary(string op, Expression argument)
+        public static UnaryExpression Unary(UnaryOperator op, Expression argument)
         {
-            var pop = UnaryExpression.ParseUnaryOperator(op);
-            return pop == UnaryOperator.Increment || pop == UnaryOperator.Decrement
-                 ? new UpdateExpression(pop, argument, true)
-                 : new UnaryExpression(pop, argument, true);
+            return op == UnaryOperator.Increment || op == UnaryOperator.Decrement
+                 ? new UpdateExpression(op, argument, true)
+                 : new UnaryExpression(op, argument, true);
         }
 
         public static VariableDeclaration VariableDeclaration(IEnumerable<VariableDeclarator> declarations, string kind)
