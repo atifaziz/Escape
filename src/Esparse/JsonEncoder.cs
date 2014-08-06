@@ -109,7 +109,7 @@ namespace Esparse
             { 
                 switch ((PropertyKind) value) 
                 { 
-                    case PropertyKind.Data: _writer.String("init"); break;
+                    case PropertyKind.Init: _writer.String("init"); break;
                     case PropertyKind.Get : _writer.String("get" ); break;
                     case PropertyKind.Set : _writer.String("set" ); break;
                     default: throw new NotSupportedException(); 

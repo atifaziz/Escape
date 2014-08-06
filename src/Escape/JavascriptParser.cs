@@ -1657,7 +1657,7 @@ namespace Escape
                 Expect(":");
 
                 value = ParseAssignmentExpression();
-                return MarkEnd(SyntaxNodeFactory.Property(PropertyKind.Data, id, value));
+                return MarkEnd(SyntaxNodeFactory.Property(PropertyKind.Init, id, value));
             }
             if (token.TokenType == TokenType.Eof || token.TokenType == TokenType.Punctuator)
             {
@@ -1669,14 +1669,16 @@ namespace Escape
                 var key = ParseObjectPropertyKey();
                 Expect(":");
                 value = ParseAssignmentExpression();
-                return MarkEnd(SyntaxNodeFactory.Property(PropertyKind.Data, key, value));
+                return MarkEnd(SyntaxNodeFactory.Property(PropertyKind.Init, key, value));
             }
         }
+
+        [Flags] enum PropertyKinds { Data = 1, Get = 2, Set = 4 };
 
         ObjectExpression ParseObjectInitialiser()
         {
             var properties = new List<Property>();
-            var map = new Dictionary<string, PropertyKind>();
+            var map = new Dictionary<string, PropertyKinds>();
 
             Expect("{");
 
@@ -1686,25 +1688,29 @@ namespace Escape
 
                 var name = property.Key.GetKey();
 
-                var kind = property.Kind;
+                var kind = property.Kind == PropertyKind.Set
+                         ? PropertyKinds.Set
+                         : property.Kind == PropertyKind.Get
+                         ? PropertyKinds.Get
+                         : PropertyKinds.Data;
 
                 var key = "$" + name;
                 if (map.ContainsKey(key))
                 {
-                    if (map[key] == PropertyKind.Data)
+                    if (map[key] == PropertyKinds.Data)
                     {
-                        if (_strict && kind == PropertyKind.Data)
+                        if (_strict && kind == PropertyKinds.Data)
                         {
                             ThrowErrorTolerant(Token.Empty, Messages.StrictDuplicateProperty);
                         }
-                        else if (kind != PropertyKind.Data)
+                        else if (kind != PropertyKinds.Data)
                         {
                             ThrowErrorTolerant(Token.Empty, Messages.AccessorDataProperty);
                         }
                     }
                     else
                     {
-                        if (kind == PropertyKind.Data)
+                        if (kind == PropertyKinds.Data)
                         {
                             ThrowErrorTolerant(Token.Empty, Messages.AccessorDataProperty);
                         }

@@ -540,7 +540,7 @@ namespace Escape.Ast
         }
     }
 
-    public enum PropertyKind { Data, Get, Set };
+    public enum PropertyKind { Init, Get, Set };
 
     public class Property : Expression
     {
