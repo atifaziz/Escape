@@ -624,10 +624,20 @@ namespace Escape.Ast
     public abstract class SyntaxNode
     {
         public SyntaxNodeType NodeType { get; private set; }
-        public Range Range { get; set; }
-        public Location Location { get; set; }
+        public Range Range { get; internal set; }
+        public Location Location { get; internal set; }
 
-        protected SyntaxNode(SyntaxNodeType nodeType) { NodeType = nodeType; }
+        protected SyntaxNode(SyntaxNodeType nodeType) : this(nodeType, null) {}
+
+        protected SyntaxNode(SyntaxNodeType nodeType, Location location) : 
+            this(nodeType, location, default(Range)) {}
+
+        protected SyntaxNode(SyntaxNodeType nodeType, Location location, Range range)
+        {
+            NodeType = nodeType;
+            Location = location;
+            Range = range;
+        }
 
         [DebuggerStepThrough]
         public T As<T>() where T : SyntaxNode
