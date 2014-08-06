@@ -761,7 +761,10 @@ namespace Escape.Ast
         protected UnaryExpression(SyntaxNodeType nodeType, UnaryOperator op, Expression argument, bool prefix) : 
             base(nodeType)
         {
-            if (!FastEnumValidator<UnaryOperator>.IsDefined((int) op)) throw new ArgumentOutOfRangeException("op");
+            if (!FastEnumValidator<UnaryOperator>.IsDefined((int) op) 
+                || op == UnaryOperator.Increment
+                || op == UnaryOperator.Decrement) 
+                throw new ArgumentOutOfRangeException("op");
             if (argument == null) throw new ArgumentNullException("argument");
             Operator = op;
             Argument = argument;
@@ -769,10 +772,23 @@ namespace Escape.Ast
         }
     }
 
-    public class UpdateExpression : UnaryExpression
+    public class UpdateExpression : Expression
     {
+        public UnaryOperator Operator { get; private set; }
+        public Expression Argument { get; private set; }
+        public bool Prefix { get; private set; }
+
         public UpdateExpression(UnaryOperator op, Expression argument, bool prefix) :
-            base(SyntaxNodeType.UpdateExpression, op, argument, prefix) {}
+            base(SyntaxNodeType.UpdateExpression)
+        {
+            if (   op != UnaryOperator.Increment 
+                && op != UnaryOperator.Decrement) 
+                throw new ArgumentOutOfRangeException("op");            
+            if (argument == null) throw new ArgumentNullException("argument");
+            Operator = op;
+            Argument = argument;
+            Prefix = prefix;
+        }
     }
 
     public class VariableDeclaration : Statement

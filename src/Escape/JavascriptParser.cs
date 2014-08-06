@@ -2015,7 +2015,7 @@ namespace Escape
                     ThrowErrorTolerant(Token.Empty, Messages.InvalidLHSInAssignment);
                 }
 
-                expr = SyntaxNodeFactory.Unary(ParseUnaryOperator((string) token.Value), expr);
+                expr = SyntaxNodeFactory.Update(ParseUnaryOperator((string) token.Value), expr);
             }
             else if (Match("+") || Match("-") || Match("~") || Match("!"))
             {

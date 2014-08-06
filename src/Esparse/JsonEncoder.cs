@@ -356,7 +356,8 @@ namespace Esparse
 
         protected override void Visit(UpdateExpression node)
         {
-            Visit((UnaryExpression) node);
+            Encode(node, Member("operator", node.Operator), Member("argument", node.Argument),
+                Member("prefix", node.Prefix));
         }
 
         protected override void Visit(VariableDeclaration node)

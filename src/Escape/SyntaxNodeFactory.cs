@@ -230,9 +230,12 @@ namespace Escape
 
         public static UnaryExpression Unary(UnaryOperator op, Expression argument)
         {
-            return op == UnaryOperator.Increment || op == UnaryOperator.Decrement
-                 ? new UpdateExpression(op, argument, true)
-                 : new UnaryExpression(op, argument, true);
+            return new UnaryExpression(op, argument, true);
+        }
+
+        public static UpdateExpression Update(UnaryOperator op, Expression argument)
+        {
+            return new UpdateExpression(op, argument, true);
         }
 
         public static VariableDeclaration VariableDeclaration(IEnumerable<VariableDeclarator> declarations, string kind)
