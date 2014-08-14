@@ -1289,51 +1289,35 @@ namespace Escape
             }
         }
 
+        T MarkEnd<T>(Unmarked<T> node) where T : SyntaxNode
+        {
+            var range = _extra.Range != null ? new Range(_state.MarkerStack.Pop(), _index) : Range.Empty;
+            var start = _extra.Loc.HasValue ? new Position(_state.MarkerStack.Pop(), _state.MarkerStack.Pop()) : Position.Nil;
+            var end   = _extra.Loc.HasValue ? new Position(_lineNumber, _index - _lineStart) : Position.Nil;
+            return PostProcess(start, end, range, node);
+        }
+
         T MarkEnd<T>(T node) where T : SyntaxNode
         {
-            if (_extra.Range != null)
-            {
-                node.Range = new Range( _state.MarkerStack.Pop(), _index);
-            }
             if (_extra.Loc.HasValue)
             {
-                node.Location = new Location(
-                    new Position(_state.MarkerStack.Pop(), _state.MarkerStack.Pop()),
-                    new Position(_lineNumber, _index - _lineStart));
-                PostProcess(node);
+                _state.MarkerStack.Pop();
+                _state.MarkerStack.Pop();
             }
-            return node;
-        }
-
-        T MarkEndIf<T>(T node) where T : SyntaxNode
-        {
-            if (!node.Range.IsEmpty || node.Location != null)
+            if (_extra.Range != null)
             {
-                if (_extra.Loc.HasValue)
-                {
-                    _state.MarkerStack.Pop();
-                    _state.MarkerStack.Pop();
-                }
-                if (_extra.Range != null)
-                {
-                    _state.MarkerStack.Pop();
-                }
+                _state.MarkerStack.Pop();
             }
-            else
-            {
-                MarkEnd(node);
-            }
+
             return node;
         }
 
-        SyntaxNode PostProcess(SyntaxNode node)
+        internal T PostProcess<T>(Position start, Position end, Range range, Unmarked<T> node) where T : SyntaxNode
         {
-            if (_extra.Source != null)
-                node.Location = new Location(node.Location.Start, node.Location.End, _extra.Source);
-            return node;
+            return node(new Location(start, end, range, _extra.Source));
         }
 
-        Literal CreateLiteral(Token token)
+        Unmarked<Literal> CreateLiteral(Token token)
         {
             return SyntaxNodeFactory.Literal(token.Value, _source.Slice(token.Range[0], token.Range[1]));
         }
@@ -1549,7 +1533,7 @@ namespace Escape
 
         // 11.1.4 Array Initialiser
 
-        ArrayExpression ParseArrayInitialiser()
+        Unmarked<ArrayExpression> ParseArrayInitialiser()
         {
             var elements = new List<Expression>();
 
@@ -1611,7 +1595,8 @@ namespace Escape
                 return MarkEnd(CreateLiteral(token));
             }
 
-            return MarkEnd(SyntaxNodeFactory.Identifier((string) token.Value));
+            var value = (string)token.Value;
+            return MarkEnd(SyntaxNodeFactory.Identifier(value));
         }
 
         Property ParseObjectProperty()
@@ -1675,7 +1660,7 @@ namespace Escape
 
         [Flags] enum PropertyKinds { Data = 1, Get = 2, Set = 4 };
 
-        ObjectExpression ParseObjectInitialiser()
+        Unmarked<ObjectExpression> ParseObjectInitialiser()
         {
             var properties = new List<Property>();
             var map = new Dictionary<string, PropertyKinds>();
@@ -1757,7 +1742,7 @@ namespace Escape
 
         Expression ParsePrimaryExpression()
         {
-            Expression expr = null;
+            Unmarked<Expression> expr = null;
 
             if (Match("("))
             {
@@ -1769,7 +1754,8 @@ namespace Escape
 
             if (type == TokenType.Identifier)
             {
-                expr = SyntaxNodeFactory.Identifier((string) Lex().Value);
+                var name = (string)Lex().Value;
+                expr = SyntaxNodeFactory.Identifier(name);
             }
             else if (type == TokenType.StringLiteral || type == TokenType.NumericLiteral)
             {
@@ -1777,18 +1763,20 @@ namespace Escape
                 {
                     ThrowErrorTolerant(_lookahead, Messages.StrictOctalLiteral);
                 }
-                expr = CreateLiteral(Lex());
+                var token = Lex();
+                expr = CreateLiteral(token);
             }
             else if (type == TokenType.Keyword)
             {
                 if (MatchKeyword("this"))
                 {
                     Lex();
-                    expr = SyntaxNodeFactory.This();
+                    expr = SyntaxNodeFactory.This;
                 }
                 else if (MatchKeyword("function"))
                 {
-                    expr = ParseFunctionExpression();
+                    var f = ParseFunctionExpression();
+                    expr = _ => f;
                 }
             }
             else if (type == TokenType.BooleanLiteral)
@@ -1813,7 +1801,8 @@ namespace Escape
             }
             else if (Match("/") || Match("/="))
             {
-                expr = CreateLiteral(_extra.Tokens != null ? CollectRegex() : ScanRegExp());
+                var token = _extra.Tokens != null ? CollectRegex() : ScanRegExp();
+                expr = CreateLiteral(token);
             }
 
             if (expr != null)
@@ -1861,7 +1850,7 @@ namespace Escape
                 ThrowUnexpected(token);
             }
 
-            return MarkEnd(SyntaxNodeFactory.Identifier((string) token.Value));
+            return MarkEnd(SyntaxNodeFactory.Identifier((string)token.Value));
         }
 
         Identifier ParseNonComputedMember()
@@ -1903,25 +1892,30 @@ namespace Escape
 
             while (Match(".") || Match("[") || Match("("))
             {
+                Unmarked<Expression> uexpr;
                 if (Match("("))
                 {
                     var args = ParseArguments();
-                    expr = SyntaxNodeFactory.Call(expr, args);
+                    uexpr = SyntaxNodeFactory.Call(expr, args);
                 }
                 else if (Match("["))
                 {
                     var property = ParseComputedMember();
-                    expr = SyntaxNodeFactory.Member('[', expr, property);
+                    uexpr = SyntaxNodeFactory.Member('[', expr, property);
                 }
                 else
                 {
                     var property = ParseNonComputedMember();
-                    expr = SyntaxNodeFactory.Member('.', expr, property);
+                    uexpr = SyntaxNodeFactory.Member('.', expr, property);
                 }
                 if (marker != null)
                 {
                     marker.End(_index, _lineNumber, _lineStart);
-                    marker.Apply(expr, _extra, PostProcess);
+                    expr = marker.Apply(uexpr, _extra, this);
+                }
+                else
+                {
+                    expr = uexpr(null);
                 }
             }
 
@@ -1938,20 +1932,25 @@ namespace Escape
 
             while (Match(".") || Match("["))
             {
+                Unmarked<Expression> uexpr;
                 if (Match("["))
                 {
                     var property = ParseComputedMember();
-                    expr = SyntaxNodeFactory.Member('[', expr, property);
+                    uexpr = SyntaxNodeFactory.Member('[', expr, property);
                 }
                 else
                 {
                     var property = ParseNonComputedMember();
-                    expr = SyntaxNodeFactory.Member('.', expr, property);
+                    uexpr = SyntaxNodeFactory.Member('.', expr, property);
                 }
                 if (marker != null)
                 {
                     marker.End(_index, _lineNumber, _lineStart);
-                    marker.Apply(expr, _extra, PostProcess);
+                    expr = marker.Apply(uexpr, _extra, this);
+                }
+                else
+                {
+                    expr = uexpr(null);
                 }
             }
 
@@ -1981,11 +1980,11 @@ namespace Escape
                     }
 
                     var token = Lex();
-                    expr = SyntaxNodeFactory.Postfix(ParseUnaryOperator((string) token.Value), expr);
+                    return MarkEnd(SyntaxNodeFactory.Postfix(ParseUnaryOperator((string)token.Value), expr));
                 }
             }
 
-            return MarkEndIf(expr);
+            return MarkEnd(expr);
         }
 
         // 11.4 Unary Operators
@@ -2015,31 +2014,31 @@ namespace Escape
                     ThrowErrorTolerant(Token.Empty, Messages.InvalidLHSInAssignment);
                 }
 
-                expr = SyntaxNodeFactory.Update(ParseUnaryOperator((string) token.Value), expr);
+                return MarkEnd(SyntaxNodeFactory.Update(ParseUnaryOperator((string)token.Value), expr));
             }
             else if (Match("+") || Match("-") || Match("~") || Match("!"))
             {
                 var token = Lex();
                 expr = ParseUnaryExpression();
-                expr = SyntaxNodeFactory.Unary(ParseUnaryOperator((string) token.Value), expr);
+                return MarkEnd(SyntaxNodeFactory.Unary(ParseUnaryOperator((string)token.Value), expr));
             }
             else if (MatchKeyword("delete") || MatchKeyword("void") || MatchKeyword("typeof"))
             {
                 var token = Lex();
                 expr = ParseUnaryExpression();
-                var unaryExpr = SyntaxNodeFactory.Unary(ParseUnaryOperator((string) token.Value), expr);
+                var unaryExpr = SyntaxNodeFactory.Unary(ParseUnaryOperator((string) token.Value), expr, null);
                 if (_strict && unaryExpr.Operator == UnaryOperator.Delete && unaryExpr.Argument.NodeType == SyntaxNodeType.Identifier)
                 {
                     ThrowErrorTolerant(Token.Empty, Messages.StrictDelete);
                 }
-                expr = unaryExpr;
+                return MarkEnd(SyntaxNodeFactory.Unary(unaryExpr.Operator, unaryExpr.Argument));
             }
             else
             {
                 expr = ParsePostfixExpression();
             }
 
-            return MarkEndIf(expr);
+            return MarkEnd(expr);
         }
 
         static int BinaryPrecedence(Token token, bool allowIn)
@@ -2150,13 +2149,17 @@ namespace Escape
                     right = (Expression) stack.Pop();
                     var op = (string) ((Token) stack.Pop()).Value;
                     left = (Expression) stack.Pop();
-                    expr = SyntaxNodeFactory.BinaryOrLogical(op, left, right);
+                    var uexpr = SyntaxNodeFactory.BinaryOrLogical(op, left, right);
                     markers.Pop();
                     marker = markers.Pop();
                     if (marker != null)
                     {
                         marker.End(_index, _lineNumber, _lineStart);
-                        marker.Apply(expr, _extra, PostProcess);
+                        expr = marker.Apply(uexpr, _extra, this);
+                    }
+                    else
+                    {
+                        expr = uexpr(null);
                     }
                     stack.Push(expr);
                     markers.Push(marker);
@@ -2177,13 +2180,17 @@ namespace Escape
             markers.Pop();
             while (i > 1)
             {
-                expr = SyntaxNodeFactory.BinaryOrLogical((string) ((Token) stack[i - 1]).Value, (Expression) stack[i - 2], expr);
+                var uexpr = SyntaxNodeFactory.BinaryOrLogical((string) ((Token) stack[i - 1]).Value, (Expression) stack[i - 2], expr);
                 i -= 2;
                 marker = markers.Pop();
                 if (marker != null)
                 {
                     marker.End(_index, _lineNumber, _lineStart);
-                    marker.Apply(expr, _extra, PostProcess);
+                    expr = marker.Apply(uexpr, _extra, this);
+                }
+                else
+                {
+                    expr = uexpr(null);
                 }
             }
 
@@ -2208,11 +2215,12 @@ namespace Escape
                 Expect(":");
                 var alternate = ParseAssignmentExpression();
 
-                expr = MarkEnd(SyntaxNodeFactory.Conditional(expr, consequent, alternate));
+                var test = expr;
+                expr = MarkEnd(SyntaxNodeFactory.Conditional(test, consequent, alternate));
             }
             else
             {
-                MarkEnd(new DebuggerStatement());
+                MarkEnd(SyntaxNodeFactory.Debugger);
             }
 
             return expr;
@@ -2246,10 +2254,10 @@ namespace Escape
 
                 token = Lex();
                 var right = ParseAssignmentExpression();
-                expr = SyntaxNodeFactory.Assignment(ParseAssignmentOperator((string)token.Value), left, right);
+                return MarkEnd(SyntaxNodeFactory.Assignment(ParseAssignmentOperator((string) token.Value), left, right));
             }
 
-            return MarkEndIf(expr);
+            return MarkEnd(expr);
         }
 
         // 11.14 Comma Operator
@@ -2261,7 +2269,7 @@ namespace Escape
 
             if (Match(","))
             {
-                expr = SyntaxNodeFactory.Sequence(new List<Expression> {expr});
+                var exprs = new List<Expression> { expr };
 
                 while (_index < _length)
                 {
@@ -2270,11 +2278,13 @@ namespace Escape
                         break;
                     }
                     Lex();
-                    ((SequenceExpression) expr).Expressions.Add(ParseAssignmentExpression());
+                    exprs.Add(ParseAssignmentExpression());
                 }
-            }
 
-            return MarkEndIf(expr);
+                return MarkEnd(SyntaxNodeFactory.Sequence(exprs));
+            }
+            
+            return MarkEnd(expr);
         }
 
         // 12.1 Block
@@ -2324,7 +2334,8 @@ namespace Escape
                 ThrowUnexpected(token);
             }
 
-            return MarkEnd(SyntaxNodeFactory.Identifier((string) token.Value));
+            var name = (string)token.Value;
+            return MarkEnd(SyntaxNodeFactory.Identifier(name));
         }
 
         VariableDeclarator ParseVariableDeclaration(string kind)
@@ -2371,7 +2382,7 @@ namespace Escape
             return list;
         }
 
-        VariableDeclaration ParseVariableStatement()
+        Unmarked<VariableDeclaration> ParseVariableStatement()
         {
             ExpectKeyword("var");
 
@@ -2401,15 +2412,15 @@ namespace Escape
 
         // 12.3 Empty Statement
 
-        EmptyStatement ParseEmptyStatement()
+        Unmarked<EmptyStatement> ParseEmptyStatement()
         {
             Expect(";");
-            return SyntaxNodeFactory.Empty();
+            return SyntaxNodeFactory.Empty;
         }
 
         // 12.4 Expression Statement
 
-        ExpressionStatement ParseExpressionStatement()
+        Unmarked<ExpressionStatement> ParseExpressionStatement()
         {
             var expr = ParseExpression();
             ConsumeSemicolon();
@@ -2418,7 +2429,7 @@ namespace Escape
 
         // 12.5 If statement
 
-        IfStatement ParseIfStatement()
+        Unmarked<IfStatement> ParseIfStatement()
         {
             Statement alternate;
 
@@ -2447,7 +2458,7 @@ namespace Escape
 
         // 12.6 Iteration Statements
 
-        DoWhileStatement ParseDoWhileStatement()
+        Unmarked<DoWhileStatement> ParseDoWhileStatement()
         {
             ExpectKeyword("do");
 
@@ -2474,7 +2485,7 @@ namespace Escape
             return SyntaxNodeFactory.DoWhile(body, test);
         }
 
-        WhileStatement ParseWhileStatement()
+        Unmarked<WhileStatement> ParseWhileStatement()
         {
             ExpectKeyword("while");
 
@@ -2497,13 +2508,13 @@ namespace Escape
         VariableDeclaration ParseForVariableDeclaration()
         {
             MarkStart();
-            var token = Lex();
+            var kind = (string) Lex().Value;
             var declarations = ParseVariableDeclarationList(null);
 
-            return MarkEnd(SyntaxNodeFactory.VariableDeclaration(declarations, (string) token.Value));
+            return MarkEnd(SyntaxNodeFactory.VariableDeclaration(declarations, kind));
         }
 
-        Statement ParseForStatement()
+        Unmarked<Statement> ParseForStatement()
         {
             SyntaxNode init = null, left = null;
             Expression right = null;
@@ -2584,13 +2595,13 @@ namespace Escape
             _state.InIteration = oldInIteration;
 
             return (left == null)
-                       ? (Statement) SyntaxNodeFactory.For(init, test, update, body)
+                       ? (Unmarked<Statement>)SyntaxNodeFactory.For(init, test, update, body)
                        : SyntaxNodeFactory.ForIn(left, right, body);
         }
 
         // 12.7 The continue statement
 
-        Statement ParseContinueStatement()
+        Unmarked<ContinueStatement> ParseContinueStatement()
         {
             Identifier label = null;
 
@@ -2642,7 +2653,7 @@ namespace Escape
 
         // 12.8 The break statement
 
-        BreakStatement ParseBreakStatement()
+        Unmarked<BreakStatement> ParseBreakStatement()
         {
             Identifier label = null;
 
@@ -2694,7 +2705,7 @@ namespace Escape
 
         // 12.9 The return statement
 
-        ReturnStatement ParseReturnStatement()
+        Unmarked<ReturnStatement> ParseReturnStatement()
         {
             Expression argument = null;
 
@@ -2736,7 +2747,7 @@ namespace Escape
 
         // 12.10 The with statement
 
-        WithStatement ParseWithStatement()
+        Unmarked<WithStatement> ParseWithStatement()
         {
             if (_strict)
             {
@@ -2789,7 +2800,7 @@ namespace Escape
             return MarkEnd(SyntaxNodeFactory.SwitchCase(test, consequent));
         }
 
-        SwitchStatement ParseSwitchStatement()
+        Unmarked<SwitchStatement> ParseSwitchStatement()
         {
             ExpectKeyword("switch");
 
@@ -2840,7 +2851,7 @@ namespace Escape
 
         // 12.13 The throw statement
 
-        ThrowStatement ParseThrowStatement()
+        Unmarked<ThrowStatement> ParseThrowStatement()
         {
             ExpectKeyword("throw");
 
@@ -2881,7 +2892,7 @@ namespace Escape
             return MarkEnd(SyntaxNodeFactory.Catch(param, body));
         }
 
-        TryStatement ParseTryStatement()
+        Unmarked<TryStatement> ParseTryStatement()
         {
             var handlers = new List<CatchClause>();
             Statement finalizer = null;
@@ -2911,7 +2922,7 @@ namespace Escape
 
         // 12.15 The debugger statement
 
-        DebuggerStatement ParseDebuggerStatement()
+        Unmarked<DebuggerStatement> ParseDebuggerStatement()
         {
             ExpectKeyword("debugger");
 
@@ -3507,20 +3518,12 @@ namespace Escape
                 _marker[5] = index - lineStart;
             }
 
-            public void Apply(SyntaxNode node, Extra extra, Func<SyntaxNode, SyntaxNode> postProcess)
+            public T Apply<T>(Unmarked<T> node, Extra extra, JavaScriptParser parser) where T : SyntaxNode
             {
-                if (extra.Range.Length > 0)
-                {
-                    node.Range = new Range(_marker[0], _marker[3]);
-                }
-                if (extra.Loc.HasValue)
-                {
-                    node.Location = new Location(
-                        new Position(_marker[1], _marker[2]),
-                        new Position(_marker[4], _marker[5]));
-                }
-
-                node = postProcess(node);
+                var range = extra.Range.Length > 0 ? new Range(_marker[0], _marker[3]) : Range.Empty;
+                var start = extra.Loc.HasValue ? new Position(_marker[1], _marker[2]) : Position.Nil;
+                var end   = extra.Loc.HasValue ? new Position(_marker[4], _marker[5]) : Position.Nil;
+                return parser.PostProcess(start, end, range, node);
             }
         };
 

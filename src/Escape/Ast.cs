@@ -44,7 +44,8 @@ namespace Escape.Ast
     {
         public IEnumerable<Expression> Elements { get; private set; }
         
-        public ArrayExpression(IEnumerable<Expression> elements) : base(SyntaxNodeType.ArrayExpression)
+        public ArrayExpression(IEnumerable<Expression> elements, Location location = null) : 
+            base(SyntaxNodeType.ArrayExpression, location)
         {
             if (elements == null) throw new ArgumentNullException("elements");
             Elements = elements;
@@ -73,8 +74,8 @@ namespace Escape.Ast
         public Expression Left { get; private set; }
         public Expression Right { get; private set; }
 
-        public AssignmentExpression(AssignmentOperator op, Expression left, Expression right) : 
-            base(SyntaxNodeType.AssignmentExpression)
+        public AssignmentExpression(AssignmentOperator op, Expression left, Expression right, Location location = null) : 
+            base(SyntaxNodeType.AssignmentExpression, location)
         {
             if (!FastEnumValidator<AssignmentOperator>.IsDefined((int) op)) throw new ArgumentOutOfRangeException("op");
             if (left == null) throw new ArgumentNullException("left");
@@ -116,8 +117,8 @@ namespace Escape.Ast
         public Expression Left { get; private set; }
         public Expression Right { get; private set; }
 
-        public BinaryExpression(BinaryOperator op, Expression left, Expression right) : 
-            base(SyntaxNodeType.BinaryExpression)
+        public BinaryExpression(BinaryOperator op, Expression left, Expression right, Location location = null) : 
+            base(SyntaxNodeType.BinaryExpression, location)
         {
             if (!FastEnumValidator<BinaryOperator>.IsDefined((int) op)) throw new ArgumentOutOfRangeException("op");
             if (left == null) throw new ArgumentNullException("left");
@@ -131,8 +132,9 @@ namespace Escape.Ast
     public class BlockStatement : Statement
     {
         public IEnumerable<Statement> Body { get; private set; }
-        
-        public BlockStatement(IEnumerable<Statement> body) : base(SyntaxNodeType.BlockStatement)
+
+        public BlockStatement(IEnumerable<Statement> body, Location location = null) : 
+            base(SyntaxNodeType.BlockStatement, location)
         {
             if (body == null) throw new ArgumentNullException("body");
             Body = body;
@@ -143,9 +145,9 @@ namespace Escape.Ast
     {
         public Identifier Label { get; private set; }
 
-        public BreakStatement() : this(null) {}
-        public BreakStatement(Identifier label) : 
-            base(SyntaxNodeType.BreakStatement)
+        public BreakStatement(Location location = null) : this(null, location) { }
+        public BreakStatement(Identifier label, Location location = null) : 
+            base(SyntaxNodeType.BreakStatement, location)
         {
             Label = label;
         }
@@ -156,8 +158,8 @@ namespace Escape.Ast
         public Expression Callee { get; private set; }
         public IEnumerable<Expression> Arguments { get; private set; }
         
-        public CallExpression(Expression callee, IEnumerable<Expression> arguments) : 
-            base(SyntaxNodeType.CallExpression)
+        public CallExpression(Expression callee, IEnumerable<Expression> arguments, Location location = null) : 
+            base(SyntaxNodeType.CallExpression, location)
         {
             if (callee == null) throw new ArgumentNullException("callee");
             if (arguments == null) throw new ArgumentNullException("arguments");
@@ -171,8 +173,8 @@ namespace Escape.Ast
         public Identifier Param { get; private set; }
         public BlockStatement Body { get; private set; }
         
-        public CatchClause(Identifier param, BlockStatement body) : 
-            base(SyntaxNodeType.CatchClause)
+        public CatchClause(Identifier param, BlockStatement body, Location location = null) : 
+            base(SyntaxNodeType.CatchClause, location)
         {
             if (param == null) throw new ArgumentNullException("param");
             if (body == null) throw new ArgumentNullException("body");
@@ -187,8 +189,8 @@ namespace Escape.Ast
         public Expression Consequent { get; private set; }
         public Expression Alternate { get; private set; }
         
-        public ConditionalExpression(Expression test, Expression consequent, Expression alternate) : 
-            base(SyntaxNodeType.ConditionalExpression)
+        public ConditionalExpression(Expression test, Expression consequent, Expression alternate, Location location = null) : 
+            base(SyntaxNodeType.ConditionalExpression, location)
         {
             if (test == null) throw new ArgumentNullException("test");
             if (consequent == null) throw new ArgumentNullException("consequent");
@@ -203,9 +205,9 @@ namespace Escape.Ast
     {
         public Identifier Label { get; private set; }
 
-        public ContinueStatement() : this(null) {}
-        public ContinueStatement(Identifier label) : 
-            base(SyntaxNodeType.ContinueStatement)
+        public ContinueStatement(Location location = null) : this(null, location) { }
+        public ContinueStatement(Identifier label, Location location = null) : 
+            base(SyntaxNodeType.ContinueStatement, location)
         {
             Label = label;
         }
@@ -213,7 +215,8 @@ namespace Escape.Ast
 
     public class DebuggerStatement: Statement
     {
-        public DebuggerStatement() : base(SyntaxNodeType.DebuggerStatement) {}
+        public DebuggerStatement(Location location = null) : 
+            base(SyntaxNodeType.DebuggerStatement, location) {}
     }
 
     public class DoWhileStatement  : Statement
@@ -221,8 +224,8 @@ namespace Escape.Ast
         public Statement Body { get; private set; }
         public Expression Test { get; private set; }
 
-        public DoWhileStatement(Statement body, Expression test) : 
-            base(SyntaxNodeType.DoWhileStatement)
+        public DoWhileStatement(Statement body, Expression test, Location location = null) : 
+            base(SyntaxNodeType.DoWhileStatement, location)
         {
             if (body == null) throw new ArgumentNullException("body");
             if (test == null) throw new ArgumentNullException("test");
@@ -233,22 +236,24 @@ namespace Escape.Ast
 
     public class EmptyStatement : Statement
     {
-        public EmptyStatement() : base(SyntaxNodeType.EmptyStatement) {}
+        public EmptyStatement(Location location = null) : 
+            base(SyntaxNodeType.EmptyStatement, location) {}
     }
 
     public abstract class Expression : SyntaxNode
     {
         // an expression represents an actual value
         // foo() is an expression, a switch/case is a statement
-        protected Expression(SyntaxNodeType nodeType) : base(nodeType) {}
+        protected Expression(SyntaxNodeType nodeType, Location location = null) : 
+            base(nodeType, location) {}
     }
 
     public class ExpressionStatement : Statement
     {
         public Expression Expression { get; private set; }
         
-        public ExpressionStatement(Expression expression) : 
-            base(SyntaxNodeType.ExpressionStatement)
+        public ExpressionStatement(Expression expression, Location location = null) : 
+            base(SyntaxNodeType.ExpressionStatement, location)
         {
             if (expression == null) throw new ArgumentNullException("expression");
             Expression = expression;
@@ -265,8 +270,8 @@ namespace Escape.Ast
         public ForInStatement(SyntaxNode left, Expression right, Statement body) : 
             this(left, right, body, false) {}
 
-        public ForInStatement(SyntaxNode left, Expression right, Statement body, bool each) : 
-            base(SyntaxNodeType.ForInStatement)
+        public ForInStatement(SyntaxNode left, Expression right, Statement body, bool each, Location location = null) : 
+            base(SyntaxNodeType.ForInStatement, location)
         {
             if (left == null) throw new ArgumentNullException("left");
             if (right == null) throw new ArgumentNullException("right");
@@ -286,8 +291,8 @@ namespace Escape.Ast
         public Expression Update { get; private set; }
         public Statement Body { get; private set; }
         
-        public ForStatement(SyntaxNode init, Expression test, Expression update, Statement body) : 
-            base(SyntaxNodeType.ForStatement)
+        public ForStatement(SyntaxNode init, Expression test, Expression update, Statement body, Location location = null) : 
+            base(SyntaxNodeType.ForStatement, location)
         {
             if (body == null) throw new ArgumentNullException("body");
             Body = body;
@@ -310,8 +315,8 @@ namespace Escape.Ast
 
         public FunctionDeclaration(Identifier id, 
             IEnumerable<Identifier> parameters, 
-            Statement body, bool strict) : 
-            base(SyntaxNodeType.FunctionDeclaration)
+            Statement body, bool strict, Location location = null) : 
+            base(SyntaxNodeType.FunctionDeclaration, location)
         {
             if (id == null) throw new ArgumentNullException("id");
             if (parameters == null) throw new ArgumentNullException("parameters");
@@ -354,8 +359,8 @@ namespace Escape.Ast
 
         public FunctionExpression(Identifier id, 
             IEnumerable<Identifier> parameters, 
-            Statement body, bool strict) : 
-            base(SyntaxNodeType.FunctionExpression)
+            Statement body, bool strict, Location location = null) : 
+            base(SyntaxNodeType.FunctionExpression, location)
         {
             if (parameters == null) throw new ArgumentNullException("parameters");
             if (body == null) throw new ArgumentNullException("body");
@@ -381,8 +386,8 @@ namespace Escape.Ast
     {
         public string Name { get; private set; }
         
-        public Identifier(string name) : 
-            base(SyntaxNodeType.Identifier)
+        public Identifier(string name, Location location = null) : 
+            base(SyntaxNodeType.Identifier, location)
         {
             if (name == null) throw new ArgumentNullException("name");
             if (name.Length == 0) throw new ArgumentException(null, "name");
@@ -401,8 +406,8 @@ namespace Escape.Ast
         public IfStatement(Expression test, Statement consequent) : 
             this(test, consequent, null) {}
 
-        public IfStatement(Expression test, Statement consequent, Statement alternate) : 
-            base(SyntaxNodeType.IfStatement)
+        public IfStatement(Expression test, Statement consequent, Statement alternate, Location location = null) : 
+            base(SyntaxNodeType.IfStatement, location)
         {
             if (test == null) throw new ArgumentNullException("test");
             if (consequent == null) throw new ArgumentNullException("consequent");
@@ -424,8 +429,8 @@ namespace Escape.Ast
     {
         public Identifier Label { get; private set; }
         public Statement Body { get; private set; }
-        public LabelledStatement(Identifier label, Statement body) : 
-            base(SyntaxNodeType.LabeledStatement)
+        public LabelledStatement(Identifier label, Statement body, Location location = null) : 
+            base(SyntaxNodeType.LabeledStatement, location)
         {
             if (label == null) throw new ArgumentNullException("label");
             if (body == null) throw new ArgumentNullException("body");
@@ -439,8 +444,8 @@ namespace Escape.Ast
         public object Value { get; private set; }
         public string Raw { get; private set; }
 
-        public Literal(object value, string raw) : 
-            base(SyntaxNodeType.Literal)
+        public Literal(object value, string raw, Location location = null) : 
+            base(SyntaxNodeType.Literal, location)
         {
             Raw = raw;
             Value = value;
@@ -464,8 +469,8 @@ namespace Escape.Ast
         public Expression Left { get; private set; }
         public Expression Right { get; private set; }
 
-        public LogicalExpression(LogicalOperator op, Expression left, Expression right) :
-            base(SyntaxNodeType.LogicalExpression)
+        public LogicalExpression(LogicalOperator op, Expression left, Expression right, Location location = null) :
+            base(SyntaxNodeType.LogicalExpression, location)
         {
             if (!FastEnumValidator<LogicalOperator>.IsDefined((int) op)) throw new ArgumentOutOfRangeException("op");
             if (left == null) throw new ArgumentNullException("left");
@@ -482,8 +487,8 @@ namespace Escape.Ast
         public Expression Property { get; private set; }
         public bool Computed { get; private set; } // true if an indexer is used and the property to be evaluated
 
-        public MemberExpression(Expression obj, Expression property, bool computed) : 
-            base(SyntaxNodeType.MemberExpression)
+        public MemberExpression(Expression obj, Expression property, bool computed, Location location = null) : 
+            base(SyntaxNodeType.MemberExpression, location)
         {
             if (obj == null) throw new ArgumentNullException("obj");
             if (property == null) throw new ArgumentNullException("property");
@@ -498,8 +503,8 @@ namespace Escape.Ast
         public Expression Callee { get; private set; }
         public IEnumerable<Expression> Arguments { get; private set; }
         
-        public NewExpression(Expression callee, IEnumerable<Expression> arguments) : 
-            base(SyntaxNodeType.NewExpression)
+        public NewExpression(Expression callee, IEnumerable<Expression> arguments, Location location = null) : 
+            base(SyntaxNodeType.NewExpression, location)
         {
             if (callee == null) throw new ArgumentNullException("callee");
             if (arguments == null) throw new ArgumentNullException("arguments");
@@ -512,8 +517,8 @@ namespace Escape.Ast
     {
         public IEnumerable<Property> Properties { get; private set; }
         
-        public ObjectExpression(IEnumerable<Property> properties) : 
-            base(SyntaxNodeType.ObjectExpression)
+        public ObjectExpression(IEnumerable<Property> properties, Location location = null) : 
+            base(SyntaxNodeType.ObjectExpression, location)
         {
             if (properties == null) throw new ArgumentNullException("properties");
             Properties = properties;
@@ -531,8 +536,8 @@ namespace Escape.Ast
 
         public Program(ICollection<Statement> body) : this(body, false) {}
 
-        public Program(ICollection<Statement> body, bool strict) : 
-            base(SyntaxNodeType.Program)
+        public Program(ICollection<Statement> body, bool strict, Location location = null) : 
+            base(SyntaxNodeType.Program, location)
         {
             if (body == null) throw new ArgumentNullException("body");
             Body = body;
@@ -548,8 +553,8 @@ namespace Escape.Ast
         public IPropertyKeyExpression Key { get; private set; }
         public Expression Value { get; private set; }
         
-        public Property(PropertyKind kind, IPropertyKeyExpression key, Expression value) : 
-            base(SyntaxNodeType.Property)
+        public Property(PropertyKind kind, IPropertyKeyExpression key, Expression value, Location location = null) : 
+            base(SyntaxNodeType.Property, location)
         {
             if (!FastEnumValidator<PropertyKind>.IsDefined((int) kind)) throw new ArgumentOutOfRangeException("kind");
             if (key == null) throw new ArgumentNullException("key");
@@ -564,9 +569,9 @@ namespace Escape.Ast
     {
         public Expression Argument { get; private set; }
 
-        public ReturnStatement() : this(null) {}
-        public ReturnStatement(Expression argument) : 
-            base(SyntaxNodeType.ReturnStatement)
+        public ReturnStatement(Location location = null) : this(null, location) { }
+        public ReturnStatement(Expression argument, Location location = null) : 
+            base(SyntaxNodeType.ReturnStatement, location)
         {
             Argument = argument;
         }
@@ -576,8 +581,8 @@ namespace Escape.Ast
     {
         public IList<Expression> Expressions { get; private set; }
 
-        public SequenceExpression(IList<Expression> expressions) : 
-            base(SyntaxNodeType.SequenceExpression)
+        public SequenceExpression(IList<Expression> expressions, Location location = null) : 
+            base(SyntaxNodeType.SequenceExpression, location)
         {
             if (expressions == null) throw new ArgumentNullException("expressions");
             Expressions = expressions;
@@ -586,7 +591,8 @@ namespace Escape.Ast
 
     public abstract class Statement : SyntaxNode
     {
-        protected Statement(SyntaxNodeType nodeType) : base(nodeType) {}
+        protected Statement(SyntaxNodeType nodeType, Location location = null) :
+            base(nodeType, location) {}
     }
 
     public class SwitchCase : SyntaxNode
@@ -597,8 +603,8 @@ namespace Escape.Ast
         public SwitchCase(IEnumerable<Statement> consequent) : 
             this(null, consequent) {}
 
-        public SwitchCase(Expression test, IEnumerable<Statement> consequent) : 
-            base(SyntaxNodeType.SwitchCase)
+        public SwitchCase(Expression test, IEnumerable<Statement> consequent, Location location = null) : 
+            base(SyntaxNodeType.SwitchCase, location)
         {
             if (consequent == null) throw new ArgumentNullException("consequent");
             Test = test;
@@ -611,8 +617,8 @@ namespace Escape.Ast
         public Expression Discriminant { get; private set; }
         public IEnumerable<SwitchCase> Cases { get; private set; }
 
-        public SwitchStatement(Expression discriminant, IEnumerable<SwitchCase> cases) : 
-            base(SyntaxNodeType.SwitchStatement)
+        public SwitchStatement(Expression discriminant, IEnumerable<SwitchCase> cases, Location location = null) : 
+            base(SyntaxNodeType.SwitchStatement, location)
         {
             if (discriminant == null) throw new ArgumentNullException("discriminant");
             if (cases == null) throw new ArgumentNullException("cases");
@@ -623,20 +629,34 @@ namespace Escape.Ast
 
     public abstract class SyntaxNode
     {
+        static readonly Location NoLocation = new Location(Position.Nil, Position.Nil);
+
         public SyntaxNodeType NodeType { get; private set; }
-        public Range Range { get; internal set; }
-        public Location Location { get; internal set; }
+        public Location Location { get; private set; }
+
+        Location InternalLocation     { get { return Location ?? NoLocation; } }
+        public Range    IndexRange    { get { return InternalLocation.Range; } }
+        public Position LocationStart { get { return InternalLocation.Start; } }
+        public Position LocationEnd   { get { return InternalLocation.End;   } }
 
         protected SyntaxNode(SyntaxNodeType nodeType) : this(nodeType, null) {}
 
-        protected SyntaxNode(SyntaxNodeType nodeType, Location location) : 
-            this(nodeType, location, default(Range)) {}
-
-        protected SyntaxNode(SyntaxNodeType nodeType, Location location, Range range)
+        protected SyntaxNode(SyntaxNodeType nodeType, Location location)
         {
             NodeType = nodeType;
             Location = location;
-            Range = range;
+        }
+
+        public string Source
+        {
+            get
+            {
+                Range range;
+                var source = InternalLocation.Source;
+                return source != null && !((range = IndexRange).IsEmpty)
+                     ? source.Substring(range.Start, range.End - range.Start)
+                     : null;
+            }
         }
 
         [DebuggerStepThrough]
@@ -693,15 +713,16 @@ namespace Escape.Ast
 
     public class ThisExpression : Expression
     {
-        public ThisExpression() : base(SyntaxNodeType.ThisExpression) {}
+        public ThisExpression(Location location = null) : 
+            base(SyntaxNodeType.ThisExpression, location) { }
     }
 
     public class ThrowStatement : Statement
     {
         public Expression Argument { get; private set; }
 
-        public ThrowStatement(Expression argument) : 
-            base(SyntaxNodeType.ThrowStatement)
+        public ThrowStatement(Expression argument, Location location = null) : 
+            base(SyntaxNodeType.ThrowStatement, location)
         {
             if (argument == null) throw new ArgumentNullException("argument");
             Argument = argument;
@@ -723,8 +744,8 @@ namespace Escape.Ast
         public TryStatement(Statement block, 
             IEnumerable<Statement> guardedHandlers, 
             IEnumerable<CatchClause> handlers, 
-            Statement finalizer) : 
-            base(SyntaxNodeType.TryStatement)
+            Statement finalizer, Location location = null) : 
+            base(SyntaxNodeType.TryStatement, location)
         {
             if (block == null) throw new ArgumentNullException("block");
             if (guardedHandlers == null) throw new ArgumentNullException("guardedHandlers");
@@ -755,11 +776,8 @@ namespace Escape.Ast
         public Expression Argument { get; private set; }
         public bool Prefix { get; private set; }
 
-        public UnaryExpression(UnaryOperator op, Expression argument, bool prefix) :
-            this(SyntaxNodeType.UnaryExpression, op, argument, prefix) {}
-
-        protected UnaryExpression(SyntaxNodeType nodeType, UnaryOperator op, Expression argument, bool prefix) : 
-            base(nodeType)
+        public UnaryExpression(UnaryOperator op, Expression argument, bool prefix, Location location = null) :
+            base(SyntaxNodeType.UnaryExpression, location)
         {
             if (!FastEnumValidator<UnaryOperator>.IsDefined((int) op) 
                 || op == UnaryOperator.Increment
@@ -778,8 +796,8 @@ namespace Escape.Ast
         public Expression Argument { get; private set; }
         public bool Prefix { get; private set; }
 
-        public UpdateExpression(UnaryOperator op, Expression argument, bool prefix) :
-            base(SyntaxNodeType.UpdateExpression)
+        public UpdateExpression(UnaryOperator op, Expression argument, bool prefix, Location location = null) :
+            base(SyntaxNodeType.UpdateExpression, location)
         {
             if (   op != UnaryOperator.Increment 
                 && op != UnaryOperator.Decrement) 
@@ -796,8 +814,8 @@ namespace Escape.Ast
         public IEnumerable<VariableDeclarator> Declarations { get; private set; }
         public string Kind { get; private set; }
         
-        public VariableDeclaration(IEnumerable<VariableDeclarator> declarations, string kind) : 
-            base(SyntaxNodeType.VariableDeclaration)
+        public VariableDeclaration(IEnumerable<VariableDeclarator> declarations, string kind, Location location = null) : 
+            base(SyntaxNodeType.VariableDeclaration, location)
         {
             if (declarations == null) throw new ArgumentNullException("declarations");
             Declarations = declarations;
@@ -811,8 +829,8 @@ namespace Escape.Ast
         public Expression Init { get; private set; }
 
         public VariableDeclarator(Identifier id) : this(id, null) {}
-        public VariableDeclarator(Identifier id, Expression init) : 
-            base(SyntaxNodeType.VariableDeclarator)
+        public VariableDeclarator(Identifier id, Expression init, Location location = null) : 
+            base(SyntaxNodeType.VariableDeclarator, location)
         {
             if (id == null) throw new ArgumentNullException("id");
             Id = id;
@@ -825,8 +843,8 @@ namespace Escape.Ast
         public Expression Test { get; private set; }
         public Statement Body { get; private set; }
         
-        public WhileStatement(Expression test, Statement body) : 
-            base(SyntaxNodeType.WhileStatement)
+        public WhileStatement(Expression test, Statement body, Location location = null) : 
+            base(SyntaxNodeType.WhileStatement, location)
         {
             if (test == null) throw new ArgumentNullException("test");
             if (body == null) throw new ArgumentNullException("body");
@@ -840,8 +858,8 @@ namespace Escape.Ast
         public Expression Object { get; private set; }
         public Statement Body { get; private set; }
 
-        public WithStatement(Expression obj, Statement body) : 
-            base(SyntaxNodeType.WithStatement)
+        public WithStatement(Expression obj, Statement body, Location location = null) : 
+            base(SyntaxNodeType.WithStatement, location)
         {
             if (obj == null) throw new ArgumentNullException("obj");
             if (body == null) throw new ArgumentNullException("body");
