@@ -65,7 +65,7 @@ namespace Escape
 
         public override int GetHashCode()
         {
-            return unchecked(((Start.GetHashCode() * 397) ^ End.GetHashCode()) * 397) ^ (Source != null ? Source.GetHashCode() : 0);
+            return unchecked((((Start.GetHashCode() * 397) ^ End.GetHashCode()) * 397) ^ (Source != null ? Source.GetHashCode() : 0));
         }
 
         public override string ToString()
