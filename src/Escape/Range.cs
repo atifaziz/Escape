@@ -40,6 +40,8 @@ namespace Escape
 
     public struct Range : IEquatable<Range>
     {
+        public static readonly Range Empty = new Range();
+
         public int Start { get; private set; }
         public int End   { get; private set; } // exclusive
 
@@ -53,9 +55,10 @@ namespace Escape
         }
 
         public bool IsEmpty { get { return Start == End; } }
+
         public bool Equals(Range other) { return Start == other.Start && End == other.End; }
         public override bool Equals(object obj) { return obj is Range && Equals((Range) obj); }
-        public override int GetHashCode() { return unchecked((Start * 397) ^ End); }
+        public override int GetHashCode() { return IsEmpty ? 0 : unchecked((Start * 397) ^ End); }
         public override string ToString() { return Start + "..." + End; }
     }
 }
