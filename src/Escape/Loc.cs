@@ -42,22 +42,35 @@ namespace Escape
     {
         public Position Start { get; private set; }
         public Position End   { get; private set; }
+        public Range Range    { get; private set; }
         public string Source  { get; private set; }
 
-        public Location(Position start, Position end) : this(start, end, null) {}
+        public Location(Position start, Position end) : 
+            this(start, end, Range.Empty, null) {}
 
-        public Location(Position start, Position end, string source)
+        public Location(Position start, Position end, string source) : 
+            this(start, end, Range.Empty, source) {}
+
+        public Location(Position start, Position end, Range range) : 
+            this(start, end, range, null) {}
+
+        public Location(Position start, Position end, Range range, string source)
         {
+            if ((!start.IsNil && end.IsNil) || (start.IsNil && !end.IsNil)) throw new ArgumentOutOfRangeException();
             Start = start;
             End = end;
+            Range = range;
             Source = source;
         }
+
+        public bool HasPosition { get { return !Start.IsNil; } }
 
         public bool Equals(Location other)
         {
             return other != null
                 && Start.Equals(other.Start) 
-                && End.Equals(other.End) 
+                && End.Equals(other.End)
+                && Range.Equals(other.Range) 
                 && string.Equals(Source, other.Source);
         }
 
@@ -65,12 +78,15 @@ namespace Escape
 
         public override int GetHashCode()
         {
-            return unchecked((((Start.GetHashCode() * 397) ^ End.GetHashCode()) * 397) ^ (Source != null ? Source.GetHashCode() : 0));
+            return unchecked((((((Start.GetHashCode() * 397)
+                                ^ End.GetHashCode()) * 397)
+                                ^ Range.GetHashCode()) * 397)
+                                ^ (Source != null ? Source.GetHashCode() : 0));
         }
 
         public override string ToString()
         {
-            return Start + "..." + End;
+            return Start.IsNil || End.IsNil ? string.Empty : Start + "..." + End;
         }
     }
 }
