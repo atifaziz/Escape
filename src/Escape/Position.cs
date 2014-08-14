@@ -40,11 +40,16 @@ namespace Escape
 
     public struct Position : IEquatable<Position>
     {
+        public static readonly Position Nil = new Position();
+
         public int Line   { get; private set; }
         public int Column { get; private set; }
+        public bool IsNil { get { return Line == 0; } }
 
         public Position(int line, int column) : this()
         {
+            if (line < 1) throw new ArgumentOutOfRangeException("line");
+            if (column < 0) throw new ArgumentOutOfRangeException("column");
             Line = line;
             Column = column;
         }
@@ -52,6 +57,6 @@ namespace Escape
         public bool Equals(Position other)      { return Line == other.Line && Column == other.Column; }
         public override bool Equals(object obj) { return obj is Position && Equals((Position) obj);    }
         public override int GetHashCode()       { return unchecked((Line * 397) ^ Column);             }
-        public override string ToString()       { return Line + ":" + Column;                          }
+        public override string ToString()       { return !IsNil ? Line + ":" + Column : string.Empty;  }
     }
 }
