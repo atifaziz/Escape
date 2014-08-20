@@ -103,6 +103,7 @@ namespace Esparse
             else if (value is BinaryOperator) { _writer.String(((BinaryOperator) value).JsText()); }
             else if (value is LogicalOperator) { _writer.String(((LogicalOperator) value).JsText()); }
             else if (value is UnaryOperator) { _writer.String(((UnaryOperator) value).JsText()); }
+            else if (value is UpdateOperator) { _writer.String(((UpdateOperator) value).JsText()); }
             else if (value is AssignmentOperator) { _writer.String(((AssignmentOperator) value).JsText()); }
             else if (value is RegExp) { _writer.String(value.ToString()); }
             else if (value is PropertyKind) 

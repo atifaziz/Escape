@@ -81,8 +81,16 @@ namespace Esparse
                 case UnaryOperator.Delete: return "delete";
                 case UnaryOperator.Void: return "void";
                 case UnaryOperator.TypeOf: return "typeof";
-                case UnaryOperator.Increment: return "++";
-                case UnaryOperator.Decrement: return "--";
+                default: throw new NotSupportedException();
+            }
+        }
+
+        public static string JsText(this UpdateOperator op)
+        {
+            switch (op)
+            {
+                case UpdateOperator.Increment: return "++";
+                case UpdateOperator.Decrement: return "--";
                 default: throw new NotSupportedException();
             }
         }

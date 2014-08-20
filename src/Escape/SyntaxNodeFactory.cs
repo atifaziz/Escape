@@ -177,7 +177,7 @@ namespace Escape
             return new ObjectExpression(properties, location);
         }
 
-        public static UpdateExpression Postfix(UnaryOperator op, Expression argument, Location location)
+        public static UpdateExpression Postfix(UpdateOperator op, Expression argument, Location location)
         {
             return new UpdateExpression(op, argument, false, location);
         }
@@ -233,7 +233,7 @@ namespace Escape
             return new UnaryExpression(op, argument, true, location);
         }
 
-        public static UpdateExpression Update(UnaryOperator op, Expression argument, Location location)
+        public static UpdateExpression Update(UpdateOperator op, Expression argument, Location location)
         {
             return new UpdateExpression(op, argument, true, location);
         }
@@ -292,7 +292,7 @@ namespace Escape
         internal static Unmarked<MemberExpression> Member(char accessor, Expression obj, Expression property) { return loc => Member(accessor, obj, property, loc); }
         internal static Unmarked<NewExpression> New(Expression callee, IEnumerable<Expression> args) { return loc => New(callee, args, loc); }
         internal static Unmarked<ObjectExpression> Object(IEnumerable<Property> properties) { return loc => Object(properties, loc); }
-        internal static Unmarked<UpdateExpression> Postfix(UnaryOperator op, Expression argument) { return loc => Postfix(op, argument, loc); }
+        internal static Unmarked<UpdateExpression> Postfix(UpdateOperator op, Expression argument) { return loc => Postfix(op, argument, loc); }
         internal static Unmarked<Program> Program(ICollection<Statement> body, bool strict) { return loc => Program(body, strict, loc); }
         internal static Unmarked<Property> Property(PropertyKind kind, IPropertyKeyExpression key, Expression value) { return loc => Property(kind, key, value, loc); }
         internal static Unmarked<ReturnStatement> Return(Expression argument) { return loc => Return(argument, loc); }
@@ -303,7 +303,7 @@ namespace Escape
         internal static Unmarked<ThrowStatement> Throw(Expression argument) { return loc => Throw(argument, loc); }
         internal static Unmarked<TryStatement> Try(Statement block, IEnumerable<Statement> guardedHandlers, IEnumerable<CatchClause> handlers, Statement finalizer) { return loc => Try(block, guardedHandlers, handlers, finalizer, loc); }
         internal static Unmarked<UnaryExpression> Unary(UnaryOperator op, Expression argument) { return loc => Unary(op, argument, loc); }
-        internal static Unmarked<UpdateExpression> Update(UnaryOperator op, Expression argument) { return loc => Update(op, argument, loc); }
+        internal static Unmarked<UpdateExpression> Update(UpdateOperator op, Expression argument) { return loc => Update(op, argument, loc); }
         internal static Unmarked<VariableDeclaration> VariableDeclaration(IEnumerable<VariableDeclarator> declarations, string kind) { return loc => VariableDeclaration(declarations, kind, loc); }
         internal static Unmarked<VariableDeclarator> VariableDeclarator(Identifier id, Expression init) { return loc => VariableDeclarator(id, init, loc); }
         internal static Unmarked<WhileStatement> While(Expression test, Statement body) { return loc => While(test, body, loc); }

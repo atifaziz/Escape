@@ -1980,7 +1980,7 @@ namespace Escape
                     }
 
                     var token = Lex();
-                    return MarkEnd(SyntaxNodeFactory.Postfix(ParseUnaryOperator((string)token.Value), expr));
+                    return MarkEnd(SyntaxNodeFactory.Postfix(ParseUpdateOperator((string)token.Value), expr));
                 }
             }
 
@@ -2014,7 +2014,7 @@ namespace Escape
                     ThrowErrorTolerant(Token.Empty, Messages.InvalidLHSInAssignment);
                 }
 
-                return MarkEnd(SyntaxNodeFactory.Update(ParseUnaryOperator((string)token.Value), expr));
+                return MarkEnd(SyntaxNodeFactory.Update(ParseUpdateOperator((string)token.Value), expr));
             }
             else if (Match("+") || Match("-") || Match("~") || Match("!"))
             {
@@ -3613,14 +3613,22 @@ namespace Escape
             {
                 case "+"     : return UnaryOperator.Plus;
                 case "-"     : return UnaryOperator.Minus;
-                case "++"    : return UnaryOperator.Increment;
-                case "--"    : return UnaryOperator.Decrement;
                 case "~"     : return UnaryOperator.BitwiseNot;
                 case "!"     : return UnaryOperator.LogicalNot;
                 case "delete": return UnaryOperator.Delete;
                 case "void"  : return UnaryOperator.Void;
                 case "typeof": return UnaryOperator.TypeOf;
                 default      : throw new ArgumentOutOfRangeException("Invalid unary operator: " + op);
+            }
+        }
+
+        public static UpdateOperator ParseUpdateOperator(string op)
+        {
+            switch (op)
+            {
+                case "++": return UpdateOperator.Increment;
+                case "--": return UpdateOperator.Decrement;
+                default: throw new ArgumentOutOfRangeException("Invalid update operator: " + op);
             }
         }
     }
