@@ -40,14 +40,32 @@ namespace Escape
 
     public class ParserException : Exception
     {
-        public int Column;
-        public string Description;
-        public int Index;
-        public int LineNumber;
-        public string Source;
+        public int Index { get; private set; }
+        public Position Position { get; private set; }
+        public string SourceText { get; private set; }
 
-        public ParserException(string message) : base(message)
+        public ParserException(string message) :
+            this(message, -1, Position.Nil) {}
+
+        public ParserException(string message, int index, Position position) : 
+            this(message, index, position, null) {}
+
+        public ParserException(string message, string source) : 
+            this(message, -1, Position.Nil, source) {}
+
+        public ParserException(string message, int index, Position position, string sourceText) : 
+            base(message)
         {
+            Index = index;
+            Position = position;
+            SourceText = sourceText;
+        }
+
+        public override string ToString()
+        {
+            return !Position.IsNil
+                 ? "Line " + Position.Line + ": " + Message
+                 : base.ToString();
         }
     }
 }

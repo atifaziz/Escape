@@ -1348,26 +1348,13 @@ namespace Escape
 
             if (token != null && token.LineNumber.HasValue)
             {
-                exception = new ParserException("Line " + token.LineNumber + ": " + msg)
-                    {
-                        Index = token.Range[0],
-                        LineNumber = token.LineNumber.Value,
-                        Column = token.Range[0] - _lineStart + 1,
-                        Source = _extra.Source
-                    };
+                exception = new ParserException(msg, token.Range[0], new Position(token.LineNumber.Value, token.Range[0] - _lineStart + 1), _extra.Source);
             }
             else
             {
-                exception = new ParserException("Line " + _lineNumber + ": " + msg)
-                    {
-                        Index = _index,
-                        LineNumber = _lineNumber,
-                        Column = _index - _lineStart + 1,
-                        Source = _extra.Source
-                    };
+                exception = new ParserException(msg, _index, new Position(_lineNumber, _index - _lineStart + 1), _extra.Source);
             }
 
-            exception.Description = msg;
             throw exception;
         }
 
@@ -1381,10 +1368,7 @@ namespace Escape
             {
                 if (_extra.Errors != null)
                 {
-                    _extra.Errors.Add(new ParserException(e.Message)
-                    {
-                        Source = _extra.Source
-                    });
+                    _extra.Errors.Add(new ParserException(e.Message, _extra.Source));
                 }
                 else
                 {
