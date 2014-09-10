@@ -49,11 +49,25 @@
     <Compile Include="ParserExtensions.cs" />
     <Compile Include="ParserOptions.cs" />
     <Compile Include="Position.cs" />
+    <Compile Include="JavascriptParser.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>JavascriptParser.g.tt</DependentUpon>
+    </Compile>
     <Compile Include="Range.cs" />
     <Compile Include="RegExp.cs" />
     <Compile Include="State.cs" />
     <Compile Include="SyntaxNodeFactory.cs" />
     <Compile Include="Token.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="JavascriptParser.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>JavascriptParser.g.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

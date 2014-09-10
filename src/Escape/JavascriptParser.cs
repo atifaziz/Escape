@@ -48,41 +48,8 @@ namespace Escape
 
     #endregion
 
-    public class JavaScriptParser
+    public partial class JavaScriptParser
     {
-        static readonly object[] Keywords =
-        {
-            "if", "in", "do", "var", "for", "new", "try", "let",
-            "this", "else", "case", "void", "with", "enum",
-            "while", "break", "catch", "throw", "const", "yield",
-            "class", "super", "return", "typeof", "delete",
-            "switch", "export", "import", "default", "finally", "extends",
-            "function", "continue", "debugger", "instanceof"
-        };
-
-        static readonly object[] StrictModeReservedWords =
-        {
-            "implements",
-            "interface",
-            "package",
-            "private",
-            "protected",
-            "public",
-            "static",
-            "yield",
-            "let"
-        };
-
-        static readonly object[] FutureReservedWords =
-        {
-            "class",
-            "enum",
-            "export",
-            "extends",
-            "import",
-            "super"
-        };
-        
         Extra _extra;
 
         int _index; // position in the stream
@@ -178,12 +145,12 @@ namespace Escape
 
         static bool IsFutureReservedWord(string id)
         {
-            return Array.IndexOf(FutureReservedWords, id) >= 0;
+            return InFutureReservedWordSet(id);
         }
 
         static bool IsStrictModeReservedWord(string id)
         {
-            return Array.IndexOf(StrictModeReservedWords, id) >= 0;
+            return InStrictModeReservedWordSet(id);
         }
 
         static bool IsRestrictedWord(string id)
@@ -203,8 +170,8 @@ namespace Escape
             // 'const' is specialized as Keyword in V8.
             // 'yield' and 'let' are for compatiblity with SpiderMonkey and ES.next.
             // Some others are from future reserved words.
-            
-            return Array.IndexOf(Keywords, id) >= 0;
+
+            return InKeywordSet(id);
         }
 
         // 7.4 Comments
