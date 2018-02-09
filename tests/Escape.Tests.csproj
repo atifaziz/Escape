@@ -1,85 +1,30 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{10194F5B-3EB5-4922-A4C0-10AF1BC92CBD}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Escape.Tests</RootNamespace>
-    <AssemblyName>Escape.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Description>Unit Tests for Escape</Description>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="xunit">
-      <HintPath>..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
-    </Reference>
-    <Reference Include="xunit.extensions">
-      <HintPath>..\packages\xunit.extensions.1.9.2\lib\net20\xunit.extensions.dll</HintPath>
-    </Reference>
+    <None Remove="esparse.js" />
+    <None Remove="esprima.js" />
+    <None Remove="Scripts\angular.js" />
+    <None Remove="Scripts\backbone.js" />
+    <None Remove="Scripts\jQuery.js" />
+    <None Remove="Scripts\JSXTransformer.js" />
+    <None Remove="Scripts\mootools.js" />
+    <None Remove="Scripts\underscore.js" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\src\Esparse\ByteSizeFormatProvider.cs">
-      <Link>ByteSizeFormatProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\src\Esparse\Extensions.cs">
-      <Link>Extensions.cs</Link>
-    </Compile>
-    <Compile Include="..\src\Esparse\JsonEncoder.cs">
-      <Link>JsonEncoder.cs</Link>
-    </Compile>
-    <Compile Include="..\src\Esparse\JsonTextWriter.cs">
-      <Link>JsonTextWriter.cs</Link>
-    </Compile>
-    <Compile Include="..\src\Esparse\SyntaxNodeVisitor.cs">
-      <Link>SyntaxNodeVisitor.cs</Link>
-    </Compile>
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="ParserTests.cs" />
-    <Compile Include="Process.cs" />
+    <Compile Include="..\src\Esparse\ByteSizeFormatProvider.cs" Link="ByteSizeFormatProvider.cs" />
+    <Compile Include="..\src\Esparse\Extensions.cs" Link="Extensions.cs" />
+    <Compile Include="..\src\Esparse\JsonEncoder.cs" Link="JsonEncoder.cs" />
+    <Compile Include="..\src\Esparse\JsonTextWriter.cs" Link="JsonTextWriter.cs" />
+    <Compile Include="..\src\Esparse\SyntaxNodeVisitor.cs" Link="SyntaxNodeVisitor.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scripts\angular.js" />
-    <EmbeddedResource Include="Scripts\backbone.js" />
-    <EmbeddedResource Include="Scripts\jQuery.js" />
-    <EmbeddedResource Include="Scripts\JSXTransformer.js" />
-    <EmbeddedResource Include="Scripts\mootools.js" />
-    <EmbeddedResource Include="Scripts\underscore.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\src\Escape\Escape.csproj">
-      <Project>{281fb3fd-b5d7-4a34-9325-4113c4c01d71}</Project>
-      <Name>Escape</Name>
-    </ProjectReference>
-  </ItemGroup>
+
   <ItemGroup>
     <Content Include="esparse.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -88,12 +33,24 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\angular.js" />
+    <EmbeddedResource Include="Scripts\backbone.js" />
+    <EmbeddedResource Include="Scripts\jQuery.js" />
+    <EmbeddedResource Include="Scripts\JSXTransformer.js" />
+    <EmbeddedResource Include="Scripts\mootools.js" />
+    <EmbeddedResource Include="Scripts\underscore.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\Escape\Escape.csproj" />
+  </ItemGroup>
+
 </Project>

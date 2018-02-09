@@ -34,33 +34,4 @@
 //
 #endregion
 
-using System;
-using System.Reflection;
-
-[assembly: AssemblyTitle("Escape")]
-[assembly: AssemblyDescription("JavaScript/ECMAScript 5.1 (ECMA-262) Parser")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Escape")]
-[assembly: AssemblyCopyright(
-    "Copyright \u00a9 2014 Atif Aziz"
-          + ", \u00a9 2013 S\u00e9bastien Ros"
-          + ", \u00a9 2013 Thaddee Tyl"
-          + ", \u00a9 2012 Mathias Bynens"
-          + ", \u00a9 2012 Joost-Wim Boekesteijn"
-          + ", \u00a9 2012 Kris Kowal"
-          + ", \u00a9 2012 Yusuke Suzuki"
-          + ", \u00a9 2012 Arpad Borsos"
-          + ", \u00a9 2011 Ariya Hidayat")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
-
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
-
-#if DEBUG
-[assembly: AssemblyConfiguration("DEBUG")]
-#else
-[assembly: AssemblyConfiguration("RELEASE")]
-#endif
-
-[assembly: CLSCompliant(true)]
+[assembly: System.CLSCompliant(true)]
