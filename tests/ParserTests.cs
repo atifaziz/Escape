@@ -43,6 +43,7 @@ namespace Escape.Tests
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.InteropServices;
     using System.Text;
     using Ast;
     using Esparse;
@@ -138,9 +139,14 @@ namespace Escape.Tests
 
         static string FindNode()
         {
+            var binName =
+                RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                ? "node.exe"
+                : "node";
+
             var path = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
             return path.Split(Path.PathSeparator)
-                       .Select(p => Path.Combine(p, "node.exe"))
+                       .Select(p => Path.Combine(p, binName))
                        .FirstOrDefault(File.Exists);
         }
 
