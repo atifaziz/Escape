@@ -38,6 +38,7 @@ namespace Escape.Ast
 {
     using System;
     using System.Linq;
+    using System.Reflection;
 
     static class FastEnumValidator<T> where T : struct
 #if !PORTABLE
@@ -53,7 +54,7 @@ namespace Escape.Ast
 
         static FastEnumValidator()
         {
-            if (Attribute.IsDefined(typeof(T), typeof(FlagsAttribute)))
+            if (typeof(T).GetTypeInfo().IsDefined(typeof(FlagsAttribute)))
                 throw new NotSupportedException("Bitmap enumeration are not supported.");
             var values = Enum.GetValues(typeof(T))
 #if PORTABLE

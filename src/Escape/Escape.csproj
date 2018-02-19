@@ -1,80 +1,49 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{281FB3FD-B5D7-4A34-9325-4113C4C01D71}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Escape</RootNamespace>
-    <AssemblyName>Escape</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile328</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFramework>netstandard1.3</TargetFramework>
+    <VersionPrefix>1.0.1</VersionPrefix>
+    <Description>JavaScript/ECMAScript 5.1 (ECMA-262) Parser</Description>
+    <Copyright>Copyright © 2014 Atif Aziz, © 2013 Sébastien Ros, © 2013 Thaddee Tyl, © 2012 Mathias Bynens, © 2012 Joost-Wim Boekesteijn, © 2012 Kris Kowal, © 2012 Yusuke Suzuki, © 2012 Arpad Borsos, © 2011 Ariya Hidayat. All rights reserved.</Copyright>
+    <Authors>Sébastien Ros</Authors>
+    <Owners>Atif Aziz</Owners>
+    <PackageTags>javascript;ecmascript;js;parser</PackageTags>
+    <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/atifaziz/Escape</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/atifaziz/Escape</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageOutputPath>..\..\dist</PackageOutputPath>
+    <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSource>true</IncludeSource>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\..\bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;PORTABLE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\..\bin\Release\</OutputPath>
-    <DefineConstants>TRACE;PORTABLE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .NET Framework is automatically included -->
-    <Folder Include="Properties\" />
+    <Content Include="..\..\COPYING.txt" Link="COPYING.txt">
+      <PackagePath />
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Ast.cs" />
-    <Compile Include="Comment.cs" />
-    <Compile Include="FastEnumValidator.cs" />
-    <Compile Include="JavascriptParser.cs" />
-    <Compile Include="Loc.cs" />
-    <Compile Include="Messages.cs" />
-    <Compile Include="ParserException.cs" />
-    <Compile Include="ParserExtensions.cs" />
-    <Compile Include="ParserOptions.cs" />
-    <Compile Include="Position.cs" />
-    <Compile Include="JavascriptParser.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>JavascriptParser.g.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Range.cs" />
-    <Compile Include="RegExp.cs" />
-    <Compile Include="State.cs" />
-    <Compile Include="SyntaxNodeFactory.cs" />
-    <Compile Include="Token.cs" />
+    <PackageReference Include="System.Reflection" Version="4.3.0" />
+    <PackageReference Include="System.Runtime" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="JavascriptParser.g.tt">
+    <None Update="JavascriptParser.g.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>JavascriptParser.g.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <ItemGroup>
+    <Compile Update="JavascriptParser.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>JavascriptParser.g.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>
