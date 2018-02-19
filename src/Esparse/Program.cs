@@ -107,9 +107,10 @@ namespace Esparse
                     }
                 }
 
-                var sourceFilePath = arg.Current;
+                var sourceFilePath = popped ? arg.Current : null;
 
-                var source = popped && sourceFilePath != "-"
+                var source = !string.IsNullOrEmpty(sourceFilePath)
+                             && sourceFilePath != "-"
                            ? inputEncoding != null 
                              ? File.ReadAllText(sourceFilePath, inputEncoding) 
                              : File.ReadAllText(sourceFilePath)
