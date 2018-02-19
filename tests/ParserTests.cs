@@ -115,7 +115,7 @@ namespace Escape.Tests
                             bsfp.Format("SZ1", esparseOutput.Length, null));
 
                         var sb = new StringBuilder(esparseOutput.Length * 110 / 100);
-                        var esw = new StringWriter(sb) { NewLine = "\r\n" };
+                        var esw = new StringWriter(sb);
                         JsonEncoder.Encode(program, false, esw);
                         esw.WriteLine();
                         Assert.Equal(esparseOutput.Length, sb.Length);
