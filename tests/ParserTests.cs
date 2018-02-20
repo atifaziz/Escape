@@ -201,7 +201,7 @@ namespace Escape.Tests
             Assert.NotNull(body);
             Assert.Equal(1, body.Count());
             Assert.Equal(SyntaxNodeType.Literal, body.First().As<ExpressionStatement>().Expression.NodeType);
-            Assert.Equal(null, body.First().As<ExpressionStatement>().Expression.As<Literal>().Value);
+            Assert.Null(body.First().As<ExpressionStatement>().Expression.As<Literal>().Value);
             Assert.Equal("null", body.First().As<ExpressionStatement>().Expression.As<Literal>().Raw);
         }
 
