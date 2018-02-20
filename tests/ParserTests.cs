@@ -188,7 +188,7 @@ namespace Escape.Tests
             var body = program.Body;
 
             Assert.NotNull(body);
-            Assert.Equal(1, body.Count());
+            Assert.Single(body);
             Assert.Equal(SyntaxNodeType.ThisExpression, body.First().As<ExpressionStatement>().Expression.NodeType);
         }
 
@@ -199,7 +199,7 @@ namespace Escape.Tests
             var body = program.Body;
 
             Assert.NotNull(body);
-            Assert.Equal(1, body.Count());
+            Assert.Single(body);
             Assert.Equal(SyntaxNodeType.Literal, body.First().As<ExpressionStatement>().Expression.NodeType);
             Assert.Null(body.First().As<ExpressionStatement>().Expression.As<Literal>().Value);
             Assert.Equal("null", body.First().As<ExpressionStatement>().Expression.As<Literal>().Raw);
@@ -215,7 +215,7 @@ namespace Escape.Tests
             var body = program.Body;
 
             Assert.NotNull(body);
-            Assert.Equal(1, body.Count());
+            Assert.Single(body);
             Assert.Equal(SyntaxNodeType.Literal, body.First().As<ExpressionStatement>().Expression.NodeType);
             Assert.Equal(42d, body.First().As<ExpressionStatement>().Expression.As<Literal>().Value);
             Assert.Equal("42", body.First().As<ExpressionStatement>().Expression.As<Literal>().Raw);
@@ -230,7 +230,7 @@ namespace Escape.Tests
             var body = program.Body;
 
             Assert.NotNull(body);
-            Assert.Equal(1, body.Count());
+            Assert.Single(body);
             Assert.NotNull(binary = body.First().As<ExpressionStatement>().Expression.As<BinaryExpression>());
             Assert.Equal(3d, binary.Right.As<Literal>().Value);
             Assert.Equal(BinaryOperator.Times, binary.Operator);
@@ -265,7 +265,7 @@ namespace Escape.Tests
             var body = program.Body;
 
             Assert.NotNull(body);
-            Assert.Equal(1, body.Count());
+            Assert.Single(body);
             Assert.NotNull(literal = body.First().As<ExpressionStatement>().Expression.As<Literal>());
             Assert.Equal(Convert.ToDouble(expected), Convert.ToDouble(literal.Value));
         }
@@ -285,7 +285,7 @@ namespace Escape.Tests
             var body = program.Body;
 
             Assert.NotNull(body);
-            Assert.Equal(1, body.Count());
+            Assert.Single(body);
             Assert.NotNull(literal = body.First().As<ExpressionStatement>().Expression.As<Literal>());
             Assert.Equal(expected, literal.Value);
         }
